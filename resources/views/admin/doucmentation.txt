@@ -1,0 +1,4 @@
+delete attribute by ajax javascrifa
+
+attribute image conditon
+
