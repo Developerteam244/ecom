@@ -1,0 +1,42 @@
+.selected_attr {
+    border:2px solid #35260c;
+    transition: border 2s ease;
+}
+
+.response-box {
+        font-size: 20px;
+        font-weight: 500;
+        height: max-content;
+        width: 90%;
+        padding: 10px;
+
+}
+
+.warning {
+    background: #ca8b8b;
+    color: #dd0b0b;
+}
+
+.success {
+    background: #b6e1ac;
+    color: #0c7905;
+}
+
+
+/* product details */
+
+
+.product__details--tab__inner{
+    container-name:add_details;
+    container-type:size;
+    height: 300px;
+    overflow: hidden;
+}
+
+@container add_details (height > 200px){
+    .tab_content {
+        height:400px;
+        overflow: hidden;
+        background:red;
+    }
+}

@@ -1,13 +1,16 @@
 <?php
 
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\CouponController;
-use App\Http\Controllers\SizeController;
-use App\Http\Controllers\ColorController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\BrandController;
-use App\Http\Controllers\TexController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\TexController;
+use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\BannerController;
+use App\Http\Controllers\Front\FrontController;
 
 
 use Illuminate\Support\Facades\Route;
@@ -22,9 +25,26 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::controller(FrontController::class)->group(function(){
 
-Route::get('/', function () {
-    return redirect('/admin');
+    Route::get('/', 'index');
+    Route::get('product/{slug}','product');
+    Route::post('product/add_cart','add_to_cart');
+    Route::post('delete_cart_item','delete_cart_item');
+    Route::post('cart_quatity_update','cart_quatity_update');
+    Route::get('category/{category_slug}','category');
+    Route::middleware(['user_auth'])->group(function () {
+        Route::get('dashboard','user_dashboard');
+
+        Route::get('logout',function (){
+           session()->forget('USER_ID');
+        return redirect('/');
+        });
+    });
+    Route::post('signup','signup')->name('signup');
+    Route::post('signin','signin')->name('signin');
+    Route::get('login','login');
+    Route::get('signup','singup_view');
 });
 
 Route::get('admin', [AdminController::class, 'index']);
@@ -147,8 +167,22 @@ Route::get('admin/manage_product_process/image/delete/{piid}/{pid}', [ProductCon
  // change product status
 Route::get('admin/product/status/{status}/{id}', [ProductController::class, 'status']);
 
+// customer list
 
+Route::get('admin/customer',[CustomerController::class, 'index']);
+Route::get('admin/customer/show/{id}',[CustomerController::class, 'show']);
+// banner list
+Route::get('admin/banner',[BannerController::class, 'index']);
 
+// banner manage
+Route::get('admin/banner/manage_banner',[BannerController::class, 'manage_banner']);
+Route::get('admin/banner/edit/{id}',[BannerController::class, 'manage_banner']);
+// change status
+Route::get('admin/banner/status/{status}/{id}',[BannerController::class, 'status']);
+// delete banner
+Route::get('admin/banner/delete/{id}',[BannerController::class, 'delete']);
+// banner process
+Route::post('admin/banner/manage_banner_process',[BannerController::class, 'manage_banner_process'])->name('banner.insert');
 
 
 

@@ -33,6 +33,12 @@
                                         @enderror
 
                                 </div>
+                                <div class="form-group">
+                                    <label for="in_home" class="control-label mb-1">IN Home </label>
+                                    <input id="in_home" name="in_home" type="checkbox"
+                                       value="1" {{$in_home}} >
+
+                                </div>
 
 
 

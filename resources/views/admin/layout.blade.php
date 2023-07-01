@@ -23,6 +23,8 @@
 
     <!-- Bootstrap CSS-->
     <link href="{{ asset('admin_assets/vendor/bootstrap-4.1/bootstrap.min.css') }}" rel="stylesheet" media="all">
+    {{-- dropify css --}}
+    <link href="{{ asset('admin_assets/css/dropify.min.css') }}" rel="stylesheet" media="all">
 
 
 
@@ -96,27 +98,37 @@
                     </li>
                     <li class="has-sub">
                         <a  href="{{url('admin/size')}}" class="@yield('size_select')">
-                            <i class="fa-regular fa-window-maximize"></i>Size</a>
+                            <img src="{{asset('admin_assets/icon/size.svg')}}" width="15px" alt=""> Size</a>
 
                     </li>
                     <li class="has-sub">
                         <a  href="{{url('admin/color')}}" class="@yield('size_select')">
-                            <i class="fa-solid fa-palette"></i>Color</a>
+                            <img src="{{asset('admin_assets/icon/color.svg')}}" width="15px" alt=""> Color</a>
 
                     </li>
                     <li class="has-sub">
                         <a  href="{{url('admin/product')}}" class="@yield('product_select')">
-                            <i class="fa-solid fa-palette"></i>Product</a>
+                            <img src="{{asset('admin_assets/icon/product.svg')}}" width="20px" alt=""> Product</a>
 
                     </li>
                     <li class="has-sub">
                         <a  href="{{url('admin/brand')}}" class="@yield('brand_select')">
-                            <i class="fa-solid fa-palette"></i>Brand</a>
+                            <img src="{{asset('admin_assets/icon/brand.svg')}}" alt="" > Brand</a>
 
                     </li>
                     <li class="has-sub">
                         <a  href="{{url('admin/tex')}}" class="@yield('tex_select')">
-                            <i class="fa-solid fa-palette"></i>Tex</a>
+                            <img src="{{asset('admin_assets/icon/tax.svg')}}" width="20px" alt=""> Tex</a>
+
+                    </li>
+                    <li class="has-sub">
+                        <a  href="{{url('admin/customer')}}" class="@yield('customer_select')">
+                            <img src="{{asset('admin_assets/icon/customer.svg')}}" width="15px" alt="">Customer </a>
+
+                    </li>
+                    <li class="has-sub">
+                        <a  href="{{url('admin/banner')}}" class="@yield('customer_select')">
+                            <img src="{{asset('admin_assets/icon/banner.svg')}}" width="20px" alt=""> Banner </a>
 
                     </li>
 
@@ -199,8 +211,12 @@
 <script src="{{ asset('admin_assets/vendor/chartjs/Chart.bundle.min.js') }}"></script>
 <script src="{{ asset('admin_assets/vendor/select2/select2.min.js') }}"></script>
 
+{{-- dropify js --}}
+<script src="{{ asset('admin_assets/js/dropify.min.js') }}"></script>
+
 <!-- Main JS-->
 <script src="{{ asset('admin_assets/js/main.js') }}"></script>
+<script src="{{ asset('admin_assets/js/script.js') }}"></script>
 
 </body>
 

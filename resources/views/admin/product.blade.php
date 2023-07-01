@@ -34,7 +34,7 @@
                             <td> {{$i++}} </td>
                             <td> {{$list->name}}</td>
                             <td> {{$list->slug}}</td>
-                            <td> <img src="{{asset('storage/media/'.$list->image)}}" width="100px" alt=""></td>
+                            <td> <img src="{{asset('storage/media/product/'.$list->image)}}" width="100px" alt=""></td>
 
                             <td >
                                 <a href="{{url('admin/product/edit')}}/{{$list->id}}">
