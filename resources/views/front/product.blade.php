@@ -277,6 +277,6 @@
 
 @push('custom-script')
 
-<script src="{{asset('front/js/custom/product.js')}}"></script>
+<script type="module" src="{{asset('front/js/custom/product.js')}}"></script>
 
 @endpush

@@ -3,5 +3,5 @@
 @yield('content')
 
 @include('front.footer')
-
 @stack('custom-script')
+

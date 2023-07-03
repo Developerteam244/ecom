@@ -429,7 +429,7 @@
         <div class="offcanvas__inner">
             <div class="offcanvas__logo">
                 <a class="offcanvas__logo_link" href="index.html">
-                    <img src="assets/img/logo/nav-log.webp" alt="Grocee Logo" width="158" height="36">
+                    <img src="" alt="Grocee Logo" width="158" height="36">
                 </a>
                 <button class="offcanvas__close--btn" data-offcanvas>close</button>
             </div>
@@ -454,7 +454,7 @@
                 <div class="offcanvas__account--wrapper d-flex">
                     <div class="offcanvas__account--currency">
                         <a class="offcanvas__account--currency__menu d-flex align-items-center text-black" href="javascript:void(0)">
-                            <img src="assets/img/icon/usd-icon.webp" alt="currency">
+                            <img src="" alt="currency">
                             <span>USD</span>
                             <svg xmlns="http://www.w3.org/2000/svg" width="9.797" height="6.05" viewBox="0 0 9.797 6.05">
                                 <path  d="M14.646,8.59,10.9,12.329,7.151,8.59,6,9.741l4.9,4.9,4.9-4.9Z" transform="translate(-6 -8.59)" fill="currentColor" opacity="0.7"/>

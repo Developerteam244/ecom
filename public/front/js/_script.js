@@ -163,24 +163,17 @@ var swiper = new Swiper(".hero__slider--activation", {
   2. product swiper column4 activation
 */
 var swiper = new Swiper(".product__swiper--activation", {
-  slidesPerView: 4,
-  loop: true,
+  slidesPerView: auto,
+  loop: false,
+  uniqueNavElements: true,
   clickable: true,
   spaceBetween: 30,
   breakpoints: {
     992: {
-      slidesPerView: 4,
-    },
-    768: {
-      slidesPerView: 3,
-      spaceBetween: 30,
-    },
-    480: {
-      slidesPerView: 2,
-      spaceBetween: 20,
+      slidesPerView: auot,
     },
     0: {
-      slidesPerView: 1,
+      slidesPerView: auto,
     },
   },
   navigation: {
@@ -189,12 +182,14 @@ var swiper = new Swiper(".product__swiper--activation", {
   },
 });
 
+swiper.loopDestroy();
+
 /*
   3. product swiper column4 style2 activation
 */
 var swiper = new Swiper(".product__swiper--column4__style2", {
   slidesPerView: 4,
-  loop: true,
+  loop: false,
   clickable: true,
   spaceBetween: 30,
   breakpoints: {

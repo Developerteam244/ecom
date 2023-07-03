@@ -29,15 +29,18 @@ Route::controller(FrontController::class)->group(function(){
 
     Route::get('/', 'index');
     Route::get('product/{slug}','product');
-    Route::post('product/add_cart','add_to_cart');
+    Route::post('add_cart','add_to_cart');
     Route::post('delete_cart_item','delete_cart_item');
     Route::post('cart_quatity_update','cart_quatity_update');
     Route::get('category/{category_slug}','category');
+    Route::post('top_filter','top_filter');
     Route::middleware(['user_auth'])->group(function () {
         Route::get('dashboard','user_dashboard');
 
         Route::get('logout',function (){
            session()->forget('USER_ID');
+           session()->forget('USER_NAME');
+
         return redirect('/');
         });
     });

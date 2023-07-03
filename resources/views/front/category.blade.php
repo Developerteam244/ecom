@@ -12,7 +12,7 @@
                         <ul class="breadcrumb__content--menu d-flex justify-content-center">
                             <li class="breadcrumb__content--menu__items"><a href="index.html">Home</a></li>
                             <li class="breadcrumb__content--menu__items"><span>Category</span></li>
-                            <li class="breadcrumb__content--menu__items"><span>{{$category_name}}</span></li>
+                            <li class="breadcrumb__content--menu__items"><span data-page="{{$category_slug}}">{{$category_name}}</span></li>
                         </ul>
                     </div>
                 </div>
@@ -41,25 +41,56 @@
                                     <div class="product__view--mode__list product__short--by align-items-center d-flex ">
                                         <label class="product__view--label">Prev Page :</label>
                                         <div class="select shop__header--select">
-                                            <select class="product__view--select">
-                                                <option selected value="1">65</option>
-                                                <option value="2">40</option>
-                                                <option value="3">42</option>
-                                                <option value="4">57 </option>
-                                                <option value="5">60 </option>
+                                            <select class="product__view--select" name="num_count">
+                                                @php
+                                                    $view_num_item = [10,25,50,100];
+                                                @endphp
+                                                @forelse ($view_num_item as $item)
+                                                @if ($item<=$count)
+
+                                                <option  value="{{$item}}">{{$item}} </option>
+                                                @else
+                                                <option  value="{{$count}}"> {{$count}}</option>
+                                                @break
+
+                                                @endif
+                                                @empty
+                                                <option  value="{{$count}}"> {{$count}}</option>
+
+
+                                                @endforelse
+
                                             </select>
                                         </div>
                                     </div>
                                     <div class="product__view--mode__list product__short--by align-items-center d-flex">
                                         <label class="product__view--label">Sort By :</label>
                                         <div class="select shop__header--select">
-                                            <select class="product__view--select">
-                                                <option selected value="1">Sort by latest</option>
-                                                <option value="2">Sort by popularity</option>
-                                                <option value="3">Sort by newness</option>
-                                                <option value="4">Sort by  rating </option>
+                                            <select class="product__view--select" name="sort_by">
+                                                <option value="name" >Name</option>
+                                                <option value="price" >Price</option>
+                                                <option value="date" >Date</option>
+
+
                                             </select>
                                         </div>
+
+                                    </div>
+                                    <div class="product__view--mode__list product__short--by align-items-center d-flex">
+                                        <label class="product__view--label">Sort Order :</label>
+                                        <div class="select shop__header--select">
+                                            <select class="product__view--select" name="sort_type">
+                                                <option value="asc" >Ascending</option>
+                                                <option value="desc" >Descending</option>
+
+
+
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                    <div class="product__view--mode__list product__short--by align-items-center d-flex">
+                                        <button class="btn btn-danger px-3 py-2" id="top_filter_btn">Apply</button>
 
                                     </div>
                                     <div class="product__view--mode__list">
@@ -97,7 +128,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <p class="product__showing--count">Showing 1–9 of 21 results</p>
+                                <p class="product__showing--count show_num_count">Showing 1–9 of 21 results</p>
                             </div>
                             <div class="tab_content">
                                 <div id="product_grid" class="tab_pane active show">
@@ -113,7 +144,7 @@
                                             <div class="col-lg-4 col-md-4 col-sm-6 col-6 custom-col mb-30">
                                                 <article class="product__card">
                                                     <div class="product__card--thumbnail">
-                                                        <a class="product__card--thumbnail__link display-block" href="product-details.html">
+                                                        <a class="product__card--thumbnail__link display-block" href="{{url('product/'.$list->slug)}}">
                                                             <img class="product__card--thumbnail__img product__primary--img" src="{{asset('storage/media/product/'.$list->image)}}" alt="product-img">
 
                                                         </a>
@@ -156,7 +187,7 @@
                                             <div class="col mb-30">
                                                 <div class="product__card product__list d-flex align-items-center">
                                                     <div class="product__card--thumbnail product__list--thumbnail">
-                                                        <a class="product__card--thumbnail__link display-block" href="product-details.html">
+                                                        <a class="product__card--thumbnail__link display-block" href="{{url('product/'.$list->slug)}}">
                                                             <img class="product__card--thumbnail__img product__primary--img" src="{{asset('storage/media/product/'.$list->image)}}" alt="product-img">
 
                                                         </a>
@@ -219,3 +250,10 @@
 
 
  @endsection
+
+ @push('custom-script')
+
+
+ <script type="module" src="{{asset('front/js/custom/filter.js')}}"></script>
+
+ @endpush

@@ -11,6 +11,7 @@ class AdminController extends Controller
 {
     public function index ()
     {
+
         if (session()->has("ADMIN_ID")) {
 
             return redirect('admin/dashboard');

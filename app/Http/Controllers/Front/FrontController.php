@@ -155,121 +155,10 @@ class FrontController extends Controller
 
     }
 
-    // login page
-
-    public function login ()  {
-        if(session()->has('USER_ID')){
-            return redirect('dashboard');
-        }else{
-
-            return view('front.login');
-        }
-    }
-
-
-    /// end login page
-
-    // signup page
-
-    public function singup_view ()  {
-        return view('front.signup');
-    }
-
-
-    /// end signup page
-
-    // create user account
-    public function signup(Request $request){
-        //  $input = $request->post();
-        // $rules = [
-        //     'name'=>'required|regex:/[A-Za-z]+/',
-        //     'email'=>'required|email|unique:user,email',
-        //     'password'=>'required|regex:/[A-Za-z]+/',
-        //     'cpassword'=>'requird|same:password'
-        // ];
-
-        // $messages = [
-        //     'name'=>'Please Enter Valid Name',
-        //     'email'=>'Please Enter Valid Email',
-        //     'password'=>'Password must consist ',
-        //     'cassword'=>'Password must consist ',
-
-        // ];
-
-        // $validator = Validator::make($input, $rules, $messages);
-        // prx($validator);
-        // die();
-
-// if ($validator->fails()) {
-//     return back()->withInput()->withErrors($validator->messages());
-// }
-
-        $request->validate([
-            'name'=>'required|regex:/[A-Za-z]+/',
-            'email'=>'required|email|unique:users,email',
-            'password'=>'required|regex:/[A-Za-z]+/',
-            'cpassword'=>'required|same:password',
-        ]);
-
-        $data['name'] = ucfirst($request->post('name'));
-        $data['email']= $request->post('email');
-        $data['password'] = Hash::make($request->post('password'));
-        $user_model= DB::table('users')->insert($data);
-
-        return redirect('login');
-     }
-
-
-    // end create user account
-
-
-    // signin user
-
-    public function signin(Request $request) {
-        $request->validate([
-            'email'=>"required|email",
-            'password'=>'required'
-        ]);
-
-        $email = $request->post('email');
-        $password= $request->post('password');
 
 
 
-        $user_model= DB::table('users')->where([
-            'email'=>$email
 
-        ])->get();
-
-        if(isset($user_model[0])){
-            if(Hash::check($password, $user_model[0]->password)){
-
-                $request->session()->put("USER_ID",$user_model[0]->id);
-                $request->session()->put("USER_NAME",$user_model[0]->name);
-
-                return redirect('dashboard');
-            }
-        }
-        return redirect('login',session->flash('message','Please Enter Valid Details'));
-    }
-
-
-    // end signin user
-
-    // user account
-
-    // dashboard
-
-public function user_dashboard() {
-
-    return view('front.user_dashboard');
-}
-
-
-    // dashboard end
-
-
-    // user account end
 
 
 
@@ -370,8 +259,9 @@ public function user_dashboard() {
 
     public function add_to_cart(Request $request) {
 
-        prx($request->post());
-        die();
+
+
+
 
         if($request->session()->has("USER_ID")){
             $cart['user_id'] = $request->session()->get("USER_ID",0);
@@ -422,11 +312,11 @@ public function user_dashboard() {
 
 
 
-
-
-
-
             return  response()->json($result);
+
+
+
+
 
         }
 
@@ -451,6 +341,7 @@ public function user_dashboard() {
             ])->update($value);
 
             $result['status'] = $qty_update_model;
+            $result['id']= $id;
 
 
 
@@ -466,6 +357,7 @@ public function user_dashboard() {
 
             if (isset($category_model[0])) {
                 $result['category_name'] = $category_model[0]->category_name;
+                $result['category_slug'] = $category_model[0]->category_slug;
 
                     $product_model = DB::table('products')->where(['category_id'=>$category_model[0]->id])->get();
                     if (isset($product_model[0])) {
@@ -483,7 +375,7 @@ public function user_dashboard() {
                          return redirect()->back()->with('categroy_msg','Sorry for incontinent Products out of stock');
                     }
 
-
+                    $result['count'] = count($product_model);
 
                     return view('.front.category',$result);
                 }else{
@@ -495,6 +387,56 @@ public function user_dashboard() {
         }
 
         // category section end
+
+        // top filter
+        public function top_filter(Request $request){
+
+            $page = $request->post('page');
+            if($page =="category"){
+                $slug = $request->post('filter');
+
+
+                $category_model = DB::table('categories')->where(['category_slug'=>$slug])->get();
+
+            if (isset($category_model[0])) {
+
+
+                    $product_model = DB::table('products')->where(['category_id'=>$category_model[0]->id])->get();
+                    if (isset($product_model[0])) {
+                        foreach ($product_model as $key => $value) {
+                            $product_attr_model = DB::table('product_attr')->where('product_id','=',$value->id)->leftJoin('sizes','sizes.id','=','product_attr.size_id')->first();
+                            $product_model[$key]->price = $product_attr_model->price;
+                            $product_model[$key]->mrp = $product_attr_model->mrp;
+                            $product_model[$key]->size_id = $product_attr_model->size;
+                            $product_model[$key]->color_id = $product_attr_model->color_id;
+
+                        }
+
+                        $result['products'] = $product_model;
+                    }else{
+                         return redirect()->back()->with('categroy_msg','Sorry for incontinent Products out of stock');
+                    }
+
+                    $result['count'] = count($product_model);
+
+
+                }else{
+
+                     return redirect()->back()->with('categroy_msg','Sorry for incontinent The category is currently out of service.');
+            }
+
+
+
+
+
+            }
+
+
+
+            return  response()->json($result);
+        }
+
+        // top filter end
 
 
     }

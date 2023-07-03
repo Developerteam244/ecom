@@ -450,6 +450,6 @@
   <script src="{{asset('front/js/script.js')}}"></script>
 
   <script src="{{asset('front/js/custom.js')}}"></script>
-
+  <script type="module" src="{{asset('front/js/custom/cart.js')}}"></script>
 </body>
 </html>
