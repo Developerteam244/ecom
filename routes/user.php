@@ -18,5 +18,19 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(UserController::class)->group(function(){
 
-    Route::get('/login','login');
+    Route::post('signup','signup')->name('signup');
+    Route::post('signin','signin')->name('signin');
+    Route::get('login','login');
+    Route::get('signup','singup_view');
+
+    Route::middleware(['user_auth'])->group(function () {
+        Route::get('dashboard','user_dashboard');
+
+        Route::get('logout',function (){
+           session()->forget('USER_ID');
+           session()->forget('USER_NAME');
+
+        return redirect('/');
+        });
+    });
 });

@@ -2,7 +2,7 @@
 function prx($arr){
     echo "<pre>";
     print_r($arr);
-    die();
+    echo "</pre>";
 }
 function getTopNavCat(){
     $result=DB::table('categories')
@@ -139,9 +139,92 @@ function temp_user() {
 
     }
    return $uid;
+};
+
+
+// paren category list
+function top_nav_parent_list(){
+    $nav_model=DB::table('categories')->select('id','category_name')
+            ->where(['status'=>1,
+                        'parent_id'=>0])
+            ->get();
+
+    if(isset($nav_model[0])){
+        return $nav_model;
+    }
+
+};
+
+
+
+// parent category list end
+
+// mobile navigation
+$mobile_html = "";
+$parent = 1;
+function getMobileTopNavCat(){
+    $result=DB::table('categories')
+            ->where(['status'=>1])
+            ->get();
+
+            foreach($result as $row){
+                $arr[$row->id]['category_name']=$row->category_name;
+                $arr[$row->id]['parent_id']=$row->parent_id;
+                $arr[$row->id]['category_slug']=$row->category_slug;
+            }
+
+    $str = buildMobileTreeView($arr,0,0,-1);
+    return $str;
+
+
+
 }
 
+function buildMobileTreeView($arr,$parent,$level,$prelevel) {
+    global $mobile_html;
+    $parent_status = 1;
 
+    foreach($arr as $id=>$data){
+		if($parent==$data['parent_id']){
+			if($level>$prelevel){
+				if($mobile_html==''){
+					$mobile_html.='<ul class="category__mobile--menu_ul">';
+                    $parent_status = 1;
+				}else{
+					$mobile_html.='<ul class="category__sub--menu">';
+                    $parent_status = 0;
+				}
+
+			}
+			if($level==$prelevel){
+				$mobile_html.='</li>';
+			}
+			$url=url("/category/".$data['category_slug']);
+            if ($parent_status) {
+                $mobile_html.=' <li class="categories__menu--items"><a class="categories__menu--link" href="'.$url.'">'.$data['category_name'].'</a>';
+
+            }else{
+
+                $mobile_html.=' <li class="categories__submenu--items"><a class="categories__submenu--items__text" href="'.$url.'">'.$data['category_name'].'</a>';
+            }
+			if($level>$prelevel){
+				$prelevel=$level;
+			}
+			$level++;
+			buildMobileTreeView($arr,$id,$level,$prelevel);
+			$level--;
+
+		}
+	}
+	if($level==$prelevel){
+		$mobile_html.='</li></ul>';
+	}
+
+
+	return $mobile_html;
+}
+
+// mobile navigation end
 // cart
 
 function cart($id=0){

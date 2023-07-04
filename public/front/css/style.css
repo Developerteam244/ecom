@@ -2046,7 +2046,7 @@ body.overlay__active::before,
 }
 
 .main__logo--img {
-  max-width: 145px;
+  max-width: 50px;
   display: block;
 }
 
@@ -2058,7 +2058,7 @@ body.overlay__active::before,
 
 @media only screen and (min-width: 768px) {
   .main__logo--img {
-    max-width: 100%;
+    max-width: 10%;
   }
 }
 

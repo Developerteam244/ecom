@@ -20,7 +20,7 @@ class UserAuth
 
             return $next($request);
         }else{
-            return redirect('login',session()->flash('message','Please Log In First'));
+            return redirect('user/login',session()->flash('message','Please Log In First'));
         }
     }
 }

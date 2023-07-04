@@ -172,6 +172,14 @@ var swiper = new Swiper(".product__swiper--activation", {
     992: {
       slidesPerView: auot,
     },
+    768: {
+      slidesPerView: auto,
+      spaceBetween: 30,
+    },
+    480: {
+      slidesPerView: auto,
+      spaceBetween: 20,
+    },
     0: {
       slidesPerView: auto,
     },

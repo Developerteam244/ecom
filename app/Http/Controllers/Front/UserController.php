@@ -14,7 +14,7 @@ class UserController extends Controller
 
      public function login ()  {
         if(session()->has('USER_ID')){
-            return redirect('dashboard');
+            return redirect('user/dashboard');
         }else{
 
             return view('front.login');
@@ -70,7 +70,7 @@ class UserController extends Controller
         $data['password'] = Hash::make($request->post('password'));
         $user_model= DB::table('users')->insert($data);
 
-        return redirect('login');
+        return redirect('user/login');
      }
 
 
@@ -101,10 +101,10 @@ class UserController extends Controller
                 $request->session()->put("USER_ID",$user_model[0]->id);
                 $request->session()->put("USER_NAME",$user_model[0]->name);
 
-                return redirect('dashboard');
+                return redirect('user/dashboard');
             }
         }
-        return redirect('login',session->flash('message','Please Enter Valid Details'));
+        return redirect('user/login',session->flash('message','Please Enter Valid Details'));
     }
 
 
