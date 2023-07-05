@@ -29,13 +29,15 @@ class FrontController extends Controller
             $result['product'][$value->category_name]= $home_product_model;
             foreach ($home_product_model as $product_key => $product_value) {
 
-                $home_product_price_model = DB::table('product_attr')->where('product_id', '=', $product_value->id)->orderBy('price','asc')->first();
+                $home_product_price_model = DB::table('product_attr')->where('product_id', '=', $product_value->id)->leftJoin('sizes','sizes.id','=','product_attr.size_id')->orderBy('price','asc')->first();
                 $price = $home_product_price_model->price;
                 $result['product'][$value->category_name][$product_key]->price = $price;
                 $mrp = $home_product_price_model->mrp;
                 $result['product'][$value->category_name][$product_key]->mrp = $mrp;
                 $discount = round(($price/$mrp)*100);
                 $result['product'][$value->category_name][$product_key]->discount = $discount;
+                $result['product'][$value->category_name][$product_key]->size_id = $home_product_price_model->size;
+                $result['product'][$value->category_name][$product_key]->color_id = $home_product_price_model->color_id;
 
             }
 
@@ -53,13 +55,15 @@ class FrontController extends Controller
         $result['feature_product']= $home_feature_product_model;
         foreach ($home_feature_product_model as $product_key => $product_value) {
 
-            $home_product_price_model = DB::table('product_attr')->where('product_id', '=', $product_value->id)->orderBy('price','asc')->first();
+            $home_product_price_model = DB::table('product_attr')->where('product_id', '=', $product_value->id)->leftJoin('sizes','sizes.id','=','product_attr.size_id')->orderBy('price','asc')->first();
             $price = $home_product_price_model->price;
             $result['feature_product'][$product_key]->price = $price;
             $mrp = $home_product_price_model->mrp;
             $result['feature_product'][$product_key]->mrp = $mrp;
             $discount = 100- round(($price/$mrp)*100);
             $result['feature_product'][$product_key]->discount = $discount;
+            $result['feature_product'][$product_key]->size_id = $home_product_price_model->size;
+            $result['feature_product'][$product_key]->color_id = $home_product_price_model->color_id;
 
         }
 
@@ -72,13 +76,15 @@ class FrontController extends Controller
         $result['tranding_product']= $home_tranding_product_model;
         foreach ($home_tranding_product_model as $product_key => $product_value) {
 
-            $home_product_price_model = DB::table('product_attr')->where('product_id', '=', $product_value->id)->orderBy('price','asc')->first();
+            $home_product_price_model = DB::table('product_attr')->where('product_id', '=', $product_value->id)->leftJoin('sizes','sizes.id','=','product_attr.size_id')->orderBy('price','asc')->first();
             $price = $home_product_price_model->price;
             $result['tranding_product'][$product_key]->price = $price;
             $mrp = $home_product_price_model->mrp;
             $result['tranding_product'][$product_key]->mrp = $mrp;
             $discount =100- round(($price/$mrp)*100);
             $result['tranding_product'][$product_key]->discount = $discount;
+            $result['tranding_product'][$product_key]->size_id = $home_product_price_model->size;
+            $result['tranding_product'][$product_key]->color_id = $home_product_price_model->color_id;
 
         }
 
@@ -95,13 +101,15 @@ class FrontController extends Controller
             $home_product_category_model = DB::table('categories')->where('id', '=', $product_value->category_id)->first();
             $category = $home_product_category_model->category_name;
             $result['discounted_product'][$product_key]->category = $category;
-            $home_product_price_model = DB::table('product_attr')->where('product_id', '=', $product_value->id)->orderBy('price','asc')->first();
+            $home_product_price_model = DB::table('product_attr')->where('product_id', '=', $product_value->id)->leftJoin('sizes','sizes.id','=','product_attr.size_id')->orderBy('price','asc')->first();
             $price = $home_product_price_model->price;
             $result['discounted_product'][$product_key]->price = $price;
             $mrp = $home_product_price_model->mrp;
             $result['discounted_product'][$product_key]->mrp = $mrp;
             $discount = 100- round(($price/$mrp)*100);
             $result['discounted_product'][$product_key]->discount = $discount;
+            $result['discounted_product'][$product_key]->size_id = $home_product_price_model->size;
+            $result['discounted_product'][$product_key]->color_id = $home_product_price_model->color_id;
 
         }
 
@@ -255,113 +263,25 @@ class FrontController extends Controller
     }
 
 
-    // add to cart function
 
-    public function add_to_cart(Request $request) {
-
-
-
-
-
-        if($request->session()->has("USER_ID")){
-            $cart['user_id'] = $request->session()->get("USER_ID",0);
-            $cart['user_type'] = "reg";
-        }else{
-            $cart['user_id']= temp_user();
-            $cart['user_type'] = "non-reg";
-        }
-
-        $product_model=DB::table("products")->where([
-            "slug"=>$request->post("slug"),
-
-        ])->get();
-        $attr_model=DB::table("product_attr")->where([
-            "sizes.size"=>$request->post("size_id"),
-            "product_attr.color_id"=>$request->post("color_id"),
-            "product_attr.product_id"=>$product_model[0]->id
-        ])->leftJoin('sizes','sizes.id','=','product_attr.size_id')->select("product_attr.id AS id")->get();
-
-        $cart['product_id'] = $product_model[0]->id;
-        $cart['attr_id'] = $attr_model[0]->id;
-
-        $cart['qty'] = $request->post('quantity');
-
-        $cart['added_on'] = date("Y-m-d");
-
-        $check = DB::table('cart')->where([
-            "user_id"=>$cart['user_id'],
-            "product_id"=>$cart['product_id'],
-            "attr_id"=>$cart['attr_id'],
-        ])->get();
-
-            if (isset($check[0])) {
-
-                $cart_model = DB::table('cart')->where([
-                   "id"=>$check[0]->id
-                ])->update($cart);
-                $result['cart']= cart($check[0]->id);
-                $result['task']= "update";
-                $result['response']= "Cart Updated ";
-            }else{
-                $cart_model = DB::table('cart')->insertGetId($cart);
-                $result['cart']= cart($cart_model);
-                $result['task']= "insert";
-                $result['response']= "Product Add in Cart";
-
-            }
-
-
-
-            return  response()->json($result);
-
-
-
-
-
-        }
-
-
-        public function delete_cart_item(Request $request) {
-               $id = $request->post('id');
-           $delete_cart_item = DB::table('cart')->where([
-            'id'=>$id
-           ])->delete();
-           $result['response'] = $delete_cart_item;
-
-        $result['res'] = $request->post('id');
-            return  response()->json($result);
-        }
-
-
-        public function cart_quatity_update(Request $request){
-            $id = $request->post('id');
-            $value['qty'] = $request->post('value');
-            $qty_update_model = DB::table('cart')->where([
-                'id'=>$id
-            ])->update($value);
-
-            $result['status'] = $qty_update_model;
-            $result['id']= $id;
-
-
-
-
-            return  response()->json($result);
-        }
 
         // category sectoin
 
         public function category(Request $request,$slug){
 
-            $category_model = DB::table('categories')->where(['category_slug'=>$slug])->get();
 
-            if (isset($category_model[0])) {
-                $result['category_name'] = $category_model[0]->category_name;
-                $result['category_slug'] = $category_model[0]->category_slug;
 
-                    $product_model = DB::table('products')->where(['category_id'=>$category_model[0]->id])->get();
-                    if (isset($product_model[0])) {
-                        foreach ($product_model as $key => $value) {
+
+
+            $product_model = DB::table('products')
+            ->join('categories AS cat','products.category_id','=','cat.id')
+            ->where(['cat.category_slug'=>$slug])
+            ->select('products.*','cat.category_name','cat.category_slug')->paginate(1);
+
+            if (isset($product_model[0])) {
+                $result['category_name'] = $product_model[0]->category_name;
+                $result['category_slug'] = $product_model[0]->category_slug;
+                foreach ($product_model as $key => $value) {
                             $product_attr_model = DB::table('product_attr')->where('product_id','=',$value->id)->leftJoin('sizes','sizes.id','=','product_attr.size_id')->first();
                             $product_model[$key]->price = $product_attr_model->price;
                             $product_model[$key]->mrp = $product_attr_model->mrp;
@@ -377,14 +297,10 @@ class FrontController extends Controller
 
                     $result['count'] = count($product_model);
 
+
+
                     return view('.front.category',$result);
-                }else{
-
-                     return redirect()->back()->with('categroy_msg','Sorry for incontinent The category is currently out of service.');
-            }
-
-
-        }
+                }
 
         // category section end
 
@@ -396,12 +312,16 @@ class FrontController extends Controller
                 $slug = $request->post('filter');
 
 
-                $category_model = DB::table('categories')->where(['category_slug'=>$slug])->get();
+                $category_model = DB::table('categories')
+                ->where(['category_slug'=>$slug])
+                ->get();
 
             if (isset($category_model[0])) {
 
 
-                    $product_model = DB::table('products')->where(['category_id'=>$category_model[0]->id])->get();
+                    $product_model = DB::table('products')
+                    ->where(['category_id'=>$category_model[0]
+                    ->id])->get();
                     if (isset($product_model[0])) {
                         foreach ($product_model as $key => $value) {
                             $product_attr_model = DB::table('product_attr')->where('product_id','=',$value->id)->leftJoin('sizes','sizes.id','=','product_attr.size_id')->first();

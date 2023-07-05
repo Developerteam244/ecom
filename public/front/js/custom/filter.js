@@ -25,7 +25,14 @@ let fhost = `http://${host}/`;
 
 
     apply_btn.addEventListener("click",e=>{
-        if (items=='')
+        filter_condition(fetch_data());
+    })
+
+
+// fetch data function
+
+const fetch_data= ()=>{
+    if (items=='')
         {
             fetch(url,{
                 method:"POST",
@@ -40,15 +47,14 @@ let fhost = `http://${host}/`;
             }).then(response=>{
                 return response.json();
             }).then(data=>{
-                filter_condition(data);
+                items = data;
+
 
             })
-        }else{
-            filter_condition(data);
-
-
         }
-    })
+        return items;
+}
+
 
     // product grid html
 
@@ -131,7 +137,7 @@ return html;
 let order = {
     asc:"asc",
     desc:"desc"
-}
+};
 
  const short_by_name = (item,orders)=>{
 
@@ -193,7 +199,7 @@ let order = {
  }
 
  const product_list = (fn,obj)=>{
-
+    console.log(obj);
     let list = fn(obj.list,obj.order);
     let total_item = obj.count;
     let num_counts = Number(num_count.value);
@@ -252,10 +258,62 @@ let order = {
                         current.short_by = "date";
                         current.short_type = type;
                         break;
-        default: product_list(short_default,order.asc);
+        default: product_list(short_default,data);
+                 current.short_by = "default";
+                     current.short_type = type;
+
     }
 
  }
+
+ const change_num_count = (element)=>{
+    let select_value = Number(element.target.value);
+    let grid_items_list = product_grid.children;
+    let items_length = grid_items_list.length;
+    let list_items_list = product_lists.children;
+    let obj = fetch_data();
+    if (select_value<items_length) {
+        let diff = items_length-select_value;
+
+        for (let i= diff; i<items_length; i++) {
+            grid_items_list[i].remove();
+            list_items_list[i].remove();
+
+        }
+
+    }else{
+
+        let by =current.short_by;
+        let type = current.short_type;
+        let offset = document.querySelector('.pagination__item--current').innerText;
+        offset = offset?offset:1;
+        let data = {
+            count:obj.count,
+            list:obj.products,
+            offset:offset,
+            order:type
+
+        };
+
+        switch(by){
+            case "name": product_list(short_by_name,data);
+
+
+
+                            break;
+            case "price": product_list(short_by_price,data);
+
+                            break;
+            case "date": product_list(short_by_date,data);
+
+                            break;
+            default: product_list(short_default,data);
+        }
+
+    }
+ }
+ num_count.addEventListener("change",change_num_count);
+
 
 
 

@@ -130,7 +130,7 @@ class ProductController extends Controller
 
             $model = new Product();
             $model['status'] = 1;
-            $image_required = 'required|mimes:jpeg,jpg,png';
+            $image_required = 'required|mimes:jpeg,jpg,png,webp';
             $msg = "Product Inserted";
             $id=0;
 
@@ -140,8 +140,8 @@ class ProductController extends Controller
             'name'=>'required',
             'slug'=>'required|unique:products,slug,'.$request->post('id'),
             'image'=> $image_required,
-            'pimage.*'=>'mimes:jpeg,jpg,png',
-            'pmimage.*'=>'mimes:jpeg,jpg,png',
+            'pimage.*'=>'mimes:jpeg,jpg,png,webp',
+            'pmimage.*'=>'mimes:jpeg,jpg,png,webp',
             'tex_id' => 'required'
 
         ]);
