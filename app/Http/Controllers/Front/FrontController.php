@@ -236,7 +236,7 @@ class FrontController extends Controller
          $releted_product_model = DB::table('products')->where(['category_id'=>$result['product']->category_id,
 
          'status'=>1]
-         )->where('id','!=',$result['product']->id)->get();
+         )->where('id','!=',$result['product']->id)->paginate(3);
 
             $result['related_product']= $releted_product_model;
             foreach ($releted_product_model as $product_key => $product_value) {
@@ -276,7 +276,7 @@ class FrontController extends Controller
             $product_model = DB::table('products')
             ->join('categories AS cat','products.category_id','=','cat.id')
             ->where(['cat.category_slug'=>$slug])
-            ->select('products.*','cat.category_name','cat.category_slug')->paginate(1);
+            ->select('products.*','cat.category_name','cat.category_slug')->paginate(3);
 
             if (isset($product_model[0])) {
                 $result['category_name'] = $product_model[0]->category_name;
@@ -296,10 +296,38 @@ class FrontController extends Controller
                     }
 
                     $result['count'] = count($product_model);
+                    $abc = $product_model;
+                    $try = $abc->toArray();
+                    // prx($try);
+
+                    // die();
+                    foreach ($try as $key => $value) {
+                        $try[$key] = (array)$value;
+                    }
+
+
+
+
+
+
+
+
+                    $order_type = "asc";
+                    function arr_sort($a,$b) {
+                        if ($order_type == "asc") {
+                            ($b["name"]<$a["name"])-($a["name"]<$b["name"]);
+                        }else{
+                            ($a["name"]<$b["name"])-($b["name"]<$a["name"]);
+
+                        }
+
+                    }
+
 
 
 
                     return view('.front.category',$result);
+
                 }
 
         // category section end
@@ -307,21 +335,40 @@ class FrontController extends Controller
         // top filter
         public function top_filter(Request $request){
 
+
+            $where = ['products.status'=>1];
             $page = $request->post('page');
+            $query  = "";
+            //$order = isset($request->post('order'))?$request->post('order'):"asc";
+            $order_column = "created_at";
+            $order_type = "desc";
+            $order_filter_column = [
+                'name'=>'name',
+                'price'=>'price',
+                'date'=>'created_at'
+
+
+            ];
+            if (!is_null($request->post('order_filter'))) {
+                $order_column = $order_filter_column[$request->post('order_filter')['short_by']];
+                $order_type = $request->post('order_filter')['short_type'];
+                $result['null'] = $order_column;
+                $result['null_tyhpe'] = $order_type;
+            };
             if($page =="category"){
                 $slug = $request->post('filter');
+                $where['cat.category_slug'] = $slug;
+
+            }
 
 
-                $category_model = DB::table('categories')
-                ->where(['category_slug'=>$slug])
-                ->get();
-
-            if (isset($category_model[0])) {
 
 
                     $product_model = DB::table('products')
-                    ->where(['category_id'=>$category_model[0]
-                    ->id])->get();
+                    ->join('categories AS cat','products.category_id','=','cat.id')
+                    ->where($where)
+                    ->select('products.*')
+                    ->get();
                     if (isset($product_model[0])) {
                         foreach ($product_model as $key => $value) {
                             $product_attr_model = DB::table('product_attr')->where('product_id','=',$value->id)->leftJoin('sizes','sizes.id','=','product_attr.size_id')->first();
@@ -332,28 +379,48 @@ class FrontController extends Controller
 
                         }
 
-                        $result['products'] = $product_model;
-                    }else{
-                         return redirect()->back()->with('categroy_msg','Sorry for incontinent Products out of stock');
+                        $model = $product_model->toArray();
+
+
+                        foreach ($model as $key => $value) {
+                            $model[$key] = (array)$value;
+                        }
+
+
+                        usort($model,function ($a,$b) use ($order_type,$order_column) {
+                            if ($order_type == "asc") {
+                                return ($b[$order_column]<$a[$order_column])-($a[$order_column]<$b[$order_column]);
+                            }else{
+                                return ($a[$order_column]<$b[$order_column])-($b[$order_column]<$a[$order_column]);
+
+                            }
+                        });
+
+                        $result['model'] = $model;
+
+                        $result['products'] = $model;
+
                     }
 
-                    $result['count'] = count($product_model);
-
-
-                }else{
-
-                     return redirect()->back()->with('categroy_msg','Sorry for incontinent The category is currently out of service.');
-            }
+                        $result['check'] = $request->post('order_filter');
+                        $result['count'] = count($product_model);
+                        return  response()->json($result);
 
 
 
 
 
-            }
 
 
 
-            return  response()->json($result);
+
+
+
+
+
+
+
+
         }
 
         // top filter end

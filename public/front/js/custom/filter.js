@@ -3,12 +3,21 @@ import {add_to_cart} from './cart.js';
 let num_count = document.querySelector("select[name='num_count']");
 let short_by = document.querySelector("select[name='sort_by']");
 let short_type = document.querySelector("select[name='sort_type']");
+let items_per_page = 6;
+let filter_where ={};
+let page = {};
+// let page = document.querySelector("[data-page]").getAttribute('data-page');
+
+
+export {page};
+
+
 
 let current = {
-    short_by:"default",
-    short_type:"asc"
+    short_by:"date",
+    short_type:"desc"
 };
-
+let currentPage = 0;
 let show_num_count = document.querySelector(".show_num_count");
 let apply_btn = document.querySelector("#top_filter_btn");
 let product_grid = document.querySelector("#product_grid").querySelector('.row');
@@ -16,7 +25,6 @@ let product_lists = document.querySelector("#product_list").querySelector('.row'
 
 let items ='';
 
-let page = document.querySelector("[data-page]").getAttribute('data-page');
 
 let host = location.host;
 let fhost = `http://${host}/`;
@@ -25,21 +33,24 @@ let fhost = `http://${host}/`;
 
 
     apply_btn.addEventListener("click",e=>{
-        filter_condition(fetch_data());
+
+
+
+             filter_condition();
+
+
     })
 
 
 // fetch data function
 
-const fetch_data= ()=>{
-    if (items=='')
-        {
-            fetch(url,{
-                method:"POST",
-                body:JSON.stringify({page:'category',
-                                filter:page,
+const fetch_data= async ()=>{
 
-                    }),
+
+
+            await fetch(url,{
+                method:"POST",
+                body:JSON.stringify(page),
                 headers:{
                     'Content-type':'application/json; charset=UTF-8',
                     'X-CSRF-TOKEN':csrf
@@ -49,10 +60,11 @@ const fetch_data= ()=>{
             }).then(data=>{
                 items = data;
 
+                console.log(data);
+
 
             })
-        }
-        return items;
+            return items;
 }
 
 
@@ -194,15 +206,17 @@ let order = {
 
  }
 
- const short_default = (item)=>{
+ const short_default = (item,orders)=>{
     return item;
  }
 
- const product_list = (fn,obj)=>{
-    console.log(obj);
-    let list = fn(obj.list,obj.order);
+ const product_list = (obj)=>{
+
+    let page_list ;
+    let list = obj.list;
+
     let total_item = obj.count;
-    let num_counts = Number(num_count.value);
+    let num_counts = items_per_page;
     let offset =  obj.offset;
     offset = num_counts*(offset-1);
     let items_count = num_counts+offset;
@@ -221,49 +235,52 @@ let order = {
     let add_cart_button_list = product_lists.querySelectorAll('.add_to_cart');
      add_cart_button_grid.forEach(item=>{
         item.addEventListener("click",add_to_cart);
-        console.log(item);
+
      });
      add_cart_button_list.forEach(item=>{
         item.addEventListener("click",add_to_cart);
      });
 
+     pagination_fun();
+     page_list = document.querySelectorAll(".pagination__list");
+
+
+     page_list.forEach(page=>{
+        page.addEventListener("click",(element)=>{
+            pagination_event(page);
+        });
+     });
 
 
  }
 
- const filter_condition = (obj)=>{
+ const filter_condition = ()=>{
 
-    let by = short_by.value;
-    let type = short_type.value;
-    let offset = document.querySelector('.pagination__item--current').innerText;
+     currentPage = 1;
+     let by = short_by.value;
+     let type = short_type.value;
+     current.short_by = by;
+     current.short_type = type;
+     page.order_filter = current;
+
+    let obj= fetch_data();
+
+     obj.then(res=>{
+
+     let offset = currentPage;
     offset = offset?offset:1;
     let data = {
-        count:obj.count,
-        list:obj.products,
+        count:res.count,
+        list:res.products,
         offset:offset,
         order:type
 
-    }
+    };
 
-    switch(by){
-        case "name": product_list(short_by_name,data);
-                        current.short_by = "name";
-                        current.short_type = type;
-                        break;
-        case "price": product_list(short_by_price,data);
-                        current.short_by = "price";
-                        current.short_type = type;
-                        break;
-        case "date": product_list(short_by_date,data);
-                        current.short_by = "date";
-                        current.short_type = type;
-                        break;
-        default: product_list(short_default,data);
-                 current.short_by = "default";
-                     current.short_type = type;
+    product_list(data);
 
-    }
 
+                    });
  }
 
  const change_num_count = (element)=>{
@@ -314,6 +331,116 @@ let order = {
  }
  num_count.addEventListener("change",change_num_count);
 
+ // pagination
+
+
+
+let pagination_list = document.querySelectorAll('.pagination__list');
+
+pagination_list.forEach(page=>{
+    page.addEventListener("click",(event)=>{
+        event.stopPropagation();
+
+        event.preventDefault();
+
+
+
+    })
+})
+
+
+// pagination html
+
+const pagination_fun= ()=>{
+
+    currentPage = currentPage>0?currentPage:1;
+    let pagination_list_tag = document.querySelector("#pagination_list");
+    let pagination_html = '';
+    let obj = items;
+    let btn_count = 4;
+    let item = Number(obj.count);
+    let item_per_page = item>items_per_page?items_per_page:item;
+    let total_page = Math.ceil(item/item_per_page);
+    if (currentPage>1) {
+        pagination_html +=`<li class="pagination__list">
+        <a  class="pagination__item--arrow  link " id="prev_page" data-page-type="prev" data-page-no="${currentPage-1}">
+            <svg xmlns="http://www.w3.org/2000/svg"  width="22.51" height="20.443" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M244 400L100 256l144-144M120 256h292"/></svg>
+            <span class="visually-hidden">page left arrow </span>
+        </a>
+    </li>`;
+    }
+
+    for(let i=currentPage; i<=total_page && i<currentPage+btn_count; i++){
+
+        if (i==currentPage) {
+            pagination_html+=`<li class="pagination__list"><span class="pagination__item pagination__item--current" data-page-type="page" data-page-no="${currentPage}">${currentPage}</span></li>`;
+        }else{
+            if (total_page>btn_count) {
+
+                if (i==currentPage+btn_count-1) {
+                    pagination_html += `<li class="pagination__list">...</li>
+                    <li class="pagination__list"><a  class="pagination__item link" data-page-type="page" data-page-no="${total_page}">${total_page}</a></li>`;
+                    break;
+                }
+                pagination_html += `<li class="pagination__list"><a  class="pagination__item link"  data-page-type="page" data-page-no="${i}">${i}</a></li>`;
+
+            }else{
+                pagination_html += `<li class="pagination__list"><a  class="pagination__item link"  data-page-type="page" data-page-no="${i}">${i}</a></li>`;
+
+            }
+        }
+
+
+    }
+    // end loop
+
+    if (currentPage<total_page) {
+        pagination_html += `<li class="pagination__list">
+        <a  class="pagination__item--arrow  link " id="next_page" data-page-type="next" data-page-no="${currentPage+1}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22.51" height="20.443" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M268 112l144 144-144 144M392 256H100"/></svg>
+            <span class="visually-hidden">page right arrow</span>
+        </a>
+        <li>`;
+
+    }
+
+    pagination_list_tag.innerHTML = pagination_html;
+
+
+
+
+
+}
+
+
+const pagination_event = (page)=>{
+    let obj = fetch_data();
+    obj.then(res=>{
+
+
+    let data ;
+    let link_tag = page.querySelector("a");
+    let page_type = page.querySelector("[data-page-type]").getAttribute("data-page-type");
+    currentPage = Number(page.querySelector("[data-page-no]").getAttribute("data-page-no"));
+
+        let pre = document.querySelector("#prev_page")
+
+        pre?pre.setAttribute("data-page-no",Number(currentPage)-1):" ";
+
+        let next =document.querySelector("#next_page")
+
+            next?next.setAttribute("data-page-no",Number(currentPage)+1):" ";
+    data = {
+        count:res.count,
+        list:res.products,
+        offset:currentPage,
+        order:"asc"
+
+    };
+    product_list(data);
+});
+
+}
 
 
 

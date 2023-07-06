@@ -218,11 +218,11 @@
                             <div class="pagination__area">
 
                                 <nav class="pagination justify-content-center">
-                                    <ul class="pagination__wrapper d-flex align-items-center justify-content-center">
+                                    <ul class="pagination__wrapper d-flex align-items-center justify-content-center" id="pagination_list">
                                         @if ($products->currentPage()>1)
 
                                         <li class="pagination__list">
-                                            <a href="{{$products->previousPageUrl()}}" class="pagination__item--arrow  link ">
+                                            <a href="{{$products->previousPageUrl()}}" class="pagination__item--arrow  link " id="prev_page" data-page-type="prev" data-page-no="{{$products->currentPage()-1}}">
                                                 <svg xmlns="http://www.w3.org/2000/svg"  width="22.51" height="20.443" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M244 400L100 256l144-144M120 256h292"/></svg>
                                                 <span class="visually-hidden">page left arrow {{$products->currentPage()}}</span>
                                             </a>
@@ -234,22 +234,22 @@
                                             @for ($i=$products->currentPage();$i<=$products->lastPage()&& $i<$total_page+$products->currentPage(); $i++)
                                            @if ($i==$products->currentPage())
 
-                                           <li class="pagination__list"><span class="pagination__item pagination__item--current">{{$products->currentPage()}}</span></li>
+                                           <li class="pagination__list"><span class="pagination__item pagination__item--current" data-page-type="page" data-page-no="{{$products->currentPage()}}">{{$products->currentPage()}}</span></li>
                                            @else
                                            @if ($products->lastPage()>$total_page)
 
                                                 @if ($i==$products->currentPage()+$total_page-1)
                                                 <li class="pagination__list">...</li>
-                                                <li class="pagination__list"><a href="{{$products->url($products->lastPage())}}" class="pagination__item link">{{$products->lastPage()}}</a></li>
+                                                <li class="pagination__list"><a  class="pagination__item link" data-page-type="page" data-page-no="{{$products->lastPage()}}">{{$products->lastPage()}}</a></li>
 
                                                 @break
 
                                                 @endif
-                                           <li class="pagination__list"><a href="{{$products->url($i)}}" class="pagination__item link">{{$i}}</a></li>
+                                           <li class="pagination__list"><a href="{{$products->url($i)}}" class="pagination__item link"  data-page-type="page" data-page-no="{{$i}}">{{$i}}</a></li>
 
                                            @else
 
-                                           <li class="pagination__list"><a href="{{$products->url($i)}}" class="pagination__item link">{{$i}}</a></li>
+                                           <li class="pagination__list"><a href="{{$products->url($i)}}" class="pagination__item link" data-page-type="page" data-page-no="{{$i}}">{{$i}}</a></li>
                                            @endif
 
 
@@ -260,7 +260,7 @@
 
                                                 @if ($products->currentPage()<$products->lastPage())
                                                 <li class="pagination__list">
-                                                    <a href="{{$products->nextPageUrl()}}" class="pagination__item--arrow  link ">
+                                                    <a  class="pagination__item--arrow  link " id="next_page" data-page-type="next" data-page-no="{{$products->currentPage()+1}}">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="22.51" height="20.443" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M268 112l144 144-144 144M392 256H100"/></svg>
                                                         <span class="visually-hidden">page right arrow</span>
                                                     </a>
@@ -287,6 +287,18 @@
  @push('custom-script')
 
 
- <script type="module" src="{{asset('front/js/custom/filter.js')}}"></script>
+ <script type="module">
+    import {page} from "{{asset('front/js/custom/filter.js')}}";
+        page.page="category";
+      page.filter= document.querySelector("[data-page]").getAttribute('data-page');;
+
+      page.order_filter = {};
+      page.order_filter.name = "name";
+      page['order_filter']['type'] = "desc";
+
+
+
+     </script>
+     <script type="module" src="{{asset('front/js/custom/filter.js')}}"></script>
 
  @endpush
