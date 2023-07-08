@@ -272,6 +272,9 @@ class FrontController extends Controller
 
 
 
+            $size =[];
+            $color = [];
+            $price = [];
 
             $product_model = DB::table('products')
             ->join('categories AS cat','products.category_id','=','cat.id')
@@ -282,13 +285,28 @@ class FrontController extends Controller
                 $result['category_name'] = $product_model[0]->category_name;
                 $result['category_slug'] = $product_model[0]->category_slug;
                 foreach ($product_model as $key => $value) {
-                            $product_attr_model = DB::table('product_attr')->where('product_id','=',$value->id)->leftJoin('sizes','sizes.id','=','product_attr.size_id')->first();
+                            $product_attr_model = DB::table('product_attr')
+                            ->where('product_id','=',$value->id)
+                            ->leftJoin('sizes','sizes.id','=','product_attr.size_id')
+                            ->leftJoin('colors','colors.id','=','product_attr.color_id')
+                            ->select('product_attr.*','sizes.size','colors.color')->first();
                             $product_model[$key]->price = $product_attr_model->price;
                             $product_model[$key]->mrp = $product_attr_model->mrp;
-                            $product_model[$key]->size_id = $product_attr_model->size;
-                            $product_model[$key]->color_id = $product_attr_model->color_id;
+                            $product_model[$key]->size = $product_attr_model->size;
+                            $product_model[$key]->color = $product_attr_model->color;
+                            array_push($size,$product_attr_model->size);
+                            array_push($color,$product_attr_model->color);
+                            array_push($price,$product_attr_model->price);
+
 
                         }
+
+                    $result['sizes'] = array_unique($size);
+                    $result['colors'] = array_unique($color);
+                    $result['min_price'] = min($price);
+                    $result['max_price'] = max($price);
+
+
 
                         $result['products'] = $product_model;
                     }else{
@@ -296,14 +314,6 @@ class FrontController extends Controller
                     }
 
                     $result['count'] = count($product_model);
-                    $abc = $product_model;
-                    $try = $abc->toArray();
-                    // prx($try);
-
-                    // die();
-                    foreach ($try as $key => $value) {
-                        $try[$key] = (array)$value;
-                    }
 
 
 
@@ -312,16 +322,7 @@ class FrontController extends Controller
 
 
 
-                    $order_type = "asc";
-                    function arr_sort($a,$b) {
-                        if ($order_type == "asc") {
-                            ($b["name"]<$a["name"])-($a["name"]<$b["name"]);
-                        }else{
-                            ($a["name"]<$b["name"])-($b["name"]<$a["name"]);
 
-                        }
-
-                    }
 
 
 
@@ -336,6 +337,9 @@ class FrontController extends Controller
         public function top_filter(Request $request){
 
 
+            $size =[];
+            $color = [];
+            $price = [];
             $where = ['products.status'=>1];
             $page = $request->post('page');
             $query  = "";
@@ -349,11 +353,21 @@ class FrontController extends Controller
 
 
             ];
+            // advance filter array
+
+
+
+                if (!is_null($request->post('advance_filter'))) {
+                    $advance_filter_data = $request->post('advance_filter');
+                }
+
+
+            // advance filtre array end
             if (!is_null($request->post('order_filter'))) {
                 $order_column = $order_filter_column[$request->post('order_filter')['short_by']];
                 $order_type = $request->post('order_filter')['short_type'];
-                $result['null'] = $order_column;
-                $result['null_tyhpe'] = $order_type;
+
+
             };
             if($page =="category"){
                 $slug = $request->post('filter');
@@ -371,20 +385,78 @@ class FrontController extends Controller
                     ->get();
                     if (isset($product_model[0])) {
                         foreach ($product_model as $key => $value) {
-                            $product_attr_model = DB::table('product_attr')->where('product_id','=',$value->id)->leftJoin('sizes','sizes.id','=','product_attr.size_id')->first();
+                            $product_attr_model = DB::table('product_attr')
+                            ->where('product_id','=',$value->id)
+                            ->leftJoin('sizes','sizes.id','=','product_attr.size_id')
+                            ->leftJoin('colors','colors.id','=','product_attr.color_id')
+                            ->select('product_attr.*','sizes.size','colors.color')->first();
                             $product_model[$key]->price = $product_attr_model->price;
                             $product_model[$key]->mrp = $product_attr_model->mrp;
-                            $product_model[$key]->size_id = $product_attr_model->size;
-                            $product_model[$key]->color_id = $product_attr_model->color_id;
+                            $product_model[$key]->size = $product_attr_model->size;
+                            $product_model[$key]->color = $product_attr_model->color;
+
 
                         }
 
                         $model = $product_model->toArray();
-
-
                         foreach ($model as $key => $value) {
                             $model[$key] = (array)$value;
-                        }
+                        };
+
+
+
+                        if (!is_null($request->post('advance_filter'))) {
+                        $model_1 = array_filter($model,function ($item) use ($advance_filter_data) {
+                            $status = true;
+                            $advance_filter = [
+                                "size"=>function ($value) use($advance_filter_data) {
+                                    if ($value['size']==$advance_filter_data['size']) {
+                                          return true;
+                                    }else{
+                                        return false;
+                                    }
+                                },
+                                "color"=>function ($value) use($advance_filter_data) {
+                                    if ($value['color']==$advance_filter_data['color']) {
+                                          return true;
+                                    }else{
+                                        return false;
+                                    }
+                                },
+                                "min_price"=>function ($value) use($advance_filter_data) {
+                                    if ($value['price']>=$advance_filter_data['min_price']) {
+                                          return true;
+                                    }else{
+                                        return false;
+                                    }
+                                },
+                                "max_price"=>function ($value) use($advance_filter_data) {
+                                    if ($value['price']<=$advance_filter_data['max_price']) {
+                                          return true;
+                                    }else{
+                                        return false;
+                                    }
+                                }
+                            ];
+
+
+
+
+                            foreach ($advance_filter_data as $key => $value) {
+                                $fn = $advance_filter[$key];
+                                $status = $fn($item);
+                                if (!$status) {
+
+                                    break;
+                                }
+                                }
+                                return $status;
+                        });
+
+                        $model = $model_1;
+
+                    };
+
 
 
                         usort($model,function ($a,$b) use ($order_type,$order_column) {
@@ -395,15 +467,27 @@ class FrontController extends Controller
 
                             }
                         });
-
-                        $result['model'] = $model;
-
+                        // size color price list
                         $result['products'] = $model;
+                        foreach ($model as $key => $value) {
+                            array_push($size,$value['size']);
+                            array_push($color,$value['color']);
+                            array_push($price,$value['price']);
+
+                        };
+
+                        $result['sizes'] = array_filter(array_unique($size));
+                        $result['colors'] = array_filter(array_unique($color));
+                        $result['min_price'] = min($price);
+                        $result['max_price'] = max($price);
+
+
+
 
                     }
 
-                        $result['check'] = $request->post('order_filter');
-                        $result['count'] = count($product_model);
+
+                        $result['count'] = count($model);
                         return  response()->json($result);
 
 

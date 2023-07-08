@@ -33,7 +33,7 @@
 
     <div class="minicart__button d-flex justify-content-center">
         <a class="primary__btn minicart__button--link" href="cart.html">View cart</a>
-        <a class="primary__btn minicart__button--link" href="checkout.html">Checkout</a>
+        <a class="primary__btn minicart__button--link" href="{{url('checkout')}}">Checkout</a>
     </div>
     @endif
 </div>

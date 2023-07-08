@@ -40,3 +40,12 @@
         background:red;
     }
 }
+/* advance filter css */
+
+.active_filter_btn {
+    background: var(--secondary-color);
+    border-color: var(--secondary-color);
+    color: var(--text-white-color);
+}
+
+

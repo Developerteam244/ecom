@@ -49,7 +49,7 @@ function cart_items_total_amount(){
 
 // set event listener on add to cart
 act.add_cart = document.querySelectorAll(".add_to_cart");
-console.log(act.add_cart);
+
 
 
 act.add_cart.forEach(function (element) {
@@ -92,7 +92,7 @@ act.condition_container = document.querySelector("#add_to_cart");
         data.slug = this.getAttribute('data-product_slug');
         data.quantity = this.parentNode.querySelector("#qty");
         data.quantity = data.quantity? data['quantity'].value :1;
-        console.log(data.quantity);
+
 
         data.color_id = condition.color.condition_value;
         data.size_id = condition.size.condition_value;
@@ -293,7 +293,7 @@ item_count_mini_cart.forEach( element=>{
 const make_item_html = (item)=>{
  let cart = item;
  let host = location.host;
- console.log(cart.qty);
+
 
 
     let html = `<div class="minicart__thumb">
@@ -383,7 +383,7 @@ return html;
     let cart_item_html= make_item_html(cart);
 item_div.innerHTML = cart_item_html;
 
-console.log(cart.qty);
+
 cart_items_total_amount();
 qty_change(item_div);
 
@@ -448,7 +448,7 @@ const fire_change_event = (item)=>{
     let item_id = target.getAttribute('data-pid');
     let task = target.getAttribute('value');
     let data_obj;
-    console.log(data_obj);
+
 
 
     let host = location.host;
@@ -474,7 +474,7 @@ const fire_change_event = (item)=>{
     return response.json();
 }).then(data=>{
 
-    console.log(data);
+
     item_total.innerText = item_price*item_qty_value;
     cart_items_total_amount();
 })
@@ -493,18 +493,18 @@ const make_event_item = (item)=>{
     if(item){
 
         let div = item;
-        console.log(div);
+
 
 
         let quantity_btn = div.querySelectorAll('.quantity__value');
         let remove_btn = div.querySelectorAll('.cart_remove_btn');
-        console.log(remove_btn);
-        console.log(div);
+
+
 
 quantity_btn.forEach(btn=>{
     btn.addEventListener("click",fire_change_event);
 });
-console.log(remove_btn);
+
 
 remove_btn.forEach(btn=>{
     btn.addEventListener("click",remove_cart_item)

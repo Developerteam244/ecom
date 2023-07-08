@@ -26,6 +26,7 @@ Route::controller(UserController::class)->group(function(){
     Route::middleware(['user_auth'])->group(function () {
         Route::get('dashboard','user_dashboard');
 
+
         Route::get('logout',function (){
            session()->forget('USER_ID');
            session()->forget('USER_NAME');

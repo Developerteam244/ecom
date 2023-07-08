@@ -21,11 +21,124 @@
     </section>
     <!-- End breadcrumb section -->
 
+    <div class="offcanvas__filter--sidebar widget__area">
+        <button type="button" class="offcanvas__filter--close" data-offcanvas>
+            <svg class="minicart__close--icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M368 368L144 144M368 144L144 368"></path></svg> <span class="offcanvas__filter--close__text">Close</span>
+        </button>
+        <div class="offcanvas__filter--sidebar__inner">
+            <div class="single__widget widget__bg">
+                <h2 class="widget__title h3">Size</h2>
+                <ul class="widget__tagcloud side_filter_size">
+                    @foreach ($sizes  as $list)
+
+                    <li class="widget__tagcloud--list"><a class="widget__tagcloud--link radio_btn" data-value="{{$list}}" data-type="size" >{{$list}}
+                    </a></li>
+
+                    @endforeach
+                </ul>
+            </div>
+
+            <div class="single__widget price__filter widget__bg">
+                <h2 class="widget__title h3">Filter By Price</h2>
+                <form class="price__filter--form" action="#">
+                    <div class="price__filter--form__inner mb-15 d-flex align-items-center">
+                        <div class="price__filter--group">
+                            <label class="price__filter--label" for="Filter-Price-GTE">From</label>
+                            <div class="price__filter--input">
+
+                                <input class="price__filter--input__field border-0 min_price" name="filter.v.price.gte" id="Filter-Price-GTE" type="number" placeholder="{{$min_price}}" >
+                            </div>
+                        </div>
+                        <div class="price__divider">
+                            <span>-</span>
+                        </div>
+                        <div class="price__filter--group">
+                            <label class="price__filter--label" for="Filter-Price-LTE">To</label>
+                            <div class="price__filter--input">
+
+                                <input class="price__filter--input__field border-0 max_price" name="filter.v.price.lte" id="Filter-Price-LTE" type="number"  min="{{$min_price}}" max="{{$max_price}}" placeholder="{{$max_price}}" >
+                            </div>
+                        </div>
+                    </div>
+                    <button class="primary__btn price__filter--btn" type="button">Filter</button>
+                </form>
+            </div>
+
+            <div class="single__widget widget__bg">
+                <h2 class="widget__title h3">Color</h2>
+                <ul class="widget__tagcloud side_filter_color">
+                    @foreach ($colors  as $list )
+
+                    <li class="widget__tagcloud--list"><a class="widget__tagcloud--link radio_btn" data-value="{{$list}}" data-type="color"> {{$list}}
+                    </a></li>
+                    @endforeach
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
     <!-- Start shop section -->
     <div class="shop__section section--padding">
         <div class="container">
             <div class="row">
+                {{--  filter side baar --}}
+                <div class="col-xl-3 col-lg-4 shop-col-width-lg-4">
+                    <div class="shop__sidebar--widget widget__area d-none d-lg-block">
+                        <div class="single__widget widget__bg">
+                            <h2 class="widget__title h3">Size</h2>
+                            <ul class="widget__tagcloud side_filter_size">
+                                @foreach ($sizes as $list)
 
+                                <li class="widget__tagcloud--list"><a class="widget__tagcloud--link radio_btn" data-value="{{$list}}" data-type="size"> {{$list}}
+                                </a></li>
+                                @endforeach
+
+
+                            </ul>
+                        </div>
+
+                        <div class="single__widget price__filter widget__bg">
+                            <h2 class="widget__title h3">Filter By Price</h2>
+                            <form class="price__filter--form" action="#">
+                                <div class="price__filter--form__inner mb-15 d-flex align-items-center">
+                                    <div class="price__filter--group">
+                                        <label class="price__filter--label" for="Filter-Price-GTE2">From</label>
+                                        <div class="price__filter--input border-radius-5 d-flex align-items-center">
+
+                                            <input class="price__filter--input__field border-0 min_price" name="filter.v.price.gte" id="Filter-Price-GTE2" type="number" placeholder="{{$min_price}}" min="{{$min_price}}" max="{{$max_price}}">
+                                        </div>
+                                    </div>
+                                    <div class="price__divider">
+                                        <span>-</span>
+                                    </div>
+                                    <div class="price__filter--group">
+                                        <label class="price__filter--label" for="Filter-Price-LTE2">To</label>
+                                        <div class="price__filter--input border-radius-5 d-flex align-items-center">
+
+                                            <input class="price__filter--input__field border-0 max_price" name="filter.v.price.lte" id="Filter-Price-LTE2" type="number" placeholder="{{$max_price}}"min="{{$min_price}}" max="{{$max_price}}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="primary__btn price__filter--btn" type="button">Filter</button>
+                            </form>
+                        </div>
+
+
+                        <div class="single__widget widget__bg">
+                            <h2 class="widget__title h3">Color</h2>
+                            <ul class="widget__tagcloud side_filter_color">
+                                @foreach ($colors  as $list)
+
+                                <li class="widget__tagcloud--list"><a class="widget__tagcloud--link radio_btn" data-value="{{$list}}" data-type="color"> {{$list}}
+                                </a></li>
+                                @endforeach
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {{-- // fitler end side baar --}}
                 <div class="col-xl-9 col-lg-8 shop-col-width-lg-8">
                     <div class="shop__right--sidebar">
                         <!-- Start categories section -->
@@ -159,7 +272,7 @@
                                                             <span class="current__price">Rs. {{$list->price}}</span>
                                                             <span class="old__price"> Rs. {{$list->mrp}}</span>
                                                         </div>
-                                                        <div class="product__card--footer add_to_cart"  data-color-cond="0" data-product_slug="{{$list->slug}}" data-size-cond="0" data-size-id="{{$list->size_id}}" data-color-id="{{$list->color_id}}">
+                                                        <div class="product__card--footer add_to_cart"  data-color-cond="0" data-product_slug="{{$list->slug}}" data-size-cond="0" data-size-id="{{$list->size}}" data-color-id="{{$list->color}}">
                                                             <a class="product__card--btn primary__btn" href="javascript:void(0)">
                                                                 <svg width="14" height="11" viewBox="0 0 14 11" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                 <path d="M13.2371 4H11.5261L8.5027 0.460938C8.29176 0.226562 7.9402 0.203125 7.70582 0.390625C7.47145 0.601562 7.44801 0.953125 7.63551 1.1875L10.0496 4H3.46364L5.8777 1.1875C6.0652 0.953125 6.04176 0.601562 5.80739 0.390625C5.57301 0.203125 5.22145 0.226562 5.01051 0.460938L1.98707 4H0.299574C0.135511 4 0.0183239 4.14062 0.0183239 4.28125V4.84375C0.0183239 5.00781 0.135511 5.125 0.299574 5.125H0.721449L1.3777 9.78906C1.44801 10.3516 1.91676 10.75 2.47926 10.75H11.0339C11.5964 10.75 12.0652 10.3516 12.1355 9.78906L12.7918 5.125H13.2371C13.3777 5.125 13.5183 5.00781 13.5183 4.84375V4.28125C13.5183 4.14062 13.3777 4 13.2371 4ZM11.0339 9.625H2.47926L1.86989 5.125H11.6433L11.0339 9.625ZM7.33082 6.4375C7.33082 6.13281 7.07301 5.875 6.76832 5.875C6.4402 5.875 6.20582 6.13281 6.20582 6.4375V8.3125C6.20582 8.64062 6.4402 8.875 6.76832 8.875C7.07301 8.875 7.33082 8.64062 7.33082 8.3125V6.4375ZM9.95582 6.4375C9.95582 6.13281 9.69801 5.875 9.39332 5.875C9.0652 5.875 8.83082 6.13281 8.83082 6.4375V8.3125C8.83082 8.64062 9.0652 8.875 9.39332 8.875C9.69801 8.875 9.95582 8.64062 9.95582 8.3125V6.4375ZM4.70582 6.4375C4.70582 6.13281 4.44801 5.875 4.14332 5.875C3.8152 5.875 3.58082 6.13281 3.58082 6.4375V8.3125C3.58082 8.64062 3.8152 8.875 4.14332 8.875C4.44801 8.875 4.70582 8.64062 4.70582 8.3125V6.4375Z" fill="currentColor"/>
@@ -206,7 +319,7 @@
                                                          {!!$list->short_desc!!}
 
                                                         </p>
-                                                        <a class="product__card--btn primary__btn add_to_cart" href="javascript:void(0)" data-product_slug="{{$list->slug}}" data-size-cond="0" data-size-id="{{$list->size_id}}" data-color-id="{{$list->color_id}}">+ Add to cart</a>
+                                                        <a class="product__card--btn primary__btn add_to_cart" href="javascript:void(0)" data-product_slug="{{$list->slug}}" data-size-cond="0" data-size-id="{{$list->size}}" data-color-id="{{$list->color}}">+ Add to cart</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -292,9 +405,8 @@
         page.page="category";
       page.filter= document.querySelector("[data-page]").getAttribute('data-page');;
 
-      page.order_filter = {};
-      page.order_filter.name = "name";
-      page['order_filter']['type'] = "desc";
+
+
 
 
 

@@ -32,9 +32,11 @@ class CartController extends Controller
         ])->get();
         $attr_model=DB::table("product_attr")->where([
             "sizes.size"=>$request->post("size_id"),
-            "product_attr.color_id"=>$request->post("color_id"),
+            "colors.color"=>$request->post("color_id"),
             "product_attr.product_id"=>$product_model[0]->id
-        ])->leftJoin('sizes','sizes.id','=','product_attr.size_id')->select("product_attr.id AS id")->get();
+        ])->leftJoin('sizes','sizes.id','=','product_attr.size_id')
+        ->leftJoin('colors','colors.id','=','product_attr.color_id')
+        ->select("product_attr.id AS id")->get();
 
         $cart['product_id'] = $product_model[0]->id;
         $cart['attr_id'] = $attr_model[0]->id;
@@ -103,4 +105,31 @@ class CartController extends Controller
 
             return  response()->json($result);
     }
+
+
+    // checkout function
+
+    public function checkout(Request $request)  {
+        if($request->session()->has("USER_ID")){
+            $user_id = $request->session()->get("USER_ID",0);
+            $user_type = "reg";
+        }else{
+            $user_id= temp_user();
+            $user_type = "non-reg";
+        }
+    $checkout_model = DB::table("cart")
+                        ->where([
+                            'user_id'=>$user_id,
+                            'user_type'=>$user_type
+                        ])
+                        ->join("products","products.id","=","cart.product_id")
+                        ->join("product_attr","product_attr.id","=","cart.attr_id")
+                        ->select("cart.id AS id","cart.qty AS qty","products.name AS name","product_attr.image AS image","product_attr.price AS price")->get();
+                            $result['product'] = $checkout_model;
+
+                        return view("front.checkout",$result);
+
+    }
+
+
 }
