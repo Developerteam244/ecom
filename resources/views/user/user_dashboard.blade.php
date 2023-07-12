@@ -41,48 +41,30 @@
                             <table class="account__table">
                                 <thead class="account__table--header">
                                     <tr class="account__table--header__child">
-                                        <th class="account__table--header__child--items">Order</th>
+                                        <th class="account__table--header__child--items">Name</th>
                                         <th class="account__table--header__child--items">Date</th>
                                         <th class="account__table--header__child--items">Payment Status</th>
                                         <th class="account__table--header__child--items">Fulfillment Status</th>
                                         <th class="account__table--header__child--items">Total</th>
                                     </tr>
                                 </thead>
+
+
                                 <tbody class="account__table--body mobile__none">
+
+                                    @forelse ($item as $list)
                                     <tr class="account__table--body__child">
-                                        <td class="account__table--body__child--items">#2014</td>
-                                        <td class="account__table--body__child--items">November 24, 2022</td>
-                                        <td class="account__table--body__child--items">Paid</td>
-                                        <td class="account__table--body__child--items">Unfulfilled</td>
-                                        <td class="account__table--body__child--items">$40.00 USD</td>
+                                        <td class="account__table--body__child--items">{{$list['item_name']}}</td>
+                                        <td class="account__table--body__child--items">{{$list->created_at}}</td>
+                                        <td class="account__table--body__child--items">{{$list->order_status}}</td>
+                                        <td class="account__table--body__child--items">{{$list->status}}</td>
+                                        <td class="account__table--body__child--items">{{$list->price*$list->qty}}</td>
                                     </tr>
 
+                                    @empty
+                                    @endforelse
                                 </tbody>
-                                <tbody class="account__table--body mobile__block">
-                                    <tr class="account__table--body__child">
-                                        <td class="account__table--body__child--items">
-                                            <strong>Order</strong>
-                                            <span>#2014</span>
-                                        </td>
-                                        <td class="account__table--body__child--items">
-                                            <strong>Date</strong>
-                                            <span>November 24, 2022</span>
-                                        </td>
-                                        <td class="account__table--body__child--items">
-                                            <strong>Payment Status</strong>
-                                            <span>Paid</span>
-                                        </td>
-                                        <td class="account__table--body__child--items">
-                                            <strong>Fulfillment Status</strong>
-                                            <span>Unfulfilled</span>
-                                        </td>
-                                        <td class="account__table--body__child--items">
-                                            <strong>Total</strong>
-                                            <span>$40.00 USD</span>
-                                        </td>
-                                    </tr>
 
-                                </tbody>
                             </table>
                         </div>
                     </div>

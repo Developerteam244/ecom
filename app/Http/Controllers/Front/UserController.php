@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Order;
+use App\Models\Order_item;
+use App\Models\User;
 use Validator;
 
 class UserController extends Controller
@@ -114,10 +117,35 @@ class UserController extends Controller
 
     // dashboard
 
-public function user_dashboard() {
+    public function user_dashboard() {
 
-    return view('front.user_dashboard');
-}
+            $usre_id = session('USER_ID');
+            $order_model = Order::where(['user_id'=>$usre_id])->orderBy('created_at','desc')->get();
+            $index = 0;
+        foreach ($order_model as $key=> $list)       {
+
+            $items = Order_item::where(['order_id'=>$list->id])->get();
+                foreach ($items as  $value) {
+                    $index++;
+                    $result['item'][$index] = $value;
+                    $result['item'][$index]->order_status = $list->order_status;
+                    $result['item'][$index]->status = $list->status;
+                }
+
+
+
+            }
+
+
+
+
+
+
+
+
+
+                return view('user.user_dashboard',$result);
+    }
 
 
     // dashboard end

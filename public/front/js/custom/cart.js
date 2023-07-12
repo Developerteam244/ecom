@@ -3,15 +3,16 @@
 let condition ={
     size:{
         msg:"Please Select The Size",
-        data:"size-id"
+        data:"size"
     },
     color:{
         msg:"Please Select The Color",
-        data:"color-id"
+        data:"color"
     }
 }
  let cart_product_div  = document.querySelector('.minicart__product');
-
+ let host = location.host;
+ let url = `http://${host}/`;
 
 
 function cart_items_total_amount(){
@@ -58,35 +59,42 @@ act.add_cart.forEach(function (element) {
 
 act.condition_container = document.querySelector("#add_to_cart");
 
-
-
-
-
-
- function add_to_cart(e){
-    condition.size.condition = this.getAttribute('data-size-cond');
-    condition.color.condition = this.getAttribute('data-color-cond');
-
-    let attr_condition =true;
-    let data = {};
+const condition_check = (element)=>{
+    condition.size.condition = element.getAttribute('data-size-cond');
+    condition.color.condition = element.getAttribute('data-color-cond');
 
     for (let list in condition){
-        if(condition[list]['condition']){
-            condition[list].condition_value = this.getAttribute("data-"+condition[list]['data']);
+        if(condition[list]['condition'] != 0){
+
+            condition[list].condition_value = element.getAttribute("data-"+condition[list]['data']);
 
             if (condition[list]['condition_value']) {
 
 
             }else{
 
-                attr_condition = false;
-                let responese = document.querySelector("#cart_response")
+                let responese = document.querySelector("#cart_response");
                 responese.innerText = condition[list]['msg'];
                 responese.classList.add('response-box','warning');
-                return ;
+                return false;
+                break;
             }
         }
     }
+    return true;
+}
+
+
+
+
+ function add_to_cart(e){
+
+
+    let attr_condition =condition_check(this);
+    let data = {};
+    console.log(attr_condition);
+
+
     if(attr_condition){
         //data.attr_id = act.product_attr_id;
         data.slug = this.getAttribute('data-product_slug');
@@ -94,8 +102,8 @@ act.condition_container = document.querySelector("#add_to_cart");
         data.quantity = data.quantity? data['quantity'].value :1;
 
 
-        data.color_id = condition.color.condition_value;
-        data.size_id = condition.size.condition_value;
+        data.color_id = this.getAttribute('data-color');
+        data.size_id = this.getAttribute('data-size');
 
         let host = location.host;
         let url = `http://${host}/add_cart`;
@@ -247,8 +255,8 @@ main_div.innerHTML += `</div>
 </div>
 
 <div class="minicart__button d-flex justify-content-center">
-    <a class="primary__btn minicart__button--link" href="cart.html">View cart</a>
-    <a class="primary__btn minicart__button--link" href="checkout.html">Checkout</a>
+
+    <a class="primary__btn minicart__button--link" href="${url}checkout">Checkout</a>
 </div>
 
 </div>`;
@@ -517,4 +525,4 @@ remove_btn.forEach(btn=>{
 }
 make_event_item(cart_product_div);
 //{add_to_cart};
-export {add_to_cart,condition};
+export {add_to_cart,condition,condition_check};

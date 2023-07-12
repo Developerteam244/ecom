@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+
 use Validator;
 
 class FrontController extends Controller
@@ -29,15 +30,20 @@ class FrontController extends Controller
             $result['product'][$value->category_name]= $home_product_model;
             foreach ($home_product_model as $product_key => $product_value) {
 
-                $home_product_price_model = DB::table('product_attr')->where('product_id', '=', $product_value->id)->leftJoin('sizes','sizes.id','=','product_attr.size_id')->orderBy('price','asc')->first();
+                $home_product_price_model = DB::table('product_attr')
+                ->where('product_id', '=', $product_value->id)
+                ->leftJoin('sizes','sizes.id','=','product_attr.size_id')
+                ->leftJoin('colors','colors.id','=','product_attr.color_id')
+                ->select('product_attr.*','sizes.size','colors.color')
+                ->orderBy('price','asc')->first();
                 $price = $home_product_price_model->price;
                 $result['product'][$value->category_name][$product_key]->price = $price;
                 $mrp = $home_product_price_model->mrp;
                 $result['product'][$value->category_name][$product_key]->mrp = $mrp;
                 $discount = round(($price/$mrp)*100);
                 $result['product'][$value->category_name][$product_key]->discount = $discount;
-                $result['product'][$value->category_name][$product_key]->size_id = $home_product_price_model->size;
-                $result['product'][$value->category_name][$product_key]->color_id = $home_product_price_model->color_id;
+                $result['product'][$value->category_name][$product_key]->size = $home_product_price_model->size;
+                $result['product'][$value->category_name][$product_key]->color = $home_product_price_model->color;
 
             }
 
@@ -50,20 +56,26 @@ class FrontController extends Controller
 
         //featured product
 
-        $home_feature_product_model = DB::table('products')->where(['is_featured'=>1, 'status'=>1])->get();
+        $home_feature_product_model = DB::table('products')
+        ->where(['is_featured'=>1, 'status'=>1])->get();
 
         $result['feature_product']= $home_feature_product_model;
         foreach ($home_feature_product_model as $product_key => $product_value) {
 
-            $home_product_price_model = DB::table('product_attr')->where('product_id', '=', $product_value->id)->leftJoin('sizes','sizes.id','=','product_attr.size_id')->orderBy('price','asc')->first();
+            $home_product_price_model = DB::table('product_attr')
+            ->where('product_id', '=', $product_value->id)
+            ->leftJoin('sizes','sizes.id','=','product_attr.size_id')
+            ->leftJoin('colors','colors.id','=','product_attr.color_id')
+            ->select('product_attr.*','sizes.size','colors.color')
+            ->orderBy('price','asc')->first();
             $price = $home_product_price_model->price;
             $result['feature_product'][$product_key]->price = $price;
             $mrp = $home_product_price_model->mrp;
             $result['feature_product'][$product_key]->mrp = $mrp;
             $discount = 100- round(($price/$mrp)*100);
             $result['feature_product'][$product_key]->discount = $discount;
-            $result['feature_product'][$product_key]->size_id = $home_product_price_model->size;
-            $result['feature_product'][$product_key]->color_id = $home_product_price_model->color_id;
+            $result['feature_product'][$product_key]->size = $home_product_price_model->size;
+            $result['feature_product'][$product_key]->color = $home_product_price_model->color;
 
         }
 
@@ -71,20 +83,26 @@ class FrontController extends Controller
 
         // tranding product
 
-        $home_tranding_product_model = DB::table('products')->where(['is_tranding'=>1, 'status'=>1])->get();
+        $home_tranding_product_model = DB::table('products')
+        ->where(['is_tranding'=>1, 'status'=>1])->get();
 
         $result['tranding_product']= $home_tranding_product_model;
         foreach ($home_tranding_product_model as $product_key => $product_value) {
 
-            $home_product_price_model = DB::table('product_attr')->where('product_id', '=', $product_value->id)->leftJoin('sizes','sizes.id','=','product_attr.size_id')->orderBy('price','asc')->first();
+            $home_product_price_model = DB::table('product_attr')
+            ->where('product_id', '=', $product_value->id)
+            ->leftJoin('sizes','sizes.id','=','product_attr.size_id')
+            ->leftJoin('colors','colors.id','=','product_attr.color_id')
+            ->select('product_attr.*','sizes.size','colors.color')
+            ->orderBy('price','asc')->first();
             $price = $home_product_price_model->price;
             $result['tranding_product'][$product_key]->price = $price;
             $mrp = $home_product_price_model->mrp;
             $result['tranding_product'][$product_key]->mrp = $mrp;
             $discount =100- round(($price/$mrp)*100);
             $result['tranding_product'][$product_key]->discount = $discount;
-            $result['tranding_product'][$product_key]->size_id = $home_product_price_model->size;
-            $result['tranding_product'][$product_key]->color_id = $home_product_price_model->color_id;
+            $result['tranding_product'][$product_key]->size = $home_product_price_model->size;
+            $result['tranding_product'][$product_key]->color = $home_product_price_model->color;
 
         }
 
@@ -98,18 +116,25 @@ class FrontController extends Controller
         $result['discounted_product']= $home_discounted_product_model;
         foreach ($home_discounted_product_model as $product_key => $product_value) {
 
-            $home_product_category_model = DB::table('categories')->where('id', '=', $product_value->category_id)->first();
+            $home_product_category_model = DB::table('categories')
+                ->where('id', '=', $product_value->category_id)
+                ->first();
             $category = $home_product_category_model->category_name;
             $result['discounted_product'][$product_key]->category = $category;
-            $home_product_price_model = DB::table('product_attr')->where('product_id', '=', $product_value->id)->leftJoin('sizes','sizes.id','=','product_attr.size_id')->orderBy('price','asc')->first();
+            $home_product_price_model = DB::table('product_attr')
+                ->where('product_id', '=', $product_value->id)
+                ->leftJoin('sizes','sizes.id','=','product_attr.size_id')
+                ->leftJoin('colors','colors.id','=','product_attr.color_id')
+                ->select('product_attr.*','sizes.size','colors.color')
+                ->orderBy('price','asc')->first();
             $price = $home_product_price_model->price;
             $result['discounted_product'][$product_key]->price = $price;
             $mrp = $home_product_price_model->mrp;
             $result['discounted_product'][$product_key]->mrp = $mrp;
             $discount = 100- round(($price/$mrp)*100);
             $result['discounted_product'][$product_key]->discount = $discount;
-            $result['discounted_product'][$product_key]->size_id = $home_product_price_model->size;
-            $result['discounted_product'][$product_key]->color_id = $home_product_price_model->color_id;
+            $result['discounted_product'][$product_key]->size = $home_product_price_model->size;
+            $result['discounted_product'][$product_key]->color = $home_product_price_model->color;
 
         }
 
@@ -123,10 +148,14 @@ class FrontController extends Controller
         $result['promo_product']= $home_discounted_product_model;
         foreach ($home_discounted_product_model as $product_key => $product_value) {
 
-            $home_product_category_model = DB::table('categories')->where('id', '=', $product_value->category_id)->first();
+            $home_product_category_model = DB::table('categories')
+            ->where('id', '=', $product_value->category_id)->first();
             $category = $home_product_category_model->category_name;
             $result['promo_product'][$product_key]->category = $category;
-            $home_product_price_model = DB::table('product_attr')->where('product_id', '=', $product_value->id)->orderBy('price','asc')->first();
+            $home_product_price_model = DB::table('product_attr')
+            ->where('product_id', '=', $product_value->id)
+            ->orderBy('price','asc')->first();
+
             $price = $home_product_price_model->price;
             $result['promo_product'][$product_key]->price = $price;
             $mrp = $home_product_price_model->mrp;
@@ -183,8 +212,9 @@ class FrontController extends Controller
 
         $result['product'] = $product_model[0];
       $product_attr_model = DB::table('product_attr')->where([
-        'product_id'=>$result['product']->id
-      ])->leftJoin('sizes','sizes.id','=','product_attr.size_id')->leftJoin('colors','colors.id','=','product_attr.color_id')->get();
+        'product_id'=>$result['product']->id])
+            ->leftJoin('sizes','sizes.id','=','product_attr.size_id')
+             ->leftJoin('colors','colors.id','=','product_attr.color_id')->get();
 
       $result['product_attr'] = $product_attr_model;
       $sizes = [];
@@ -192,13 +222,13 @@ class FrontController extends Controller
 
         foreach ($product_attr_model as $key => $value) {
             $sizes[$key]['size'] = $value->size;
-            $sizes[$key]['size_id'] = $value->size_id;
-            $sizes[$key]['id'] = $value->id;
+
+
             $colors[$key]['color'] = $value->color;
             $colors[$key]['image'] = $value->image;
-            $colors[$key]['color_id'] = $value->color_id;
-            $colors[$key]['id'] = $value->id;
             $colors[$key]['size'] = $value->size;
+
+
         }
 
         $unique_size =[];
@@ -241,15 +271,20 @@ class FrontController extends Controller
             $result['related_product']= $releted_product_model;
             foreach ($releted_product_model as $product_key => $product_value) {
 
-             $home_product_price_model = DB::table('product_attr')->where('product_id', '=', $product_value->id)->leftJoin('sizes','sizes.id','=','product_attr.size_id')->orderBy('price','asc')->first();
+             $home_product_price_model = DB::table('product_attr')
+             ->where('product_id', '=', $product_value->id)
+             ->leftJoin('sizes','sizes.id','=','product_attr.size_id')
+             ->leftJoin('colors','colors.id','=','product_attr.color_id')
+            ->select('product_attr.*','sizes.size','colors.color')
+             ->orderBy('price','asc')->first();
              $price = $home_product_price_model->price;
              $result['related_product'][$product_key]->price = $price;
              $mrp = $home_product_price_model->mrp;
              $result['related_product'][$product_key]->mrp = $mrp;
              $discount = 100- round(($price/$mrp)*100);
              $result['related_product'][$product_key]->discount = $discount;
-             $result['related_product'][$product_key]->size_id = $home_product_price_model->size;
-             $result['related_product'][$product_key]->color_id = $home_product_price_model->color_id;
+             $result['related_product'][$product_key]->size = $home_product_price_model->size;
+             $result['related_product'][$product_key]->color = $home_product_price_model->color;
 
          }
 

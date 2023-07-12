@@ -1,7 +1,9 @@
-import { condition } from "./cart.js";
+import { condition,condition_check } from "./cart.js";
 
-
-
+let csrf = document.querySelector("meta[name='csrf-token']").getAttribute('content');
+let buy_btn= document.querySelector("#buy_now");
+let host = location.host;
+let url = `http://${host}/`;
 act.product_preview = document.querySelector('.product_preview');
 act.product_preview_html = act.product_preview.innerHTML;
 act.product_preview_status = true;
@@ -43,10 +45,10 @@ function product_preview_color(e){
     act.product_preview_status = false;
     if(act.hasOwnProperty('product_size_attr')){
 
-        act.product_color_id = this.getAttribute('data-color-id');
+        act.product_color_id = this.getAttribute('data-color');
     }
     act.product_attr_id = this.getAttribute('data-id');
-    document.querySelector("#add_to_cart").setAttribute('data-color-id',act.product_color_id);
+    document.querySelector("#add_to_cart").setAttribute('data-color',act.product_color_id);
     condition.color.condition_value = act.product_color_id;
     act.product_preview.innerHTML = `<div class="product__media--preview__items">
     <a class="product__media--preview__items--link glightbox" data-gallery="product-media-preview" href="http://127.0.0.1:8000/storage/media/attr_image/${image}"><img class="product__media--preview__items--img" src="http://127.0.0.1:8000/storage/media/attr_image/${image}"></a>
@@ -58,7 +60,7 @@ function product_preview_color(e){
     </div>
 </div>`;
 
-
+document.querySelector("#buy_now").setAttribute('data-color',act.product_color_id);
 }
 
 
@@ -87,8 +89,54 @@ function click_size(e) {
             color.style.display = "none";
         }
     })
-    document.querySelector("#add_to_cart").setAttribute('data-size-id',act.product_size_attr);
+    condition.size.condition_value = act.product_size_attr
+    document.querySelector("#add_to_cart").setAttribute('data-size',act.product_size_attr);
+    document.querySelector("#buy_now").setAttribute('data-size',act.product_size_attr);
     //act.product_size_id = this.getAttribute('data-size-id');
     //condition.size.condition_value = act.product_size_id;
+    console.log(condition);
+
 
 }
+
+buy_btn.addEventListener("click",(element)=>{
+
+    let attr_condition = condition_check(buy_btn);
+    let data = {};
+    console.log(attr_condition);
+
+
+    if (attr_condition) {
+        let size = buy_btn.getAttribute("data-size");
+        let color = buy_btn.getAttribute("data-color");
+        let slug = buy_btn.getAttribute("data-product-slug");
+        let qty = document.getElementById("qty").value;
+
+        let formdata = new FormData();
+        let form = document.createElement("form");
+        form.method = "GET";
+        form.action = `${url}checkout_details/buy_now`;
+
+        formdata.append("size",size);
+        formdata.append("color",color);
+        formdata.append("slug",slug);
+        formdata.append("qty",qty);
+
+        for(let [key,value] of formdata.entries()){
+            let input = document.createElement('input');
+             input.name = key;
+             input.value = value;
+             form.appendChild(input);
+        }
+
+        document.body.appendChild(form);
+        form.submit();
+
+
+
+
+
+    }
+
+})
+

@@ -92,7 +92,7 @@
                                 <li class="payment__history--list"><button class="payment__history--link primary__btn" type="submit">Paypal</button></li>
                             </ul>
                         </div>
-                        <button class="checkout__now--btn primary__btn" type="submit" id="submit">Checkout Now</button>
+                        <button class="checkout__now--btn primary__btn" type="button" id="checkout" data-id="{{$order_id}}">Checkout Now</button>
                     </aside>
                 </div>
 
@@ -111,20 +111,102 @@
 
  @endsection
 
- @push('custom-scripts')
+ @push('custom-script')
 
 
- <script type="module">
-    import {page} from "{{asset('front/js/custom/filter.js')}}";
-        page.page="category";
-      page.filter= document.querySelector("[data-page]").getAttribute('data-page');;
+ <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+ <script>
+let checkout_btn = document.getElementById("checkout");
+let order_id = checkout_btn.getAttribute("data-id");
+
+checkout_btn.addEventListener("click",(btn)=>{
+
+    let obj= request("checkout_order",{id:order_id});
+
+    obj.then(ans=>{
+
+        razor(ans);
+
+
+    })
 
 
 
 
+})
+
+let request = async (url_path,body)=>{
+    let host = location.host;
+let fhost = `http://${host}/${url_path}`;
+    let csrf = document.querySelector("meta[name='csrf-token']").getAttribute('content');
+    let url = `http://${host}/${url_path}`;
+    let res='';
+    let items;
+
+    await fetch(url,{
+                method:"POST",
+                body:JSON.stringify(body),
+                headers:{
+                    'Content-type':'application/json; charset=UTF-8',
+                    'X-CSRF-TOKEN':csrf
+                }
 
 
-     </script>
-     <script type="module" src="{{asset('front/js/custom/filter.js')}}"></script>
+            }).then(data=>{
+                return data.json();
+            }).then(response=>{
+                res= response;
+
+
+            })
+
+            return res;
+}
+
+
+const razor = (obj)=>{
+    let option = obj.option;
+
+    option.handler = handler;
+    console.log(option);
+
+
+
+    var rzp1 = new Razorpay(option);
+    rzp1.open();
+    rzp1.on('payment.failed', function (response){
+        alert(response.error.code);
+        alert(response.error.description);
+        alert(response.error.source);
+        alert(response.error.step);
+        alert(response.error.reason);
+        alert(response.error.metadata.order_id);
+        alert(response.error.metadata.payment_id);
+    });
+
+};
+
+
+
+const handler = (response)=>{
+
+    let data = {
+        id:order_id,
+        res:response
+    }
+
+    let result = request("checkout_payment",data);
+
+        result.then(res=>{
+            if (res.res=='true') {
+                location.href = "./user/dashboard";
+            }
+
+        })
+
+}
+
+ </script>
+
 
  @endpush

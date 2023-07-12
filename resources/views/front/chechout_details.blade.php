@@ -26,7 +26,8 @@
                 <div class="row">
                     <div class="col-lg-12 col-md-12">
                         <div class="main checkout__mian">
-                            <form action="#">
+                            <form action="{{url('checkout_details_submit')}}" method="post">
+                                @csrf
                                 <div class="checkout__content--step section__contact--information">
                                     <div
                                         class="section__header checkout__section--header d-flex align-items-center justify-content-between mb-25">
@@ -50,7 +51,7 @@
                                                             class="checkout__input--label__star">*</span></label>
                                                     <input class="checkout__input--field border-radius-5"
                                                         placeholder="First name " id="name" type="text"
-                                                        name="name" required>
+                                                        name="name" value="{{$name}}" required>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 mb-20">
@@ -59,7 +60,7 @@
                                                         <span class="checkout__input--label__star">*</span></label>
                                                     <input class="checkout__input--field border-radius-5"
                                                         placeholder="Please Enter your Mobile No." id="mobile"
-                                                        type="text" name="mobile" required>
+                                                        type="text" name="mobile" value="{{$mobile}}" required>
                                                 </div>
                                             </div>
 
@@ -79,7 +80,7 @@
                                                             class="checkout__input--label__star">*</span></label>
                                                     <input class="checkout__input--field border-radius-5"
                                                         placeholder="Please Enter Your Area " id="area" name="area"
-                                                        type="text" required>
+                                                        type="text" value="{{$area}}" required>
                                                 </div>
                                             </div>
 
@@ -97,7 +98,7 @@
                                                     <label class="checkout__input--label mb-5" for="town">Town/City
                                                         <span class="checkout__input--label__star">*</span></label>
                                                     <input class="checkout__input--field border-radius-5" placeholder="City"
-                                                        id="town" name="town" type="text" required>
+                                                        id="town" name="city" type="text" value="{{$city}}" required>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6 mb-20">
@@ -121,13 +122,24 @@
                                                         <span class="checkout__input--label__star">*</span></label>
                                                     <input class="checkout__input--field border-radius-5"
                                                         placeholder="Pin code" id="pin" name="pin"
-                                                        type="text" required>
+                                                        type="text" value="{{$pin}}" required>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                    @if ($type=="buy_now")
+                                        <input type="text" hidden name="type" value="buy_now">
+                                        @foreach ($buy  as $key=>$list)
+                                        <input type="text" hidden name="{{$key}}" value="{{$list}}">
 
+                                        @endforeach
 
+                                        @elseif ($type == "cart")
+
+                                        <input type="text" hidden name="type" value="cart">
+
+                                    @endif
+                                    <button type="submit">Submit</button>
                                 </div>
 
 
