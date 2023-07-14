@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Order;
 use App\Models\Order_item;
-use App\Models\User;
+use App\Models\Admin\User;
 use Validator;
 
 class UserController extends Controller
@@ -122,6 +122,7 @@ class UserController extends Controller
             $usre_id = session('USER_ID');
             $order_model = Order::where(['user_id'=>$usre_id])->orderBy('created_at','desc')->get();
             $index = 0;
+            $result['item'] = [];
         foreach ($order_model as $key=> $list)       {
 
             $items = Order_item::where(['order_id'=>$list->id])->get();
@@ -133,23 +134,45 @@ class UserController extends Controller
                 }
 
 
-
             }
+            return view('user.user_dashboard',$result);
 
 
-
-
-
-
-
-
-
-                return view('user.user_dashboard',$result);
     }
 
 
     // dashboard end
 
+    // user manage profile show their detials
+
+    public function manage_profile() {
+        $user_id = session()->get("TEMP_USER","1");
+
+        $user_model = User::find($user_id);
+        $result['email'] = $user_model->email;
+        $result['name'] = $user_model->name;
+        $result['mobile'] = $user_model->mobile;
+        $result['area'] = $user_model->area;
+        $result['city'] = $user_model->city;
+        $result['dist'] = $user_model->dist;
+        $result['state'] = $user_model->state;
+        $result['pin'] = $user_model->pin;
+
+
+        return view('user.manage_profile', $result);
+    }
+
+    // update user details
+    public function manage_profile_process(Request $request) {
+        $user_id = session()->get("TEMP_USER","1");
+        $details = $request->post();
+        unset($details['_token']);
+        $details = array_filter($details);
+
+        $user_model = User::where(['id'=>$user_id])->update($details);
+
+        return redirect()->route('user.dashboard');
+    }
 
     // user account end
 

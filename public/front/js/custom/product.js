@@ -30,24 +30,31 @@ act.product_color = document.querySelectorAll(".product_color");
 
 act.product_color.forEach(function (element) {
 
-    element.addEventListener("click", product_preview_color);
+    element.addEventListener("click", (evetn)=>{
 
+
+        product_preview_color(element);
+    })
 });
 
 
-function product_preview_color(e){
-    let image = this.getAttribute('data-product-image');
-    e.stopImmediatePropagation();
-    e.stopPropagation();
 
+
+
+
+function product_preview_color(element){
+    let image = element.getAttribute('data-product-image');
+
+
+    console.log(element);
 
 
     act.product_preview_status = false;
     if(act.hasOwnProperty('product_size_attr')){
 
-        act.product_color_id = this.getAttribute('data-color');
+        act.product_color_id = element.getAttribute('data-color');
     }
-    act.product_attr_id = this.getAttribute('data-id');
+    act.product_attr_id = element.getAttribute('data-id');
     document.querySelector("#add_to_cart").setAttribute('data-color',act.product_color_id);
     condition.color.condition_value = act.product_color_id;
     act.product_preview.innerHTML = `<div class="product__media--preview__items">

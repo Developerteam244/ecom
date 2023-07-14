@@ -21,10 +21,13 @@ Route::controller(UserController::class)->group(function(){
     Route::post('signup','signup')->name('signup');
     Route::post('signin','signin')->name('signin');
     Route::get('login','login');
-    Route::get('signup','singup_view');
+    Route::get('signup','singup_view')->name('signup_view');
 
     Route::middleware(['user_auth'])->group(function () {
-        Route::get('dashboard','user_dashboard');
+        Route::get('dashboard','user_dashboard')->name('user.dashboard');
+        Route::get('manage_profile','manage_profile');
+        Route::post('manage_profile_process','manage_profile_process')->name('manage_profile_process');
+
 
 
         Route::get('logout',function (){

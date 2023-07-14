@@ -1,6 +1,6 @@
 @extends('front.layout')
- @section('content')
 
+ @section('content')
 
 
 

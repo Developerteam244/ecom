@@ -25,15 +25,7 @@
         <div class="container">
             <p class="account__welcome--text">Hello, {{session('USER_NAME')}} welcome to your dashboard!</p>
             <div class="my__account--section__inner border-radius-10 d-flex">
-                <div class="account__left--sidebar">
-                    <h2 class="account__content--title mb-20">My Profile</h2>
-                    <ul class="account__menu">
-                        <li class="account__menu--list active"><a href="{{asset('dashboard')}}">Dashboard</a></li>
-                        <li class="account__menu--list"><a href="my-account-2.html">Addresses</a></li>
-                        <li class="account__menu--list"><a href="wishlist.html">Wishlist</a></li>
-                        <li class="account__menu--list"><a href="{{asset('logout')}}">Log Out</a></li>
-                    </ul>
-                </div>
+                @include('user.sidebar')
                 <div class="account__wrapper">
                     <div class="account__content">
                         <h2 class="account__content--title h3 mb-20">Orders History</h2>

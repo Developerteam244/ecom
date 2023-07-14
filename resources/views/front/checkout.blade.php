@@ -118,7 +118,7 @@
  <script>
 let checkout_btn = document.getElementById("checkout");
 let order_id = checkout_btn.getAttribute("data-id");
-
+let host = location.host;
 checkout_btn.addEventListener("click",(btn)=>{
 
     let obj= request("checkout_order",{id:order_id});
@@ -199,7 +199,7 @@ const handler = (response)=>{
 
         result.then(res=>{
             if (res.res=='true') {
-                location.href = "./user/dashboard";
+                location.href = `http://${host}/user/dashboard`;
             }
 
         })

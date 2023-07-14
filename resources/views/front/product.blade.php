@@ -141,31 +141,32 @@
 
                                  <p class="product__details--info__desc mb-15">{!! $product->short_desc !!}</p>
                                  <div class="product__variant">
-                                     @if (!empty($product_color))
-                                         @php
-                                             $color_id = 1;
-                                         @endphp
-
-                                         <div class="product__variant--list mb-10">
-                                             <fieldset class="variant__input--fieldset">
-                                                 <legend class="product__variant--title mb-8">Color :</legend>
-                                                 <div class="variant__color d-flex">
-                                                     @foreach ($product_color as $list)
+                                    @if (!empty($product_color))
+                                    @php
+                                    $color_id = 1;
+                                    @endphp
+                                    <div class="product__variant--list mb-10">
+                                        <fieldset class="variant__input--fieldset">
+                                            <legend class="product__variant--title mb-8">Color :</legend>
+                                            <div class="variant__color d-flex">
+                                                @foreach ($product_color as $list)
                                                          @if ($list != '')
-                                                             <div class="variant__color--list product_color"
-                                                                 data-size="{{ $list['size'] }}"
-                                                                 data-product-image="{{ $list['image'] }}"
-                                                                 data-color="{{ $list['color'] }}">
-                                                                 <input id="color-red5" name="color" type="radio">
-                                                                 <label class="variant__color--value red "
-                                                                     for="color-red5" title="{{ $list['color'] }}">
-                                                             </div>
-                                                         @endif
-                                                     @endforeach
+                                                         <div class="variant__color--list product_color"
+                                                         data-size="{{ $list['size'] }}"
+                                                         data-product-image="{{ $list['image'] }}"
+                                                         data-color="{{ $list['color'] }}">
+                                                         <input id="{{ $list['color'] }}" name="color" type="radio">
+                                                         <label class="variant__color--value red "
+                                                             for="{{ $list['color'] }}" title="{{ $list['color'] }}">
+                                                     </div>
+                                                @endif
+                                                @endforeach
 
-                                             </fieldset>
-                                         </div>
-                                     @endif
+
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    @endif
                                      @if (!empty($product_size))
                                          <div class="product__variant--list mb-20">
                                              <fieldset class="variant__input--fieldset">

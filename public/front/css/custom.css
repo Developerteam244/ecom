@@ -26,20 +26,9 @@
 /* product details */
 
 
-.product__details--tab__inner{
-    container-name:add_details;
-    container-type:size;
-    height: 300px;
-    overflow: hidden;
-}
 
-@container add_details (height > 200px){
-    .tab_content {
-        height:400px;
-        overflow: hidden;
-        background:red;
-    }
-}
+
+
 /* advance filter css */
 
 .active_filter_btn {
@@ -49,3 +38,18 @@
 }
 
 
+/* User Dashboard */
+
+.profile_image {
+    width: 100px;
+    height: 100px;
+
+}
+
+.profile_image>img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+/* User Dashboard end*/

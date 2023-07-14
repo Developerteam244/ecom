@@ -32,7 +32,7 @@ Route::controller(CartController::class)->group(function(){
     Route::post('add_cart','add_to_cart');
     Route::post('delete_cart_item','delete_cart_item');
     Route::post('cart_quatity_update','cart_quatity_update');
-    Route::get('checkout','checkout');
+    Route::get('checkout/{order_id}','checkout')->name('checkout');
     Route::get('checkout_details/{type}','checkout_details');
     Route::post('checkout_details_submit','checkout_details_submit');
     Route::post('checkout_order','checkout_order');

@@ -46,18 +46,18 @@
                                             <label class="checkout__checkbox--label login__remember--label" for="check1">
                                                 Remember me</label>
                                         </div>
-                                        <button class="account__login--forgot"  type="submit">Forgot Your Password?</button>
+                                        <button class="account__login--forgot"  type="submit">Forgot Your Password</button>
                                     </div>
-                                    <button class="account__login--btn primary__btn" type="submit">Login</button>
+                                    <button class="account__login--btn primary__btn" type="submit">Logins</button>
                                     <div class="account__login--divide">
-                                        <span class="account__login--divide__text">OR</span>
+                                        <span class="account__login--divide__text">O</span>
                                     </div>
                                     <div class="account__social d-flex justify-content-center mb-15">
                                         <a class="account__social--link facebook" target="_blank" href="https://www.facebook.com">Facebook</a>
                                         <a class="account__social--link google" target="_blank" href="https://www.google.com">Google</a>
                                         <a class="account__social--link twitter" target="_blank" href="https://twitter.com">Twitter</a>
                                     </div>
-                                    <p class="account__login--signup__text">Don,t Have an Account? <a href="{{url('signup')}}">
+                                    <p class="account__login--signup__text">Don,t Have an Account? <a href="{{route('signup_view')}}">
                                         <button type="button">Sign up now</button>  </a>
                                     </p>
                                 </div>

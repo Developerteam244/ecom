@@ -170,6 +170,7 @@ class CartController extends Controller
                     $checkout_details_model->dist = "Surguja";
                     $checkout_details_model->state = $request->post('state');
                     $checkout_details_model->pin = $request->post('pin');
+                    $checkout_details_model->type = $request->post('type');
                     $checkout_details_model->order_status = "submit detail";
 
                     $checkout_details_model->save();
@@ -218,7 +219,7 @@ class CartController extends Controller
                                                     'sizes.size'=>$size,
                                                     'colors.color'=>$color
                                             ])
-                                            ->select('products.id AS id','products.name AS name','product_attr.id AS paid','product_attr.price AS price','product_attr.image AS image')
+                                            ->select('products.id AS id','products.name AS name','product_attr.id AS paid')
                                             ->get();
 
                                             $order_item_model = new Order_item();
@@ -229,7 +230,7 @@ class CartController extends Controller
                                             $order_item_model->product_attr_id = $product_model[0]->paid;
                                             $order_item_model->save();
                                             $product_model[0]->qty = $qty;
-                                            $result['product'] = $product_model;
+
 
 
                             }
@@ -237,12 +238,40 @@ class CartController extends Controller
 
 
 
-                        $result['order_id'] = $order_id;
 
-                    return view("front.checkout",$result);
+
+                        return redirect()->route('checkout',['order_id'=>$order_id]);
+                    // return view("front.checkout",$result);
 
 
     }
+    // middle checkout
+
+    public function checkout(Request $request,$id)  {
+        if($request->session()->has("USER_ID")){
+            $user_id = $request->session()->get("USER_ID",0);
+            $user_type = "reg";
+        }else{
+            return redirect('user/login');
+        }
+
+            $order_item_model = Order_item::where(['order_id'=>$id])
+                         ->join('product_attr','product_attr.id','=','order_items.product_attr_id')
+                         ->select('order_items.item_name AS name','order_items.qty AS qty','product_attr.price AS price','product_attr.image AS image')
+                        ->get();
+
+
+
+
+        $result['product'] = $order_item_model;
+        $result['order_id'] = $id;
+
+
+
+        return view("front.checkout",$result);
+
+    }
+
     // checkout order create
 
     public function checkout_order(Request $request) {
@@ -265,6 +294,8 @@ class CartController extends Controller
 
             $sub_total += $product_attr_model->price*$list->qty;
         }
+
+
 
 
 
@@ -316,14 +347,14 @@ class CartController extends Controller
             $order_item_change_model = Order_item::where(['id'=>$list->id])
                             ->update(['price'=>$product_attr_model->price]);
 
-        }
-        foreach ($order_item_model as $list) {
-            $paid = $list['attr_id'];
+            // manage the qty
+            $paid = $list['product_attr_id'];
             $qty = $list['qty'];
              $product_attr_model = DB::table('product_attr')->where(['id'=>$list->product_attr_id])
              ->decrement('qty',$list->qty);
 
-         };
+        }
+
 
 
 
@@ -336,8 +367,11 @@ class CartController extends Controller
         $order_model->pay_id =  $payment_model->id;
         $order_model->save();
 
+        if ($order_model->type == "cart") {
 
-        $cart_model = DB::table('cart')->where(['user_id'=>$user_id,'user_type'=>$user_type])->delete();
+            $cart_model = DB::table('cart')->where(['user_id'=>$user_id,'user_type'=>$user_type])
+            ->delete();
+        };
 
 
         $api_id = env("RAZOR_ID");
@@ -358,26 +392,7 @@ class CartController extends Controller
 
 
 
-    public function checkout(Request $request)  {
-        if($request->session()->has("USER_ID")){
-            $user_id = $request->session()->get("USER_ID",0);
-            $user_type = "reg";
-        }else{
-            return redirect('user/login');
-        }
-    $checkout_model = DB::table("cart")
-    ->where([
-        'user_id'=>$user_id,
-        'user_type'=>$user_type
-    ])
-    ->join("products","products.id","=","cart.product_id")
-    ->join("product_attr","product_attr.id","=","cart.attr_id")
-    ->select("cart.id AS id","cart.qty AS qty","products.name AS name","product_attr.image AS image","product_attr.price AS price")->get();
-        $result['product'] = $checkout_model;
 
-    return view("front.checkout",$result);
-
-}
 
 
 
