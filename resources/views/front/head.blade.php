@@ -14,6 +14,8 @@
   <link rel="stylesheet" href="{{asset('front/css/plugins/glightbox.min.css')}}">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700&family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500&display=swap" rel="stylesheet">
 
+
+
   <!-- Plugin css -->
   <link rel="stylesheet" href="{{asset('front/css/vendor/bootstrap.min.css')}}">
 
@@ -25,48 +27,6 @@
 </head>
 
 <body>
-
-    <!-- Start preloader -->
-  <!--  <div id="preloader">
-        <div id="ctn-preloader" class="ctn-preloader">
-            <div class="animation-preloader">
-                <div class="spinner"></div>
-                <div class="txt-loading">
-                    <span data-text-preloader="L" class="letters-loading">
-                        L
-                    </span>
-
-                    <span data-text-preloader="O" class="letters-loading">
-                        O
-                    </span>
-
-                    <span data-text-preloader="A" class="letters-loading">
-                        A
-                    </span>
-
-                    <span data-text-preloader="D" class="letters-loading">
-                        D
-                    </span>
-
-                    <span data-text-preloader="I" class="letters-loading">
-                        I
-                    </span>
-
-                    <span data-text-preloader="N" class="letters-loading">
-                        N
-                    </span>
-
-                    <span data-text-preloader="G" class="letters-loading">
-                        G
-                    </span>
-                </div>
-            </div>
-            <div class="loader-section section-left"></div>
-            <div class="loader-section section-right"></div>
-        </div>
-    </div>
--->
-<!-- Start header area -->
 
 
 <header class="header__section mb-20">
@@ -83,7 +43,7 @@
                 <div class="main__logo">
                     <h1 class="main__logo--title"><a class="main__logo--link" href="{{url('/')}}"><img class="main__logo--img" src="{{asset('front/img/logo/nav-log.webp')}}" alt="logo-img"></a></h1>
                 </div>
-                <div class="header__search--widget d-none d-lg-block header__sticky--none">
+                <div class="header__search--widget d-none d-lg-block">
                     <form class="d-flex header__search--form border-radius-5" action="#">
                         <div class="header__select--categories select">
                             <select class="header__select--inner">
@@ -111,7 +71,7 @@
                     </form>
                 </div>
 
-                <div class="header__account header__sticky--none">
+                <div class="header__account">
                     <ul class="header__account--wrapper d-flex align-items-center">
                         <li class="header__account--items d-none d-lg-block">
                             <a class="header__account--btn" href="{{url('user/login')}}">
@@ -155,46 +115,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class="header__account header__sticky--block">
-                    <ul class="header__account--wrapper d-flex align-items-center">
-                        <li class="header__account--items  header__account--search__items d-sm-2-none">
-                            <a class="header__account--btn search__open--btn" href="javascript:void(0)" data-offcanvas>
-                                <svg class="product__items--action__btn--svg" xmlns="http://www.w3.org/2000/svg" width="22.51" height="20.443" viewBox="0 0 512 512"><path d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="32"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32" d="M338.29 338.29L448 448"/></svg>
-                                <span class="visually-hidden">Search</span>
-                            </a>
-                        </li>
-                        <li class="header__account--items d-none d-lg-block">
-                            <a class="header__account--btn" href="my-account.html">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class=" -user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                                <span class="visually-hidden">My account</span>
-                            </a>
-                        </li>
-                        <li class="header__account--items d-none d-lg-block">
-                            <a class="header__account--btn" href="wishlist.html">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class=" -heart"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-                                <span class="items__count wish_item_count">3</span>
-                            </a>
-                        </li>
-                        <li class="header__account--items header__minicart--items">
-                            <a class="header__account--btn minicart__open--btn" href="javascript:void(0)" data-offcanvas>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="22.706" height="22.534" viewBox="0 0 14.706 13.534">
-                                    <g  transform="translate(0 0)">
-                                      <g >
-                                        <path  data-name="Path 16787" d="M4.738,472.271h7.814a.434.434,0,0,0,.414-.328l1.723-6.316a.466.466,0,0,0-.071-.4.424.424,0,0,0-.344-.179H3.745L3.437,463.6a.435.435,0,0,0-.421-.353H.431a.451.451,0,0,0,0,.9h2.24c.054.257,1.474,6.946,1.555,7.33a1.36,1.36,0,0,0-.779,1.242,1.326,1.326,0,0,0,1.293,1.354h7.812a.452.452,0,0,0,0-.9H4.74a.451.451,0,0,1,0-.9Zm8.966-6.317-1.477,5.414H5.085l-1.149-5.414Z" transform="translate(0 -463.248)" fill="currentColor"/>
-                                        <path  data-name="Path 16788" d="M5.5,478.8a1.294,1.294,0,1,0,1.293-1.353A1.325,1.325,0,0,0,5.5,478.8Zm1.293-.451a.452.452,0,1,1-.431.451A.442.442,0,0,1,6.793,478.352Z" transform="translate(-1.191 -466.622)" fill="currentColor"/>
-                                        <path  data-name="Path 16789" d="M13.273,478.8a1.294,1.294,0,1,0,1.293-1.353A1.325,1.325,0,0,0,13.273,478.8Zm1.293-.451a.452.452,0,1,1-.431.451A.442.442,0,0,1,14.566,478.352Z" transform="translate(-2.875 -466.622)" fill="currentColor"/>
-                                      </g>
-                                    </g>
-                                </svg>
 
-                            @if ($result['items']>0)
-                            <span class="items__count cart_item_count">{{$result['items']}}</span>
-
-                            @endif
-                            </a>
-                        </li>
-                    </ul>
-                </div>
             </div>
         </div>
     </div>
@@ -203,17 +124,7 @@
             <div class="header__bottom--inner position__relative d-flex align-items-center">
                 <div class="categories__menu mobile-v-none">
                     <div class="categories__menu--header bg__secondary text-white d-flex align-items-center" data-bs-toggle="collapse" data-bs-target="#categoriesAccordion">
-                        <svg class="categories__list--icon" width="18" height="15" viewBox="0 0 18 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="13" height="1.5" fill="currentColor"/>
-                            <rect y="4.44434" width="18" height="1.5" fill="currentColor"/>
-                            <rect y="8.88892" width="15" height="1.5" fill="currentColor"/>
-                            <rect y="13.3333" width="17" height="1.5" fill="currentColor"/>
-                            </svg>
 
-                        <span class="categories__menu--title">Select catagories</span>
-                        <svg class="categories__arrowdown--icon" xmlns="http://www.w3.org/2000/svg" width="12.355" height="8.394" viewBox="0 0 10.355 6.394">
-                            <path  d="M15.138,8.59l-3.961,3.952L7.217,8.59,6,9.807l5.178,5.178,5.178-5.178Z" transform="translate(-6 -8.59)" fill="currentColor"/>
-                        </svg>
                     </div>
                     <div class="dropdown__categories--menu border-radius-5 active collapse show" id="categoriesAccordion">
                             @php
@@ -242,7 +153,82 @@
                         </nav>
                     </div>
                 </div>
+                {{-- meraj --}}
+                <div class="header__right--area d-flex justify-content-between align-items-center">
+                    <div class="header__menu">
+                        <nav class="header__menu--navigation">
+                            <ul class="header__menu--wrapper d-flex">
+                                <li class="header__menu--items">
+                                    <a class="header__menu--link text-white" href="index.html">Home
+                                        <svg class="menu__arrowdown--icon" xmlns="http://www.w3.org/2000/svg" width="12" height="7.41" viewBox="0 0 12 7.41">
+                                            <path  d="M16.59,8.59,12,13.17,7.41,8.59,6,10l6,6,6-6Z" transform="translate(-6 -8.59)" fill="currentColor" opacity="0.7"/>
+                                        </svg>
+                                    </a>
+                                    <ul class="header__sub--menu">
+                                        <li class="header__sub--menu__items"><a href="index.html" class="main_cat header__sub--menu__link">Home One</a>
+                                        <ul class="sub_cate">
+                                            <li>submenu</li>
+                                            <li>submenu</li>
+                                            <li><a href="index.html" class="main_cat">Home One</a>
+                                                <ul class="sub_cate">
+                                                    <li>submenu</li>
+                                                    <li>submenu</li>
+                                                    <li>submenu</li>
+                                                    <li>submenu</li>
+                                                    <li>submenu</li>
+                                                </ul>
+                                            </li>
+                                            <li>submenu</li>
+                                            <li>submenu</li>
+                                        </ul>
+                                        </li>
+                                        <li class="header__sub--menu__items"><a href="index-2.html" class="header__sub--menu__link">Home Two</a></li>
+                                        <li class="header__sub--menu__items"><a href="index-3.html" class="header__sub--menu__link">Home Three</a></li>
+                                        <li class="header__sub--menu__items"><a href="index-4.html" class="header__sub--menu__link">Home Four</a></li>
+                                        <li class="header__sub--menu__items"><a href="index-5.html" class="header__sub--menu__link">Home Five</a></li>
+                                    </ul>
+                                </li>
 
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="language__currency d-none d-lg-block">
+                        <ul class="d-flex align-items-center">
+                            <li class="language__currency--list">
+                                <a class="account__currency--link" href="javascript:void(0)">
+                                    <img class="currency__link--icon" src="assets/img/icon/language-icon.webp" alt="currency">
+                                    <span>USD</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="9.797" height="6.05" viewBox="0 0 9.797 6.05">
+                                        <path  d="M14.646,8.59,10.9,12.329,7.151,8.59,6,9.741l4.9,4.9,4.9-4.9Z" transform="translate(-6 -8.59)" fill="currentColor" opacity="0.7"/>
+                                    </svg>
+                                </a>
+                                <div class="dropdown__currency">
+                                    <ul>
+                                        <li class="currency__items"><a class="currency__text" href="#">CAD</a></li>
+                                        <li class="currency__items"><a class="currency__text" href="#">CNY</a></li>
+                                        <li class="currency__items"><a class="currency__text" href="#">EUR</a></li>
+                                        <li class="currency__items"><a class="currency__text" href="#">GBP</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="language__currency--list">
+                                <a class="language__switcher" href="javascript:void(0)">
+                                    <span>English</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="9.797" height="6.05" viewBox="0 0 9.797 6.05">
+                                        <path  d="M14.646,8.59,10.9,12.329,7.151,8.59,6,9.741l4.9,4.9,4.9-4.9Z" transform="translate(-6 -8.59)" fill="currentColor" opacity="0.7"/>
+                                    </svg>
+                                </a>
+                                <div class="dropdown__language">
+                                    <ul>
+                                        <li class="language__items"><a class="language__text" href="#">France</a></li>
+                                        <li class="language__items"><a class="language__text" href="#">Russia</a></li>
+                                        <li class="language__items"><a class="language__text" href="#">Spanish</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

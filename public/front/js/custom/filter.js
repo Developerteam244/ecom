@@ -1,16 +1,18 @@
+
 import {add_to_cart} from './cart.js';
 
-let num_count = document.querySelector("select[name='num_count']");
+
 let short_by = document.querySelector("select[name='sort_by']");
 let short_type = document.querySelector("select[name='sort_type']");
 
 let radio_btn = document.querySelectorAll(".radio_btn");
 let filter_btn = document.querySelectorAll(".price__filter--btn");
+let filter_rest_btn = document.querySelectorAll(".price__reset--btn");
+let price_filter = document.querySelectorAll(".price__filter--form");
 
 
 
-
-let items_per_page = 6;
+let items_per_page = 2;
 let filter_where ={};
 let page = {};
 // let page = document.querySelector("[data-page]").getAttribute('data-page');
@@ -26,7 +28,7 @@ let current = {
 };
 let advance_filter = {};
 let currentPage = 0;
-let show_num_count = document.querySelector(".show_num_count");
+
 let apply_btn = document.querySelector("#top_filter_btn");
 let product_grid = document.querySelector("#product_grid").querySelector('.row');
 let product_lists = document.querySelector("#product_list").querySelector('.row');
@@ -55,7 +57,7 @@ let fhost = `http://${host}/`;
 const fetch_data= async ()=>{
 
 
-    console.log(page);
+
 
             await fetch(url,{
                 method:"POST",
@@ -69,7 +71,7 @@ const fetch_data= async ()=>{
             }).then(data=>{
                 items = data;
 
-                console.log(data);
+
 
 
             })
@@ -292,70 +294,13 @@ let order = {
                     });
  }
 
- const change_num_count = (element)=>{
-    let select_value = Number(element.target.value);
-    let grid_items_list = product_grid.children;
-    let items_length = grid_items_list.length;
-    let list_items_list = product_lists.children;
-    let obj = fetch_data();
-    if (select_value<items_length) {
-        let diff = items_length-select_value;
 
-        for (let i= diff; i<items_length; i++) {
-            grid_items_list[i].remove();
-            list_items_list[i].remove();
-
-        }
-
-    }else{
-
-        let by =current.short_by;
-        let type = current.short_type;
-        let offset = document.querySelector('.pagination__item--current').innerText;
-        offset = offset?offset:1;
-        let data = {
-            count:obj.count,
-            list:obj.products,
-            offset:offset,
-            order:type
-
-        };
-
-        switch(by){
-            case "name": product_list(short_by_name,data);
-
-
-
-                            break;
-            case "price": product_list(short_by_price,data);
-
-                            break;
-            case "date": product_list(short_by_date,data);
-
-                            break;
-            default: product_list(short_default,data);
-        }
-
-    }
- }
- num_count.addEventListener("change",change_num_count);
 
  // pagination
 
 
 
-let pagination_list = document.querySelectorAll('.pagination__list');
 
-pagination_list.forEach(page=>{
-    page.addEventListener("click",(event)=>{
-        event.stopPropagation();
-
-        event.preventDefault();
-
-
-
-    })
-})
 
 
 // pagination html
@@ -492,7 +437,7 @@ const radio_btn_event = (btn)=>{
 
         }
         page.advance_filter = advance_filter;
-        console.log(type);
+
 
 
         let obj = fetch_data();
@@ -502,12 +447,6 @@ const radio_btn_event = (btn)=>{
             let type = short_type.value;
             current.short_by = by;
             current.short_type = type;
-
-
-           let obj= fetch_data();
-
-            obj.then(res=>{
-
 
             let offset = currentPage;
            offset = offset?offset:1;
@@ -527,14 +466,15 @@ const radio_btn_event = (btn)=>{
             max_price:res.max_price
            });
 
-                           });
+
 
 
 
 
         })
 
-}
+    }
+
 
 const filter_column_value_change = (obj)=>{
     let size = obj.sizes;
@@ -543,18 +483,60 @@ const filter_column_value_change = (obj)=>{
     color = Object.values(color);
     let min_price = obj.min_price;
     let max_price = obj.max_price;
+
     let size_list = document.querySelectorAll(".radio_btn[data-type='size']");
     let color_list = document.querySelectorAll(".radio_btn[data-type='color']");
     let size_list_parent = document.querySelectorAll(".side_filter_size");
     let color_list_parent = document.querySelectorAll(".side_filter_color");
+    let unique_size_list = new Set();
+    let unique_color_list = new Set();
+    for (let s of size_list){
+        unique_size_list.add(s.getAttribute('data-value'));
+    }
+    for (let c of color_list){
+        unique_color_list.add(c.getAttribute('data-value'));
+    }
+
+
+    price_filter.forEach(form=>{
+        let min_pirce_input = form.querySelector('.min_price');
+        let max_price_input = form.querySelector('.max_price');
+
+
+
+
+        try {
+            min_pirce_input.setAttribute("min",min_price);
+            max_price_input.setAttribute("min",min_price);
+            min_pirce_input.setAttribute("max",max_price);
+            max_price_input.setAttribute("max",max_price);
+            min_pirce_input.setAttribute("placeholder",min_price);
+            max_price_input.setAttribute("placeholder",max_price);
+        } catch (error) {
+            console.log(error);
+
+
+        }
+
+    })
+
 
     // manage sizes
-    for(let s of size_list){
-       let index = size.indexOf(s.innerText);
+    for(let s of unique_size_list){
+       let index = size.indexOf(s);
         if(index>-1){
             size.splice(index,1);
         }else{
-            size_list.querySelectorAll(`a:contains(${s.innerText})`).forEach(element=>element);
+           //size_list.querySelectorAll(`:contains(${s.innerText})`).forEach(element=>element);
+           size_list_parent.forEach(size_parent=>{
+               let check= size_parent.querySelector(`[data-value="${s}"]`);
+
+               if (check) {
+                check.parentNode.remove();
+               }
+
+           })
+
         }
 
     }
@@ -573,17 +555,27 @@ const filter_column_value_change = (obj)=>{
     }
 
 
+
     // manage colors
 
-    for(let c of color_list){
-        let index = color.indexOf(c.innerText);
+    for(let c of unique_color_list){
+        let index = color.indexOf(c);
          if(index>-1){
              color.splice(index,1);
          }else{
-             c.remove();
-         }
+            color_list_parent.forEach(color_parent=>{
+                let check= color_parent.querySelector(`[data-value="${c}"]`);
 
-     }
+
+                if (check) {
+                    check.parentNode.remove();
+                }
+
+            })
+        }
+
+    }
+
      for(let i=0;i<color.length;i++){
          for (let x of color_list_parent){
              let li = document.createElement("li");
@@ -602,4 +594,105 @@ const filter_column_value_change = (obj)=>{
 }
 
 
+// price filter btn event
+
+filter_btn.forEach(btn=>{
+    btn.addEventListener("click",()=>{
+        let cls_form = btn.closest("form");
+        let min_price_input = cls_form.querySelector(".min_price");
+        let max_price_input = cls_form.querySelector(".max_price");
+
+        min_price_input = min_price_input.value>0?min_price_input.value:min_price_input.getAttribute("min");
+        max_price_input = max_price_input.value>0?max_price_input.value:max_price_input.getAttribute("max");
+
+        advance_filter.min_price = min_price_input;
+        advance_filter['max_price'] = max_price_input;
+        page.advance_filter = advance_filter;
+        console.log(advance_filter);
+
+        let obj = fetch_data();
+        obj.then(res=>{
+            console.log(res);
+
+            currentPage = 1;
+            let by = short_by.value;
+            let type = short_type.value;
+            current.short_by = by;
+            current.short_type = type;
+
+            let offset = currentPage;
+           offset = offset?offset:1;
+           let data = {
+               count:res.count,
+               list:res.products,
+               offset:offset,
+               order:type
+
+           };
+
+           product_list(data);
+           filter_column_value_change({
+            sizes:res.sizes,
+            colors:res.colors,
+            min_price:res.min_price,
+            max_price:res.max_price
+           });
+
+
+
+
+
+
+        })
+
+
+
+
+    })
+})
+
+filter_rest_btn.forEach(btn=>{
+    btn.addEventListener("click",()=>{
+       delete advance_filter.min_price
+      delete  advance_filter['max_price']
+        page.advance_filter = advance_filter;
+
+        let obj = fetch_data();
+        obj.then(res=>{
+
+            btn.closest('form').reset();
+
+            currentPage = 1;
+            let by = short_by.value;
+            let type = short_type.value;
+            current.short_by = by;
+            current.short_type = type;
+
+            let offset = currentPage;
+            offset = offset?offset:1;
+           let data = {
+               count:res.count,
+               list:res.products,
+               offset:offset,
+               order:type
+
+           };
+
+           product_list(data);
+           filter_column_value_change({
+            sizes:res.sizes,
+            colors:res.colors,
+            min_price:res.min_price,
+            max_price:res.max_price
+           });
+
+
+
+
+
+
+        })
+
+    })
+})
 

@@ -1,0 +1,41 @@
+.header_menu{
+    color: rgb(255, 255, 255);
+    display: flex;
+    padding-left: 15px;
+}
+.nav-item{
+    display: flex;
+}
+
+.sub_cate li{
+    padding: 10px;
+    word-spacing: 5px;
+}
+.sub_cate li:hover{
+    background-color: #ed1d24;
+    color:white;
+    border-radius: 5px;
+
+}
+.main_cat{
+    position: relative;
+    text-decoration: none;
+    color: #f9fafb !important;
+    background: #ed1d24;
+    padding: 8px !important;
+    border-radius: 14px;
+}
+.sub_cate{
+    position: absolute;
+    right: -222px;
+    top: 7px;
+    padding: 14px;
+    width: 220px;
+    background: white;
+    border-radius: 10px;
+}
+.sub_cat>.main_cat>.sub_cat{
+    left: 209px !important;
+    color: black;
+    top: -14px !important;
+}

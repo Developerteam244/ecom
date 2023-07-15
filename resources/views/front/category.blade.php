@@ -46,7 +46,7 @@
                             <label class="price__filter--label" for="Filter-Price-GTE">From</label>
                             <div class="price__filter--input">
 
-                                <input class="price__filter--input__field border-0 min_price" name="filter.v.price.gte" id="Filter-Price-GTE" type="number" placeholder="{{$min_price}}" >
+                                <input class="price__filter--input__field border-0 min_price" name="filter.v.price.gte" id="Filter-Price-GTE" type="number" placeholder="{{$min_price}}"  min="{{$min_price}}" max="{{$max_price}}">
                             </div>
                         </div>
                         <div class="price__divider">
@@ -61,6 +61,7 @@
                         </div>
                     </div>
                     <button class="primary__btn price__filter--btn" type="button">Filter</button>
+                    <button class="primary__btn price__reset--btn" type="button">Reset</button>
                 </form>
             </div>
 
@@ -100,7 +101,7 @@
 
                         <div class="single__widget price__filter widget__bg">
                             <h2 class="widget__title h3">Filter By Price</h2>
-                            <form class="price__filter--form" action="#">
+                            <form class="price__filter--form" >
                                 <div class="price__filter--form__inner mb-15 d-flex align-items-center">
                                     <div class="price__filter--group">
                                         <label class="price__filter--label" for="Filter-Price-GTE2">From</label>
@@ -116,11 +117,12 @@
                                         <label class="price__filter--label" for="Filter-Price-LTE2">To</label>
                                         <div class="price__filter--input border-radius-5 d-flex align-items-center">
 
-                                            <input class="price__filter--input__field border-0 max_price" name="filter.v.price.lte" id="Filter-Price-LTE2" type="number" placeholder="{{$max_price}}"min="{{$min_price}}" max="{{$max_price}}">
+                                            <input class="price__filter--input__field border-0 max_price" name="filter.v.price.lte" id="Filter-Price-LTE2" type="number" placeholder="{{$max_price}}" min="{{$min_price}}" max="{{$max_price}}">
                                         </div>
                                     </div>
                                 </div>
                                 <button class="primary__btn price__filter--btn" type="button">Filter</button>
+                                <button class="primary__btn price__reset--btn" type="button">Reset</button>
                             </form>
                         </div>
 
@@ -151,32 +153,7 @@
                                         <svg  class="widget__filter--btn__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="28" d="M368 128h80M64 128h240M368 384h80M64 384h240M208 256h240M64 256h80"/><circle cx="336" cy="128" r="28" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="28"/><circle cx="176" cy="256" r="28" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="28"/><circle cx="336" cy="384" r="28" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="28"/></svg>
                                         <span class="widget__filter--btn__text">Filter</span>
                                     </button>
-                                    <div class="product__view--mode__list product__short--by align-items-center d-flex ">
-                                        <label class="product__view--label">Prev Page :</label>
-                                        <div class="select shop__header--select">
-                                            <select class="product__view--select" name="num_count">
-                                                @php
-                                                    $view_num_item = [10,25,50,100];
-                                                @endphp
-                                                @forelse ($view_num_item as $item)
-                                                @if ($item<=$count)
 
-                                                <option  value="{{$item}}">{{$item}} </option>
-                                                @else
-                                                <option  value="{{$count}}"> {{$count}}</option>
-                                                @break
-
-                                                @endif
-                                                @empty
-                                                <option  value="{{$count}}"> {{$count}}</option>
-
-
-                                                @endforelse
-                                                <option  value="1">1</option>
-
-                                            </select>
-                                        </div>
-                                    </div>
                                     <div class="product__view--mode__list product__short--by align-items-center d-flex">
                                         <label class="product__view--label">Sort By :</label>
                                         <div class="select shop__header--select">
@@ -242,7 +219,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <p class="product__showing--count show_num_count">Showing 1–9 of 21 results</p>
+
                             </div>
                             <div class="tab_content">
                                 <div id="product_grid" class="tab_pane active show">
@@ -353,7 +330,7 @@
 
                                                 @if ($i==$products->currentPage()+$total_page-1)
                                                 <li class="pagination__list">...</li>
-                                                <li class="pagination__list"><a  class="pagination__item link" data-page-type="page" data-page-no="{{$products->lastPage()}}">{{$products->lastPage()}}</a></li>
+                                                <li class="pagination__list"><a href="{{$products->url($products->lastPage())}}"  class="pagination__item link" data-page-type="page" data-page-no="{{$products->lastPage()}}">{{$products->lastPage()}}</a></li>
 
                                                 @break
 
@@ -373,7 +350,7 @@
 
                                                 @if ($products->currentPage()<$products->lastPage())
                                                 <li class="pagination__list">
-                                                    <a  class="pagination__item--arrow  link " id="next_page" data-page-type="next" data-page-no="{{$products->currentPage()+1}}">
+                                                    <a  class="pagination__item--arrow  link " href="{{$products->nextPageUrl()}}" id="next_page" data-page-type="next" data-page-no="{{$products->currentPage()+1}}">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="22.51" height="20.443" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M268 112l144 144-144 144M392 256H100"/></svg>
                                                         <span class="visually-hidden">page right arrow</span>
                                                     </a>

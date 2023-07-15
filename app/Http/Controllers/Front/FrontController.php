@@ -394,6 +394,7 @@ class FrontController extends Controller
 
                 if (!is_null($request->post('advance_filter'))) {
                     $advance_filter_data = $request->post('advance_filter');
+                    $result['afilter'] = $advance_filter_data;
                 }
 
 

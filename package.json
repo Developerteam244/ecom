@@ -2,8 +2,8 @@
     "private": true,
     "scripts": {
         "dev": "vite",
-        "watch": "mix watch",
         "build": "vite build",
+        "watch": "mix watch",
         "hot": "mix watch --hot"
     },
     "devDependencies": {
