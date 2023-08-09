@@ -1,0 +1,29 @@
+{
+    "[php]": {
+        "editor.defaultFormatter": "Sophisticode.php-formatter"
+    },
+    "tabnine.experimentalAutoImports": true,
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "liveServer.settings.donotShowInfoMsg": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "explorer.confirmDragAndDrop": false,
+    "explorer.confirmDelete": false,
+    "[blade]": {
+        "editor.defaultFormatter": "shufo.vscode-blade-formatter"
+    },
+    "diffEditor.ignoreTrimWhitespace": false,
+    "workbench.editor.enablePreview": false,
+    "diffEditor.renderSideBySide": false,
+    "editor.occurrencesHighlight": false,
+    "terminal.integrated.env.windows": {},
+    "workbench.colorTheme": "Visual Studio Dark",
+    "editor.tokenColorCustomizations": {},
+    "indentRainbow.excludedLanguages": [
+
+        "plaintext"
+    ],
+    "editor.occurrencesHighlight":false
+
+}

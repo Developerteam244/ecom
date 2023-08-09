@@ -661,7 +661,7 @@ filter_rest_btn.forEach(btn=>{
         obj.then(res=>{
 
             btn.closest('form').reset();
-
+            console.log('hello');
             currentPage = 1;
             let by = short_by.value;
             let type = short_type.value;

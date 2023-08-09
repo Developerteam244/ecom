@@ -15,12 +15,15 @@ return new class extends Migration
     {
         Schema::create('order_items', function (Blueprint $table) {
             $table->id();
-            $table->integer('order_id');
+            $table->unsignedBigInteger('order_id');
+            $table->foreign('order_id')->references('orders')->on('id');
             $table->string('item_name');
             $table->integer('product_id');
             $table->integer('product_attr_id');
             $table->integer('qty');
             $table->integer('price');
+            $table->enum('status',['pending','accepted','on the way','delivered']);
+            $table->string('refund_id')->nullable();
             $table->timestamps();
         });
     }

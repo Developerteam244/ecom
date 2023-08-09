@@ -18,7 +18,7 @@ class BannerController extends Controller
     public function index()
     {
         $model = Banner::orderBy('rank')->get();
-        $result['data'] = $model;
+        $result['banner'] = $model;
 
         return view('admin.banner',$result);
     }
@@ -52,6 +52,7 @@ class BannerController extends Controller
             $id = $request->post('id');
             $model = Banner::find($id);
             $image_condi = "mimes:jpg,jpeg";
+            $msg = "Banner Successfully Updated";
             if ($request->hasFile('image')) {
                 $this->delete_image('banners',$id,'banner/');
 
@@ -60,6 +61,7 @@ class BannerController extends Controller
             $model = new Banner();
             $image_condi = "required|mimes:jpg,jpeg";
             $model->status = 1;
+            $msg = "Banner Successfully Added";
         }
 
         $request->validate([
@@ -84,7 +86,7 @@ class BannerController extends Controller
         // echo '<pre>';
         // print_r($request->file());
 
-
+        $request->session()->flash('message',$msg);
         $model->save();
         return redirect('admin/banner');
 
@@ -94,6 +96,8 @@ class BannerController extends Controller
         $model= Banner::find($id);
         $model->status= $status;
         $model->save();
+        $msg = "Status Updated";
+        $request->session()->flash('message',$msg);
         return redirect('admin/banner');
     }
 

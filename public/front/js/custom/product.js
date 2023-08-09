@@ -44,17 +44,24 @@ act.product_color.forEach(function (element) {
 
 function product_preview_color(element){
     let image = element.getAttribute('data-product-image');
-
-
-    console.log(element);
-
-
+    let color_size_list =  JSON.parse(element.getAttribute("data-size"));
     act.product_preview_status = false;
-    if(act.hasOwnProperty('product_size_attr')){
 
-        act.product_color_id = element.getAttribute('data-color');
-    }
-    act.product_attr_id = element.getAttribute('data-id');
+    act.product_size.forEach(function (size) {
+        let size_atr_color = size.getAttribute('data-size');
+        if (condition['size'].hasOwnProperty('condition_value')) {
+            if (!Object.values(color_size_list).includes(condition['size']['condition_value'])) {
+
+                delete condition['size']['condition_value'];
+            }
+        }
+
+
+    })
+
+    act.product_color_id = element.getAttribute('data-color');
+
+
     document.querySelector("#add_to_cart").setAttribute('data-color',act.product_color_id);
     condition.color.condition_value = act.product_color_id;
     act.product_preview.innerHTML = `<div class="product__media--preview__items">
@@ -68,6 +75,7 @@ function product_preview_color(element){
 </div>`;
 
 document.querySelector("#buy_now").setAttribute('data-color',act.product_color_id);
+console.log(condition);
 }
 
 
@@ -82,16 +90,23 @@ act.product_size.forEach(function (element) {
 
 function click_size(e) {
     act.product_size_attr = this.getAttribute('data-size');
+    let size_color_list =  JSON.parse(this.getAttribute("data-color"));
+
+
 
     act.product_color.forEach(function (color) {
-        let color_atr_size = color.getAttribute('data-size');
+        let color_atr_size = color.getAttribute('data-color');
         if (condition['color'].hasOwnProperty('condition_value')) {
+            if (!Object.values(size_color_list).includes(condition['color']['condition_value'])) {
 
-            delete condition['color']['condition_value'];
+                delete condition['color']['condition_value'];
+            }
         }
-        if(act.product_size_attr == color_atr_size){
+
+        if(Object.values(size_color_list).includes(color_atr_size)){
             color.style.display = "block";
         }else{
+
 
             color.style.display = "none";
         }

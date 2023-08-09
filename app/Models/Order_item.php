@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Order_item extends Model
 {
     use HasFactory;
+    protected $table = 'order_items';
+    protected $primaryKey = 'id';
+
+    public function relatedOrder ()
+    {
+       return $this->belongsTo(Order::class,'order_id','id');
+    }
 }

@@ -17,6 +17,11 @@ return new class extends Migration
             $table->id();
             $table->string('category_name');
             $table->string('category_slug');
+            $table->integer('parent_id');
+            $table->integer('in_home');
+            $table->string('keywords');
+            $table->string('description');
+
 
             $table->timestamps();
         });

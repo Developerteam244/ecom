@@ -17,7 +17,7 @@ class BrandController extends Controller
 
     public function index()
     {
-        $result['data'] = Brand::all();
+        $result['brand'] = Brand::all();
         return view('admin/brand',$result);
     }
 
@@ -26,22 +26,24 @@ class BrandController extends Controller
     public function manage_brand(Request $request,$id='')
     {
         if($id>0){
-            $arr = Brand::where(['id'=>$id])->get();
-            $result['brand'] = $arr[0]->brand;
-            $result['in_home'] = '';
-            $result['in_home'] = '';
-            if ($arr[0]->in_home ==1) {
-                $result['in_home'] = 'checked';
+            $arr = Brand::find($id);
+            $result['name'] = $arr->name;
+            $result['in_home'] = $arr->in_home;
+            $result['id'] = $arr->id;
+            $result['description'] = $arr->description;
+            $result['keywords'] = $arr->keywords;
+            $result['image'] = $arr->image;
+            $result['slug'] = $arr->slug;
 
-            }
-
-            $result['brand_id'] = $arr[0]->id;
 
         }else{
-            $result['brand'] = '';
-            $result['in_home'] = '';
-
-            $result['brand_id'] = 0;
+            $result['id'] = 0;
+            $result['name'] = '';
+            $result['in_home'] = 0;
+            $result['description'] ='';
+            $result['keywords'] = '';
+            $result['image'] = '';
+            $result['slug'] = '';
         }
 
         return view('admin/manage_brand',$result);
@@ -52,21 +54,25 @@ class BrandController extends Controller
     {
         $request->validate([
 
-            'brand'=>'required|unique:brands,brand,'.$request->post('id')
+            'name'=>'required|unique:brands,name,'.$request->post('id'),
+            'slug'=>'required|unique:brands,slug,'.$request->post('id')
         ]);
         if($request->post('id')>0){
             $id =$request->post('id');
             $model = Brand::find($id);
 
-            $request->session()->flash('message','brand Updated');
+            $request->session()->flash('message','Brand Updated');
         }else{
 
             $model = new Brand();
-            $request->session()->flash('message','brand Inserted');
+            $request->session()->flash('message','Brand Inserted');
         }
-        $model->brand = ucfirst($request->post('brand'));
+        $model->name = ucfirst($request->post('name'));
+        $model->slug = $request->post('slug');
+        $model->keywords = $request->post('keywords');
+        $model->description = $request->post('description');
         $model->in_home = 0;
-            if ($request->post('in_home')) {
+            if (!is_null($request->post('in_home'))) {
                 $model->in_home = 1;
 
             }

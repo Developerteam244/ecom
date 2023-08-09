@@ -10,7 +10,7 @@ class TexController extends Controller
 {
     public function index()
     {
-        $result['data'] = Tex::all();
+        $result['tax'] = Tex::all();
         return view('admin/tex',$result);
     }
 
@@ -23,13 +23,13 @@ class TexController extends Controller
             $result['tex_name'] = $arr[0]->name;
             $result['tex_value'] = $arr[0]->value;
 
-            $result['tex_id'] = $arr[0]->id;
+            $result['id'] = $arr[0]->id;
 
         }else{
 
             $result['tex_name'] = '';
             $result['tex_value'] = '';
-            $result['tex_id'] = 0;
+            $result['id'] = 0;
         }
 
         return view('admin/manage_tex',$result);
@@ -46,11 +46,11 @@ class TexController extends Controller
             $id =$request->post('id');
             $model = Tex::find($id);
 
-            $request->session()->flash('message','tex Updated');
+            $request->session()->flash('message','Tex Updated');
         }else{
 
             $model = new Tex();
-            $request->session()->flash('message','tex Inserted');
+            $request->session()->flash('message','Tex Inserted');
         }
         $model->name = ucfirst($request->post('tex_name'));
         $model->value = ucfirst($request->post('tex_value'));

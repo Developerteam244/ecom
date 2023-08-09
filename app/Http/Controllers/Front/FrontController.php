@@ -211,39 +211,68 @@ class FrontController extends Controller
         ])->get();
 
         $result['product'] = $product_model[0];
-      $product_attr_model = DB::table('product_attr')->where([
+
+        $product_attr_model = DB::table('product_attr')->where([
         'product_id'=>$result['product']->id])
             ->leftJoin('sizes','sizes.id','=','product_attr.size_id')
              ->leftJoin('colors','colors.id','=','product_attr.color_id')->get();
 
       $result['product_attr'] = $product_attr_model;
       $sizes = [];
+
       $colors = [];
 
+
+
+            function array_search_id($str,$arr,$ckey) {
+                $status = -1;
+                echo count($arr);
+                foreach ($arr as $key => $value) {
+                    if (in_array($str,$value)) {
+                        return $key;
+                    }
+                }
+                return $status;
+            }
+
         foreach ($product_attr_model as $key => $value) {
-            $sizes[$key]['size'] = $value->size;
+            $size_index = array_search_id($value->size,$sizes,"size");
+            $color_index = array_search_id($value->color,$colors,"color");
+          // echo "hell".$size_index;
+            if ($size_index>=0) {
+
+                 array_push($sizes[$size_index]['color'],$value->color);
+            }else{
+
+                $sizes[$key]['size'] = $value->size;
+                $sizes[$key]['color'][0] = $value->color;
+            };
 
 
-            $colors[$key]['color'] = $value->color;
-            $colors[$key]['image'] = $value->image;
-            $colors[$key]['size'] = $value->size;
+
+            if ($color_index>=0) {
+
+                array_push($colors[$color_index]['size'],$value->size);
+           }else{
+
+               $colors[$key]['color'] = $value->color;
+               $colors[$key]['size'][0] = $value->size;
+               $colors[$key]['image'] = $value->image;
+           }
+
+
 
 
         }
 
-        $unique_size =[];
-
-            $size = array_filter($sizes,function ($item) use (&$unique_size) {
-         if(!in_array($item['size'],$unique_size)){
-        array_push($unique_size,$item['size']);
-        return $item;
-                    }
-
-                });
 
 
 
-         $result['product_size'] = $size;
+
+
+
+
+         $result['product_size'] = $sizes;
             $result['product_color'] = $colors;
 
 

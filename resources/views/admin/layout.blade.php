@@ -1,224 +1,837 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <!-- Required meta tags-->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="au theme template">
-    <meta name="author" content="Hau Nguyen">
-    <meta name="keywords" content="au theme template">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-    <!-- Title Page-->
     <title>@yield('title')</title>
 
-    <!-- Fontfaces CSS-->
-    <link href="{{ asset('admin_assets/css/font-face.css') }}" rel="stylesheet" media="all">
-    <link href="{{ asset('admin_assets/vendor/font-awesome-4.7/css/font-awesome.min.css') }}" rel="stylesheet"
-        media="all">
-    <link href="{{ asset('admin_assets/vendor/font-awesome-5/css/fontawesome-all.min.css') }}" rel="stylesheet"
-        media="all">
-    <link href="{{ asset('admin_assets/vendor/mdi-font/css/material-design-iconic-font.min.css') }}" rel="stylesheet"
-        media="all">
+    <meta name="description"
+        content="Dashmix - Bootstrap 5 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest">
+    <meta name="author" content="pixelcave">
+    <meta name="robots" content="noindex, nofollow">
 
-    <!-- Bootstrap CSS-->
-    <link href="{{ asset('admin_assets/vendor/bootstrap-4.1/bootstrap.min.css') }}" rel="stylesheet" media="all">
-    {{-- dropify css --}}
-    <link href="{{ asset('admin_assets/css/dropify.min.css') }}" rel="stylesheet" media="all">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <!-- Open Graph Meta -->
+    <meta property="og:title" content="Dashmix - Bootstrap 5 Admin Template &amp; UI Framework">
+    <meta property="og:site_name" content="Dashmix">
+    <meta property="og:description"
+        content="Dashmix - Bootstrap 5 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
 
+    <!-- Icons -->
+    <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+    <link rel="shortcut icon" href="{{ asset('admin_assets/media/favicons/favicon.png') }}">
+    <link rel="icon" type="image/png" sizes="192x192"
+        href="{{ asset('admin_assets/media/favicons/favicon-192x192.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180"
+        href="{{ asset('admin_assets/media/favicons/apple-touch-icon-180x180.png') }}">
+    <!-- END Icons -->
 
-    <!-- Main CSS-->
-    <link href="{{ asset('admin_assets/css/theme.css') }}" rel="stylesheet" media="all">
-
+    <!-- Stylesheets -->
+    <!-- Dashmix framework meraj -->
+    <link rel="stylesheet" id="css-main" href="{{ asset('admin_assets/css/dashmix.min.css') }}">
+    @yield('page_link')
 </head>
 
+<body>
 
-<div class="page-wrapper">
-    <!-- HEADER MOBILE-->
-    <header class="header-mobile d-block d-lg-none">
-        <div class="header-mobile__bar">
-            <div class="container-fluid">
-                <div class="header-mobile-inner">
-                    <a class="logo" href="index.html">
-                        <img src="images/icon/logo.png" alt="CoolAdmin" />
-                    </a>
-                    <button class="hamburger hamburger--slider" type="button">
-                        <span class="hamburger-box">
-                            <span class="hamburger-inner"> <i class="fa fa-bars"></i></span>
-                        </span>
-                    </button>
+    <div id="page-container"
+        class="sidebar-o sidebar-dark enable-page-overlay side-scroll page-header-fixed main-content-narrow">
+        <!-- Side Overlay-->
+        <aside id="side-overlay">
+            <!-- Side Header -->
+            <div class="bg-image" style="">
+                <div class="bg-primary-op">
+                    <div class="content-header">
+                        <!-- User Avatar -->
+                        <a class="img-link me-1" href="be_pages_generic_profile.html">
+                            {{-- <img class="img-avatar img-avatar48"
+                                src="{{ asset('back_assets/media/avatars/avatar10.jpg') }}" alt=""> --}}
+                        </a>
+                        <!-- END User Avatar -->
+
+                        <!-- User Info -->
+                        <div class="ms-2">
+                            <a class="text-white fw-semibold" href="#">{{ ucfirst(session()->get('name')) }}</a>
+                            <div class="text-white-75 fs-sm">My prasnol quete.</div>
+                        </div>
+                        <!-- END User Info -->
+
+                        <!-- Close Side Overlay -->
+                        <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
+                        <a class="ms-auto text-white" href="javascript:void(0)" data-toggle="layout"
+                            data-action="side_overlay_close">
+                            <i class="fa fa-times-circle"></i>
+                        </a>
+                        <!-- END Close Side Overlay -->
+                    </div>
                 </div>
             </div>
-        </div>
-        <nav class="navbar-mobile">
-            <div class="container-fluid">
-                <ul class="navbar-mobile__list list-unstyled">
-                    <li class="has-sub">
-                        <a  href="{{url('admin/dashboard')}}">
-                            <i class="fas fa-tachometer-alt"></i>Dashboard</a>
+            <!-- END Side Header -->
 
-                    </li>
-                    <li class="has-sub">
-                        <a  href="{{url('admin/category')}}">
-                            <i class="fas fa-tachometer-alt"></i>Category</a>
-
-                    </li>
-
-                </ul>
-            </div>
-        </nav>
-    </header>
-    <!-- END HEADER MOBILE-->
-
-    <!-- MENU SIDEBAR-->
-    <aside class="menu-sidebar d-none d-lg-block">
-        <div class="logo">
-            <a href="#">
-                <img src="images/icon/logo.png" alt="Cool Admin" />
-            </a>
-        </div>
-        <div class="menu-sidebar__content js-scrollbar1">
-            <nav class="navbar-sidebar">
-                <ul class="list-unstyled navbar__list">
-                    <li class="has-sub">
-                        <a  href="{{url('admin/dashboard')}}" class="@yield('dashboard_select')">
-                            <i class="fas fa-tachometer-alt"></i>Dashboard</a>
-
-                    </li>
-                    <li class="has-sub">
-                        <a  href="{{url('admin/category')}}" class="@yield('category_select')">
-                            <i class="fas fa-list"></i>Category</a>
-
-                    </li>
-                    <li class="has-sub">
-                        <a  href="{{url('admin/coupon')}}" class="@yield('coupon_select')">
-                            <i class="fas fa-tag"></i>Coupon</a>
-
-                    </li>
-                    <li class="has-sub">
-                        <a  href="{{url('admin/size')}}" class="@yield('size_select')">
-                            <img src="{{asset('admin_assets/icon/size.svg')}}" width="15px" alt=""> Size</a>
-
-                    </li>
-                    <li class="has-sub">
-                        <a  href="{{url('admin/color')}}" class="@yield('size_select')">
-                            <img src="{{asset('admin_assets/icon/color.svg')}}" width="15px" alt=""> Color</a>
-
-                    </li>
-                    <li class="has-sub">
-                        <a  href="{{url('admin/product')}}" class="@yield('product_select')">
-                            <img src="{{asset('admin_assets/icon/product.svg')}}" width="20px" alt=""> Product</a>
-
-                    </li>
-                    <li class="has-sub">
-                        <a  href="{{url('admin/brand')}}" class="@yield('brand_select')">
-                            <img src="{{asset('admin_assets/icon/brand.svg')}}" alt="" > Brand</a>
-
-                    </li>
-                    <li class="has-sub">
-                        <a  href="{{url('admin/tex')}}" class="@yield('tex_select')">
-                            <img src="{{asset('admin_assets/icon/tax.svg')}}" width="20px" alt=""> Tex</a>
-
-                    </li>
-                    <li class="has-sub">
-                        <a  href="{{url('admin/customer')}}" class="@yield('customer_select')">
-                            <img src="{{asset('admin_assets/icon/customer.svg')}}" width="15px" alt="">Customer </a>
-
-                    </li>
-                    <li class="has-sub">
-                        <a  href="{{url('admin/banner')}}" class="@yield('customer_select')">
-                            <img src="{{asset('admin_assets/icon/banner.svg')}}" width="20px" alt=""> Banner </a>
-
-                    </li>
-
-                </ul>
-            </nav>
-        </div>
-    </aside>
-    <!-- END MENU SIDEBAR-->
-
-    <!-- PAGE CONTAINER-->
-    <div class="page-container">
-        <!-- HEADER DESKTOP-->
-        <header class="header-desktop">
-            <div class="section__content section__content--p30">
-                <div class="container-fluid">
-                    <div class="header-wrap">
-
-                        <div class="header-button">
-
-                            <div class="account-wrap">
-                                <div class="account-item clearfix js-item-menu">
-
-                                    <div class="content">
-                                        <a class="js-acc-btn" href="#">Welcome Admin</a>
-                                    </div>
-                                    <div class="account-dropdown js-dropdown">
-
-                                        <div class="account-dropdown__body">
-                                            <div class="account-dropdown__item">
-                                                <a href="#">
-                                                    <i class="zmdi zmdi-account"></i>Account</a>
-                                            </div>
-
-
+            <!-- Side Content -->
+            <div class="content-side">
+                <!-- Side Overlay Tabs -->
+                <div class="block block-transparent pull-x pull-t mb-0">
+                    <ul class="nav nav-tabs nav-tabs-block nav-justified" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="so-settings-tab" data-bs-toggle="tab"
+                                data-bs-target="#so-settings" role="tab" aria-controls="so-settings"
+                                aria-selected="true">
+                                <i class="fa fa-fw fa-cog"></i>
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="so-profile-tab" data-bs-toggle="tab"
+                                data-bs-target="#so-profile" role="tab" aria-controls="so-profile"
+                                aria-selected="false">
+                                <i class="far fa-fw fa-user-circle"></i>
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="block-content tab-content overflow-hidden">
+                        <!-- Settings Tab -->
+                        <div class="tab-pane pull-x fade fade-up show active" id="so-settings" role="tabpanel"
+                            aria-labelledby="so-settings-tab" tabindex="0">
+                            <div class="block mb-0">
+                                <!-- Color Themes -->
+                                <!-- Toggle Themes functionality initialized in Template._uiHandleTheme() -->
+                                <div class="block-content block-content-sm block-content-full bg-body">
+                                    <span class="text-uppercase fs-sm fw-bold">Color Themes</span>
+                                </div>
+                                <div class="block-content block-content-full">
+                                    <div class="row g-sm text-center">
+                                        <div class="col-4 mb-1">
+                                            <a class="d-block py-3 text-white fs-sm fw-semibold bg-default"
+                                                data-toggle="theme" data-theme="default" href="#">
+                                                Default
+                                            </a>
                                         </div>
-                                        <div class="account-dropdown__footer">
-                                            <a href="{{url('admin/logout')}}">
-                                                <i class="zmdi zmdi-power"></i>Logout</a>
+                                        <div class="col-4 mb-1">
+                                            <a class="d-block py-3 text-white fs-sm fw-semibold bg-xwork"
+                                                data-toggle="theme" data-theme="assets/css/themes/xwork.min.css"
+                                                href="#">
+                                                xWork
+                                            </a>
+                                        </div>
+                                        <div class="col-4 mb-1">
+                                            <a class="d-block py-3 text-white fs-sm fw-semibold bg-xmodern"
+                                                data-toggle="theme" data-theme="assets/css/themes/xmodern.min.css"
+                                                href="#">
+                                                xModern
+                                            </a>
+                                        </div>
+                                        <div class="col-4 mb-1">
+                                            <a class="d-block py-3 text-white fs-sm fw-semibold bg-xeco"
+                                                data-toggle="theme" data-theme="assets/css/themes/xeco.min.css"
+                                                href="#">
+                                                xEco
+                                            </a>
+                                        </div>
+                                        <div class="col-4 mb-1">
+                                            <a class="d-block py-3 text-white fs-sm fw-semibold bg-xsmooth"
+                                                data-toggle="theme" data-theme="assets/css/themes/xsmooth.min.css"
+                                                href="#">
+                                                xSmooth
+                                            </a>
+                                        </div>
+                                        <div class="col-4 mb-1">
+                                            <a class="d-block py-3 text-white fs-sm fw-semibold bg-xinspire"
+                                                data-toggle="theme" data-theme="assets/css/themes/xinspire.min.css"
+                                                href="#">
+                                                xInspire
+                                            </a>
+                                        </div>
+                                        <div class="col-4 mb-1">
+                                            <a class="d-block py-3 text-white fs-sm fw-semibold bg-xdream"
+                                                data-toggle="theme" data-theme="assets/css/themes/xdream.min.css"
+                                                href="#">
+                                                xDream
+                                            </a>
+                                        </div>
+                                        <div class="col-4 mb-1">
+                                            <a class="d-block py-3 text-white fs-sm fw-semibold bg-xpro"
+                                                data-toggle="theme" data-theme="assets/css/themes/xpro.min.css"
+                                                href="#">
+                                                xPro
+                                            </a>
+                                        </div>
+                                        <div class="col-4 mb-1">
+                                            <a class="d-block py-3 text-white fs-sm fw-semibold bg-xplay"
+                                                data-toggle="theme" data-theme="assets/css/themes/xplay.min.css"
+                                                href="#">
+                                                xPlay
+                                            </a>
+                                        </div>
+                                        <div class="col-12">
+                                            <a class="d-block py-3 bg-body-dark fw-semibold text-dark"
+                                                href="be_ui_color_themes.html">All Color Themes</a>
                                         </div>
                                     </div>
                                 </div>
+                                <!-- END Color Themes -->
+
+                                <!-- Sidebar -->
+                                <div class="block-content block-content-sm block-content-full bg-body">
+                                    <span class="text-uppercase fs-sm fw-bold">Sidebar</span>
+                                </div>
+                                <div class="block-content block-content-full">
+                                    <div class="row g-sm text-center">
+                                        <div class="col-6 mb-1">
+                                            <a class="d-block py-3 bg-body-dark fw-semibold text-dark"
+                                                data-toggle="layout" data-action="sidebar_style_dark"
+                                                href="javascript:void(0)">Dark</a>
+                                        </div>
+                                        <div class="col-6 mb-1">
+                                            <a class="d-block py-3 bg-body-dark fw-semibold text-dark"
+                                                data-toggle="layout" data-action="sidebar_style_light"
+                                                href="javascript:void(0)">Light</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- END Sidebar -->
+
+                                <!-- Header -->
+                                <div class="block-content block-content-sm block-content-full bg-body">
+                                    <span class="text-uppercase fs-sm fw-bold">Header</span>
+                                </div>
+                                <div class="block-content block-content-full">
+                                    <div class="row g-sm text-center mb-2">
+                                        <div class="col-6 mb-1">
+                                            <a class="d-block py-3 bg-body-dark fw-semibold text-dark"
+                                                data-toggle="layout" data-action="header_style_dark"
+                                                href="javascript:void(0)">Dark</a>
+                                        </div>
+                                        <div class="col-6 mb-1">
+                                            <a class="d-block py-3 bg-body-dark fw-semibold text-dark"
+                                                data-toggle="layout" data-action="header_style_light"
+                                                href="javascript:void(0)">Light</a>
+                                        </div>
+                                        <div class="col-6 mb-1">
+                                            <a class="d-block py-3 bg-body-dark fw-semibold text-dark"
+                                                data-toggle="layout" data-action="header_mode_fixed"
+                                                href="javascript:void(0)">Fixed</a>
+                                        </div>
+                                        <div class="col-6 mb-1">
+                                            <a class="d-block py-3 bg-body-dark fw-semibold text-dark"
+                                                data-toggle="layout" data-action="header_mode_static"
+                                                href="javascript:void(0)">Static</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- END Header -->
+
+                                <!-- Content -->
+                                <div class="block-content block-content-sm block-content-full bg-body">
+                                    <span class="text-uppercase fs-sm fw-bold">Content</span>
+                                </div>
+                                <div class="block-content block-content-full">
+                                    <div class="row g-sm text-center">
+                                        <div class="col-6 mb-1">
+                                            <a class="d-block py-3 bg-body-dark fw-semibold text-dark"
+                                                data-toggle="layout" data-action="content_layout_boxed"
+                                                href="javascript:void(0)">Boxed</a>
+                                        </div>
+                                        <div class="col-6 mb-1">
+                                            <a class="d-block py-3 bg-body-dark fw-semibold text-dark"
+                                                data-toggle="layout" data-action="content_layout_narrow"
+                                                href="javascript:void(0)">Narrow</a>
+                                        </div>
+                                        <div class="col-12 mb-1">
+                                            <a class="d-block py-3 bg-body-dark fw-semibold text-dark"
+                                                data-toggle="layout" data-action="content_layout_full_width"
+                                                href="javascript:void(0)">Full Width</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- END Content -->
+
+                                <!-- Layout API -->
+                                <div class="block-content block-content-full border-top">
+                                    <a class="btn w-100 btn-alt-primary" href="be_layout_api.html">
+                                        <i class="fa fa-fw fa-flask me-1"></i> Layout API
+                                    </a>
+                                </div>
+                                <!-- END Layout API -->
                             </div>
+                        </div>
+                        <!-- END Settings Tab -->
+
+                        <!-- Profile -->
+                        <div class="tab-pane pull-x fade fade-up" id="so-profile" role="tabpanel"
+                            aria-labelledby="so-profile-tab" tabindex="0">
+                            <form action="be_pages_dashboard.html" method="POST" onsubmit="return false;">
+                                <div class="block mb-0">
+                                    <!-- Personal -->
+                                    <div class="block-content block-content-sm block-content-full bg-body">
+                                        <span class="text-uppercase fs-sm fw-bold">Personal</span>
+                                    </div>
+                                    <div class="block-content block-content-full">
+                                        <div class="mb-4">
+                                            <label class="form-label">Username</label>
+                                            <input type="text" readonly class="form-control"
+                                                id="so-profile-username-static" value="Admin">
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="form-label" for="so-profile-name">Name</label>
+                                            <input type="text" class="form-control" id="so-profile-name"
+                                                name="so-profile-name" value="George Taylor">
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="form-label" for="so-profile-email">Email</label>
+                                            <input type="email" class="form-control" id="so-profile-email"
+                                                name="so-profile-email" value="g.taylor@example.com">
+                                        </div>
+                                    </div>
+                                    <!-- END Personal -->
+
+                                    <!-- Password Update -->
+                                    <div class="block-content block-content-sm block-content-full bg-body">
+                                        <span class="text-uppercase fs-sm fw-bold">Password Update</span>
+                                    </div>
+                                    <div class="block-content block-content-full">
+                                        <div class="mb-4">
+                                            <label class="form-label" for="so-profile-password">Current
+                                                Password</label>
+                                            <input type="password" class="form-control" id="so-profile-password"
+                                                name="so-profile-password">
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="form-label" for="so-profile-new-password">New
+                                                Password</label>
+                                            <input type="password" class="form-control" id="so-profile-new-password"
+                                                name="so-profile-new-password">
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="form-label" for="so-profile-new-password-confirm">Confirm
+                                                New Password</label>
+                                            <input type="password" class="form-control"
+                                                id="so-profile-new-password-confirm"
+                                                name="so-profile-new-password-confirm">
+                                        </div>
+                                    </div>
+                                    <!-- END Password Update -->
+
+                                    <!-- Options -->
+                                    <div class="block-content block-content-sm block-content-full bg-body">
+                                        <span class="text-uppercase fs-sm fw-bold">Options</span>
+                                    </div>
+                                    <div class="block-content">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value=""
+                                                id="so-settings-status" name="so-settings-status">
+                                            <label class="form-check-label fw-semibold"
+                                                for="so-settings-status">Online Status</label>
+                                        </div>
+                                        <p class="text-muted fs-sm">
+                                            Make your online status visible to other users of your app
+                                        </p>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value=""
+                                                id="so-settings-notifications" name="so-settings-notifications">
+                                            <label class="form-check-label fw-semibold"
+                                                for="so-settings-notifications">Notifications</label>
+                                        </div>
+                                        <p class="text-muted fs-sm">
+                                            Receive desktop notifications regarding your projects and sales
+                                        </p>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value=""
+                                                id="so-settings-updates" name="so-settings-updates">
+                                            <label class="form-check-label fw-semibold" for="so-settings-updates">Auto
+                                                Updates</label>
+                                        </div>
+                                        <p class="text-muted fs-sm">
+                                            If enabled, we will keep all your applications and servers up to date with
+                                            the most recent features automatically
+                                        </p>
+                                    </div>
+                                    <!-- END Options -->
+
+                                    <!-- Submit -->
+                                    <div class="block-content block-content-full border-top">
+                                        <button type="submit" class="btn w-100 btn-alt-primary">
+                                            <i class="fa fa-fw fa-save me-1 opacity-50"></i> Save
+                                        </button>
+                                    </div>
+                                    <!-- END Submit -->
+                                </div>
+                            </form>
+                        </div>
+                        <!-- END Profile -->
+                    </div>
+                </div>
+                <!-- END Side Overlay Tabs -->
+            </div>
+            <!-- END Side Content -->
+        </aside>
+        <!-- END Side Overlay -->
+
+        <!-- Sidebar -->
+
+
+        <nav id="sidebar" aria-label="Main Navigation">
+            <!-- Side Header -->
+            <div class="bg-header-dark">
+                <div class="content-header bg-white-5">
+                    <!-- Logo -->
+
+
+                    <!-- END Logo -->
+
+                    <!-- Options -->
+                    <div>
+
+                        <!-- Toggle Sidebar Style -->
+                        <button type="button" class="btn btn-sm btn-alt-secondary" data-toggle="class-toggle"
+                            data-target="#sidebar-style-toggler" data-class="fa-toggle-off fa-toggle-on"
+                            onclick="Dashmix.layout('sidebar_style_toggle');Dashmix.layout('header_style_toggle');">
+                            <i class="fa fa-toggle-off" id="sidebar-style-toggler"></i>
+                        </button>
+                        <!-- END Toggle Sidebar Style -->
+
+                        <!-- Dark Mode -->
+                        <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
+                        <button type="button" class="btn btn-sm btn-alt-secondary" data-toggle="class-toggle"
+                            data-target="#dark-mode-toggler" data-class="far fa"
+                            onclick="Dashmix.layout('dark_mode_toggle');">
+                            <i class="far fa-moon" id="dark-mode-toggler"></i>
+                        </button>
+                        <!-- END Dark Mode -->
+
+                        <!-- Close Sidebar, Visible only on mobile screens -->
+                        <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
+                        <button type="button" class="btn btn-sm btn-alt-secondary d-lg-none" data-toggle="layout"
+                            data-action="sidebar_close">
+                            <i class="fa fa-times-circle"></i>
+                        </button>
+                        <!-- END Close Sidebar -->
+                    </div>
+                    <!-- END Options -->
+                </div>
+            </div>
+            <!-- END Side Header -->
+
+            <!-- Sidebar Scrolling -->
+            <div class="js-sidebar-scroll">
+                <!-- Side Navigation -->
+                <div class="content-side">
+                    <ul class="nav-main">
+                        <li class="nav-main-item">
+                            <a class="nav-main-link active" href="{{ route('admin.dashboard') }}">
+                                <i class="nav-main-link-icon fa fa-location-arrow"></i>
+                                <span class="nav-main-link-name"  >Dashboard</span>
+
+                            </a>
+                        </li>
+                        <li class="nav-main-item @yield('admin.product')">
+                            <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" >
+                              <i class="nav-main-link-icon fa fa-clone"></i>
+                              <span class="nav-main-link-name">Product </span>
+                            </a>
+                            <ul class="nav-main-submenu">
+                              <li class="nav-main-item ">
+                                <a class="nav-main-link @yield('admin.add_product')" href="{{route('admin.add_product')}}">
+                                  <span class="nav-main-link-name "  >Add Product</span>
+                                </a>
+                              </li>
+                              <li class="nav-main-item">
+                                <a class="nav-main-link @yield('admin.all_product')" href="{{route('admin.all_product')}}">
+                                  <span class="nav-main-link-name">All Product</span>
+                                </a>
+                              </li>
+
+                            </ul>
+                        </li>
+                        <li class="nav-main-item @yield('admin.category')">
+                            <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" >
+                              <i class="nav-main-link-icon fa fa-list"></i>
+                              <span class="nav-main-link-name"> Category </span>
+                            </a>
+                            <ul class="nav-main-submenu">
+                              <li class="nav-main-item">
+                                <a class="nav-main-link @yield('admin.add_category')" href="{{route('admin.add_category')}}">
+                                  <span class="nav-main-link-name">Add Category </span>
+                                </a>
+                              </li>
+                              <li class="nav-main-item">
+                                <a class="nav-main-link " href="{{route('admin.all_category')}}">
+                                  <span class="nav-main-link-name">All Category</span>
+                                </a>
+                              </li>
+
+                            </ul>
+                        </li>
+                        <li class="nav-main-item @yield('admin.size')">
+                            <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" >
+                              <i class="nav-main-link-icon fa fa-arrows-left-right-to-line"></i>
+                              <span class="nav-main-link-name"> Size </span>
+                            </a>
+                            <ul class="nav-main-submenu">
+                              <li class="nav-main-item">
+                                <a class="nav-main-link @yield('admin.add_sizes')" href="{{route('admin.add_size')}}">
+                                  <span class="nav-main-link-name">Add Size </span>
+                                </a>
+                              </li>
+                              <li class="nav-main-item">
+                                <a class="nav-main-link @yield('admin.all_size')" href="{{route('admin.all_size')}}">
+                                  <span class="nav-main-link-name">All Size</span>
+                                </a>
+                              </li>
+
+                            </ul>
+                        </li>
+
+                        <li class="nav-main-heading">Manage Additional</li>
+                        <li class="nav-main-item @yield('admin.banner')">
+                            <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" >
+                                <i class="nav-main-link-icon fa fa-barcode"></i>
+                                <span class="nav-main-link-name">Banner </span>
+                              </a>
+                              <ul class="nav-main-submenu">
+                                <li class="nav-main-item">
+                                  <a class="nav-main-link @yield('admin.add_banner')" href="{{route('admin.add_banner')}}">
+                                    <span class="nav-main-link-name">Add Banner</span>
+                                  </a>
+                                </li>
+                                <li class="nav-main-item">
+                                  <a class="nav-main-link @yield('admin.all_banner')" href="{{route('admin.all_banner')}}">
+                                    <span class="nav-main-link-name">All Banner</span>
+                                  </a>
+                                </li>
+
+                              </ul>
+                        </li>
+
+                        <li class="nav-main-item @yield('admin.order')">
+                            <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" >
+                                <i class="nav-main-link-icon fa fa-boxes"></i>
+                                <span class="nav-main-link-name">Order </span>
+                              </a>
+                              <ul class="nav-main-submenu">
+                                <li class="nav-main-item">
+                                  <a class="nav-main-link @yield('admin.pending_order')" href="{{route('admin.pending_orders')}}">
+                                    <span class="nav-main-link-name"> Pending Order </span>
+                                  </a>
+                                </li>
+                                <li class="nav-main-item">
+                                  <a class="nav-main-link @yield('admin.accepted_order')" href="{{route('admin.accepted_orders')}}">
+                                    <span class="nav-main-link-name"> Accpeted Order </span>
+                                  </a>
+                                </li>
+                                <li class="nav-main-item">
+                                  <a class="nav-main-link @yield('admin.on_the_way_order')" href="{{route('admin.on_the_way_orders')}}">
+                                    <span class="nav-main-link-name"> On The Way Order </span>
+                                  </a>
+                                </li>
+                                <li class="nav-main-item">
+                                  <a class="nav-main-link @yield('admin.delivered_order')" href="{{route('admin.delivered_orders')}}">
+                                    <span class="nav-main-link-name"> Delivered Order </span>
+                                  </a>
+                                </li>
+                                <li class="nav-main-item">
+                                  <a class="nav-main-link @yield('admin.cancel_order')" href="{{route('admin.cancel_orders')}}">
+                                    <span class="nav-main-link-name"> Cancelled Order </span>
+                                  </a>
+                                </li>
+
+
+                              </ul>
+                        </li>
+                        <li class="nav-main-item @yield('admin.brand')">
+                            <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" >
+                                <i class="nav-main-link-icon fa fa-clone"></i>
+                                <span class="nav-main-link-name">Brand </span>
+                              </a>
+                              <ul class="nav-main-submenu">
+                                <li class="nav-main-item">
+                                  <a class="nav-main-link @yield('admin.add_brand')" href="{{route('admin.add_brand')}}">
+                                    <span class="nav-main-link-name"> Add Brand </span>
+                                  </a>
+                                </li>
+                                <li class="nav-main-item">
+                                  <a class="nav-main-link @yield('admin.all_brand')" href="{{route('admin.all_brand')}}">
+                                    <span class="nav-main-link-name"> All Brand </span>
+                                  </a>
+                                </li>
+
+                              </ul>
+                        </li>
+
+                        <li class="nav-main-heading">Tex </li>
+                        <li class="nav-main-item @yield('admin.tax')">
+                            <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" >
+                                <i class="nav-main-link-icon fa fa-indian-rupee-sign"></i>
+                                <span class="nav-main-link-name">Tex </span>
+                              </a>
+                              <ul class="nav-main-submenu">
+                                <li class="nav-main-item">
+                                  <a class="nav-main-link @yield('admin.add_tax')" href="{{route('admin.add_tax')}}">
+                                    <span class="nav-main-link-name"> Add Tax </span>
+                                  </a>
+                                </li>
+                                <li class="nav-main-item">
+                                  <a class="nav-main-link @yield('admin.all_tax')" href="{{route('admin.all_tax')}}">
+                                    <span class="nav-main-link-name"> All Tax </span>
+                                  </a>
+                                </li>
+
+                              </ul>
+                        </li>
+
+
+                        <li class="nav-main-heading">Manage Users</li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="">
+                                <i class="nav-main-link-icon fas fa-th"></i>
+                                <span class="nav-main-link-name">View publicer</span>
+                            </a>
+                        </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="">
+                                <i class="nav-main-link-icon fas fa-th"></i>
+                                <span class="nav-main-link-name">View Users</span>
+                            </a>
+                        </li>
+                        <li class="nav-main-heading">Pages</li>
+
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="gs_backend.html">
+                                <span class="nav-main-link-name">Documentation</span>
+                            </a>
+                        </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="gs_backend.html">
+                                <span class="nav-main-link-name">Privacy Policy</span>
+                            </a>
+                        </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="gs_backend.html">
+                                <span class="nav-main-link-name">Term & Condition</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+                <!-- END Side Navigation -->
+            </div>
+            <!-- END Sidebar Scrolling -->
+        </nav>
+        <!-- END Sidebar -->
+
+        <!-- Header -->
+        <header id="page-header">
+            <!-- Header Content -->
+            <div class="content-header">
+                <!-- Left Section -->
+                <div class="space-x-1">
+                    <!-- Toggle Sidebar -->
+                    <!-- Layout API, functionality initialized in Template._uiApiLayout()-->
+                    <button type="button" class="btn btn-alt-secondary" data-toggle="layout"
+                        data-action="sidebar_toggle">
+                        <i class="fa fa-fw fa-bars"></i>
+                    </button>
+                    <!-- END Toggle Sidebar -->
+
+                    <!-- Open Search Section -->
+                    <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
+                    <button type="button" class="btn btn-alt-secondary" data-toggle="layout"
+                        data-action="header_search_on">
+                        <i class="fa fa-fw opacity-50 fa-search"></i> <span id="nav-search"
+                            class="ms-1 d-none d-sm-inline-block">Search</span>
+                    </button>
+                    <!-- END Open Search Section -->
+                </div>
+                <!-- END Left Section -->
+
+                <!-- Right Section -->
+                <div class="space-x-1">
+                    <!-- User Dropdown -->
+                    <button type="button" class="btn btn-alt-secondary">
+                        <a href="{{route('admin.logout')}}" class="nav-link">
+                            <i class="fa fa-fw fa-power-off "></i>
+                            <span class="d-none d-sm-inline-block">Sign Out</span>
+                        </a>
+                    </button>
+                    <!-- END User Dropdown -->
+
+                    <!-- Notifications Dropdown -->
+                    <div class="dropdown d-inline-block">
+                        <button type="button" class="btn btn-alt-secondary" id="page-header-notifications-dropdown"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-fw fa-bell"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
+                            aria-labelledby="page-header-notifications-dropdown">
+                            <div class="bg-primary-dark rounded-top fw-semibold text-white text-center p-3">
+                                Notifications
+                            </div>
+                            <ul class="nav-items my-2">
+                                <li>
+                                    <a class="d-flex text-dark py-2" href="javascript:void(0)">
+                                        <div class="flex-shrink-0 mx-3">
+                                            <i class="fa fa-fw fa-check-circle text-success"></i>
+                                        </div>
+                                        <div class="flex-grow-1 fs-sm pe-2">
+                                            <div class="fw-semibold">App was updated to v5.6!</div>
+                                            <div class="text-muted">3 min ago</div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="d-flex text-dark py-2" href="javascript:void(0)">
+                                        <div class="flex-shrink-0 mx-3">
+                                            <i class="fa fa-fw fa-user-plus text-info"></i>
+                                        </div>
+                                        <div class="flex-grow-1 fs-sm pe-2">
+                                            <div class="fw-semibold">New Subscriber was added! You now have 2580!</div>
+                                            <div class="text-muted">10 min ago</div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="d-flex text-dark py-2" href="javascript:void(0)">
+                                        <div class="flex-shrink-0 mx-3">
+                                            <i class="fa fa-fw fa-times-circle text-danger"></i>
+                                        </div>
+                                        <div class="flex-grow-1 fs-sm pe-2">
+                                            <div class="fw-semibold">Server backup failed to complete!</div>
+                                            <div class="text-muted">30 min ago</div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="d-flex text-dark py-2" href="javascript:void(0)">
+                                        <div class="flex-shrink-0 mx-3">
+                                            <i class="fa fa-fw fa-exclamation-circle text-warning"></i>
+                                        </div>
+                                        <div class="flex-grow-1 fs-sm pe-2">
+                                            <div class="fw-semibold">You are running out of space. Please consider
+                                                upgrading your plan.</div>
+                                            <div class="text-muted">1 hour ago</div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="d-flex text-dark py-2" href="javascript:void(0)">
+                                        <div class="flex-shrink-0 mx-3">
+                                            <i class="fa fa-fw fa-plus-circle text-primary"></i>
+                                        </div>
+                                        <div class="flex-grow-1 fs-sm pe-2">
+                                            <div class="fw-semibold">New Sale! + $30</div>
+                                            <div class="text-muted">2 hours ago</div>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="p-2 border-top">
+                                <a class="btn btn-alt-primary w-100 text-center" href="javascript:void(0)">
+                                    <i class="fa fa-fw fa-eye opacity-50 me-1"></i> View All
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END Notifications Dropdown -->
+
+                    <!-- Toggle Side Overlay -->
+                    <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
+                    <button type="button" class="btn btn-alt-secondary" data-toggle="layout"
+                        data-action="side_overlay_toggle">
+                        <i class="fa fa-gear"></i>
+                    </button>
+                    <!-- END Toggle Side Overlay -->
+                </div>
+                <!-- END Right Section -->
+            </div>
+            <!-- END Header Content -->
+
+            <!-- Header Search -->
+            <div id="page-header-search" class="overlay-header bg-header-dark">
+                <div class="bg-white-10">
+                    <div class="content-header">
+                        <form class="w-100" onsubmit="return false">
+                            <div class="input-group">
+                                <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
+                                <button type="button" class="btn btn-alt-primary" data-toggle="layout"
+                                    data-action="header_search_off">
+                                    <i class="fa fa-fw fa-times-circle"></i>
+                                </button>
+                                <input type="text" class="form-control border-0" placeholder="Search or hit ESC.."
+                                    id="page-header-search-input" name="page-header-search-input">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- END Header Search -->
+
+            <!-- Header Loader -->
+            <!-- Please check out the Loaders page under Components category to see examples of showing/hiding it -->
+            <div id="page-header-loader" class="overlay-header bg-header-dark">
+                <div class="bg-white-10">
+                    <div class="content-header">
+                        <div class="w-100 text-center">
+                            <i class="fa fa-fw fa-sun fa-spin text-white"></i>
                         </div>
                     </div>
                 </div>
             </div>
+            <!-- END Header Loader -->
         </header>
-        <!-- END HEADER DESKTOP-->
+        <!-- END Header -->
 
-        <!-- MAIN CONTENT-->
-        <div class="main-content">
-            <div class="section__content section__content--p30">
-                <div class="container-fluid">
-                    @yield('container')
+        <!-- Main Container -->
+        <main id="main-container">
 
+            @yield('container')
+
+        </main>
+        <!-- END Main Container -->
+
+        <!-- Footer -->
+        <footer id="page-footer" class="bg-body-light">
+            <div class="content py-0">
+                <div class="row fs-sm">
+                    <div class="col-sm-6 order-sm-2 mb-1 mb-sm-0 text-center text-sm-end">
+                        Crafted with <i class="fa fa-heart text-danger"></i> by <a class="fw-semibold"
+                            href="#">Ecomm</a>
+                    </div>
+                    <div class="col-sm-6 order-sm-1 text-center text-sm-start">
+                        <a class="fw-semibold" href="#" target="_blank">BLOGPORTEL</a> &copy; <span
+                            data-toggle="year-copy"></span>
+                    </div>
                 </div>
             </div>
-        </div>
+        </footer>
+        <!-- END Footer -->
     </div>
-    <!-- END PAGE CONTAINER-->
+    <!-- END Page Container -->
 
-</div>
+    <script src="{{ asset('admin_assets/js/dashmix.app.min.js') }}"></script>
+    <script src="{{ asset('admin_assets/js/lib/jquery.min.js') }}"></script>
 
+    <!-- bootstrap -->
 
+    {{-- <script src="{{asset('admin_assets\js\bootstrap\bootstrap.bundle.min.js')}}"></script> --}}
+    {{-- <script src="{{asset('admin_assets\js\bootstrap\tooltip.js')}}"></script> --}}
+    {{-- <script src="{{asset('admin_assets\js\bootstrap\popover.js')}}"></script> --}}
 
-<!-- Jquery JS-->
-<script src="{{ asset('admin_assets/vendor/jquery-3.2.1.min.js ') }}"></script>
-<!-- Bootstrap JS-->
-<script src="{{ asset('admin_assets/vendor/bootstrap-4.1/popper.min.js') }}"></script>
-<script src="{{ asset('admin_assets/vendor/bootstrap-4.1/bootstrap.min.js') }}"></script>
-<!-- Vendor JS       -->
-<script src="{{ asset('admin_assets/vendor/slick/slick.min.js') }}"></script>
-<script src="{{ asset('admin_assets/vendor/wow/wow.min.js') }}"></script>
-<script src="{{ asset('admin_assets/vendor/animsition/animsition.min.js') }}"></script>
-<script src="{{ asset('admin_assets/vendor/bootstrap-progressbar/bootstrap-progressbar.min.js') }}"></script>
-<script src="{{ asset('admin_assets/vendor/counter-up/jquery.waypoints.min.js') }}"></script>
-<script src="{{ asset('admin_assets/vendor/counter-up/jquery.counterup.min.js') }}"></script>
-<script src="{{ asset('admin_assets/vendor/circle-progress/circle-progress.min.js') }}"></script>
-<script src="{{ asset('admin_assets/vendor/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
-<script src="{{ asset('admin_assets/vendor/chartjs/Chart.bundle.min.js') }}"></script>
-<script src="{{ asset('admin_assets/vendor/select2/select2.min.js') }}"></script>
+    <!-- Page JS Plugins -->
+    <script src="{{ asset('admin_assets/js/plugins/chart.js/chart.umd.js') }}"></script>
 
-{{-- dropify js --}}
-<script src="{{ asset('admin_assets/js/dropify.min.js') }}"></script>
-
-<!-- Main JS-->
-<script src="{{ asset('admin_assets/js/main.js') }}"></script>
-<script src="{{ asset('admin_assets/js/script.js') }}"></script>
-
+    <!-- Page JS Code -->
+    <script src="{{ asset('admin_assets/js/pages/be_pages_dashboard.min.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $('[data-bs-toggle="tooltip"]').tooltip()
+        });
+    </script>
+    @yield('page_script')
 </body>
 
 </html>
-<!-- end document-->

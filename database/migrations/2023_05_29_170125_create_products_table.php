@@ -18,13 +18,12 @@ return new class extends Migration
             $table->integer('category_id');
             $table->string('name');
             $table->string('brand');
-            $table->string('model');
+
             $table->longText('short_desc');
             $table->longText('desc');
             $table->longText('keywords');
             $table->longText('technical_specification');
-            $table->longText('uses');
-            $table->longText('warranty');
+
             $table->integer('status');
             $table->timestamps();
         });

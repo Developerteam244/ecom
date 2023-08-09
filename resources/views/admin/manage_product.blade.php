@@ -1,5 +1,7 @@
 @extends('admin/layout')
 @section('title', 'Manage Product')
+@section('admin.add_product', 'active')
+@section('admin.product', 'open')
 @section('container')
     @if ($id > 0)
         {{ $image_required = '' }}
@@ -10,908 +12,380 @@
         @endphp
     @endif
 
-    @error('pimage.*')
-        <div class="alert alert-danger" role="alert">
-
-            {{ $message }}
-        </div>
-    @enderror
-    <h1 class="mb10">Manage Product</h1>
-    <a href="{{ url('admin/product') }}">
-
-        <button type="button" class="btn btn-success"> Back</button>
-    </a>
-    <div class="row m-t-30">
-        <div class="col-md-12">
-
-            <form action="{{ route('product.insert') }}" method="post" enctype="multipart/form-data">
-                <div class="row">
-                    {{ session('sku_error') }}
-                    <div class="col-lg-12">
-                        {{ session('message') }}
-                        <div class="card">
-
-                            <div class="card-body">
-                                <div class="row">
+    <div class="content">
 
 
-                                    <div class="col-6">
+        <form action="{{ route('admin.product_insert') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <input type="number" name="id" value="{{ $id }}" hidden>
+            <!-- Info -->
+            <div class="block block-rounded">
+                <div class="block-header block-header-default">
+                    <h3 class="block-title">Product Details</h3>
+                </div>
+                <div class="block-content">
+                    <div class="row justify-content-center">
+                        <div class="col-md-10 col-lg-12">
+                            <div class="row">
+                                <div class="mb-4 col-lg-6">
+                                    <label class="form-label" for="dm-ecom-product-id">Name</label>
+                                    <i
+                                        class="fa fa-circle-question" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="bottom" data-bs-original-title="<ul class='text-start small'>
+                                            <li>Enter Product name</li>
+                                            <li>It will appear the customer </li>
+                                        </ul>">
+                                    </i>
 
 
-                                        @csrf
-                                        <div class="form-group">
-                                            <label for="product_name" class="control-label mb-1">Product Name </label>
-                                            <input id="product_name" name="name" type="text" class="form-control"
-                                                aria-required="true" aria-invalid="false" value="{{ $name }}">
-                                            @error('name')
-                                                ;
-                                                <p class="text-danger">
-
-                                                    {{ $message }}
-
-                                                </p>
-                                            @enderror
-
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-
-                                        <div class="form-group">
-                                            <label for="slug" class="control-label mb-1">Product Slug </label>
-                                            <input id="slug" name="slug" type="text" class="form-control"
-                                                aria-required="true" aria-invalid="false" value="{{ $slug }}">
-                                            @error('slug')
-                                                <p class="text-danger">
-
-                                                    {{ $message }}
-
-                                                </p>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="image" class="control-label mb-1">Product Thumbnail </label>
-                                    <input id="image" name="image" type="file" class="form-control"
-                                        aria-required="true" aria-invalid="false" {{ $image_required }}
-                                       >
-                                    @error('image')
-                                        <p class="text-danger">
-
-                                            {{ $message }}
-
-                                        </p>
+                                    <input type="text" class="form-control" name="name" value="{{ $name }}"
+                                        required>
+                                    @error('name')
+                                        <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
-                                <div class="row">
-                                    <div class="col-4">
-
-
-                                        <div class="form-group">
-                                            <label for="brand" class="control-label mb-1">Brand </label>
-                                            <select id="brand_id" name="brand_id" type="text" class="form-control"
-                                                aria-required="true" aria-invalid="false">
-                                                <option value=''>Select Brand </option>
-
-                                                @foreach ($brand as $list)
-                                                    @if ($brand_id == $list->id)
-                                                        <option selected value="{{ $list->id }}">
-                                                            {{ $list->brand }} </option>
-                                                    @else
-                                                        <option value="{{ $list->id }}">{{ $list->brand }}
-                                                        </option>
-                                                    @endif
-                                                @endforeach
-
-
-
-
-
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-4">
-
-                                        <div class="form-group">
-                                            <label for="category_id" class="control-label mb-1">Category </label>
-                                            <select id="category_id" name="category_id" type="text" class="form-control"
-                                                aria-required="true" aria-invalid="false">
-                                                <option value=''>Select Category </option>
-
-                                                @foreach ($category as $list)
-                                                    @if ($category_id == $list->id)
-                                                        <option selected value="{{ $list->id }}">
-                                                            {{ $list->category_name }} </option>
-                                                    @else
-                                                        <option value="{{ $list->id }}">{{ $list->category_name }}
-                                                        </option>
-                                                    @endif
-                                                @endforeach
-
-
-
-
-
-                                            </select>
-                                            @error('category_id')
-                                                <p class="text-danger">
-
-                                                    {{ $message }}
-
-                                                </p>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="col-4">
-
-                                        <div class="form-group">
-                                            <label for="model" class="control-label mb-1">Model </label>
-                                            <input id="model" name="model" type="text" class="form-control"
-                                                aria-required="true" aria-invalid="false" value="{{ $model }}">
-                                            @error('model')
-                                                <p class="text-danger">
-
-                                                    {{ $message }}
-
-                                                </p>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="short_desc" class="control-label mb-1">Short Description </label>
-                                    <textarea id="short_desc" name="short_desc" type="text" class="form-control" aria-required="true"
-                                        aria-invalid="false">{{ $short_desc }} </textarea>
-                                    @error('short_desc')
-                                        <p class="text-danger">
-
-                                            {{ $message }}
-
-                                        </p>
+                                <div class="mb-4 col-lg-6">
+                                    <label class="form-label" for="slug">Slug</label>
+                                    <i
+                                        class="fa fa-circle-question" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="bottom" data-bs-original-title="<ul class='text-start small'>
+                                            <li>Enter Product Slug</li>
+                                            <li>It should be unique for each product </li>
+                                            <li>It is used make custom url  </li>
+                                            <li>It is will appear in the url </li>
+                                        </ul>"></i>
+                                    <input type="text" class="form-control" id="slug" name="slug"
+                                        value="{{ $slug }}" required>
+                                    @error('slug')
+                                        <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
+                                <div class="mb-4 col-lg-6">
+                                    <label class="form-label" for="category">Category </label>
 
+                                    <select class="js-select2 form-select" id="category_id" name="category_id"
+                                        style="width: 100%;" data-placeholder="Choose Category">
+                                        <option></option>
+                                        <!-- Required for data-placeholder attribute to work with Select2 plugin -->
+                                        @foreach ($category as $list)
+                                            @if ($list->id == $category_id)
+                                                <option value="{{ $list->id }}" selected>{{ $list->category_name }}
+                                                </option>
+                                            @else
+                                                <option value="{{ $list->id }}">{{ $list->category_name }}</option>
+                                            @endif
+                                        @endforeach
 
-                                <div class="form-group">
-                                    <label for="desc" class="control-label mb-1">Description </label>
-                                    <textarea id="desc" name="desc" type="text" class="form-control" aria-required="true"
-                                        aria-invalid="false">{{ $desc }} </textarea>
-                                    @error('desc')
-                                        <p class="text-danger">
+                                    </select>
 
-                                            {{ $message }}
+                                </div>
+                                <div class="mb-4 col-lg-6">
+                                    <label class="form-label" for="brand">Brand </label>
 
-                                        </p>
+                                    <select class="js-select2 form-select" id="brand" name="brand_id"
+                                        style="width: 100%;" data-placeholder="Choose Brand">
+                                        <option></option>
+
+                                        @foreach ($brand as $list)
+                                            @if ($list->id == $brand_id)
+                                                <option value="{{ $list->id }}" selected>{{ $list->name }}</option>
+                                            @else
+                                                <option value="{{ $list->id }}">{{ $list->name }}</option>
+                                            @endif
+                                        @endforeach
+
+                                    </select>
+
+                                </div>
+                                {{-- short description --}}
+                                <div class="mb-4 col-lg-12">
+
+                                    <x-admin.texteditor name="short_desc" id="short_desc" lable="Short Description"
+                                        value="{{ $short_desc }}"></x-admin.texteditor>
+                                </div>
+                                {{-- long description --}}
+                                <div class="mb-4 col-lg-12">
+
+                                    <x-admin.texteditor name="desc" id="desc" lable=" Description"
+                                        value="{{ $desc }}"></x-admin.texteditor>
+                                </div>
+                                <div class="mb-4 col-lg-12">
+
+                                    <x-admin.texteditor name="tecnical_specification" id="technical_specification"
+                                        lable="Technical Specification" value="{{ $technical_specification }}">
+                                    </x-admin.texteditor>
+                                </div>
+                                <div class="mb-4 col-lg-12">
+                                    <label class="form-label" for="dm-ecom-product-id">Keywords</label>
+                                    <input type="text" class="form-control keyword" id="keyword" data-role="tagsinput"
+                                        name="keywords" value="{{ $keywords }}">
+                                </div>
+                                {{-- tex input --}}
+                                <div class="mb-4 col-lg-4">
+                                    <label class="form-label" for="tex_id">Tex </label>
+                                    @error('tex_id')
+                                        <p class="text-danger">{{ $message }}</p>
                                     @enderror
-                                </div>
-                                <div class="form-group">
-                                    <label for="keywords" class="control-label mb-1"> Keywords </label>
-                                    <textarea id="keywords" name="keywords" type="text" class="form-control" aria-required="true"
-                                        aria-invalid="false">{{ $keywords }} </textarea>
-                                    @error('keywords')
-                                        <p class="text-danger">
 
-                                            {{ $message }}
+                                    <select class="js-select2 form-select" id="tex_id" name="tex_id"
+                                        style="width: 100%;" data-placeholder="Choose Text">
+                                        <option></option>
 
-                                        </p>
-                                    @enderror
-                                </div>
-                                <div class="form-group">
-                                    <label for="technical_specification" class="control-label mb-1">Technical
-                                        Specipication </label>
-                                    <textarea id="technical_specification" name="technical_specification" type="text" class="form-control"
-                                        aria-required="true" aria-invalid="false">{{ $technical_specification }} </textarea>
-                                    @error('technical_specification')
-                                        <p class="text-danger">
+                                        @foreach ($tex as $list)
+                                            @if ($list->id == $tex_id)
+                                                <option value="{{ $list->id }}" selected>{{ $list->name }}</option>
+                                            @else
+                                                <option value="{{ $list->id }}">{{ $list->name }}</option>
+                                            @endif
+                                        @endforeach
 
-                                            {{ $message }}
+                                    </select>
 
-                                        </p>
-                                    @enderror
-                                </div>
-                                <div class="form-group">
-                                    <label for="uses" class="control-label mb-1">Uses </label>
-                                    <textarea id="uses" name="uses" type="text" class="form-control" aria-required="true"
-                                        aria-invalid="false">{{ $uses }} </textarea>
-                                    @error('uses')
-                                        <p class="text-danger">
-
-                                            {{ $message }}
-
-                                        </p>
-                                    @enderror
-                                </div>
-                                <div class="form-group">
-                                    <label for="warranty" class="control-label mb-1">Warranty </label>
-                                    <textarea id="warranty" name="warranty" type="text" class="form-control" aria-required="true"
-                                        aria-invalid="false">{{ $warranty }} </textarea>
-                                    @error('warranty')
-                                        <p class="text-danger">
-
-                                            {{ $message }}
-
-                                        </p>
-                                    @enderror
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <label for="lead_time" class="control-label mb-1">Lead Time </label>
-                                        <input id="lead_time" name="lead_time" type="text" class="form-control"
-                                            aria-required="true" aria-invalid="false" value="{{ $lead_time }}">
-
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label for="tex_id" class="control-label mb-1">Tex </label>
-                                            <select id="tex_id" name="tex_id" type="text" class="form-control"
-                                                aria-required="true" aria-invalid="false">
-                                                <option value=''>Select Tex </option>
-
-                                                @foreach ($tex as $list)
-                                                    @if ($tex_id == $list->id)
-                                                        <option selected value="{{ $list->id }}">
-                                                            {{ $list->name }} </option>
-                                                    @else
-                                                        <option value="{{ $list->id }}">{{ $list->name }}
-                                                        </option>
-                                                    @endif
-                                                @endforeach
-
-
-
-
-
-                                            </select>
-                                            @error('tex_id')
-                                                <p class="text-danger">
-
-                                                    {{ $message }}
-
-                                                </p>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label for="is_promo" class="control-label mb-1">Is Promotional </label>
-                                            <select id="is_promo" name="is_promo" type="text" class="form-control"
-                                                aria-required="true" aria-invalid="false">
-
-
-
-                                                    @if ($is_promo == 1)
-                                                        <option selected value="1"> Yes  </option>
-                                                        <option value=0>No</option>
-                                                        @else
-                                                        <option value=1>Yes</option>
-                                                        <option value=0 selected>No</option>
-                                                    @endif
-
-
-
-
-
-
-                                            </select>
-                                            @error('tex_id')
-                                                <p class="text-danger">
-
-                                                    {{ $message }}
-
-                                                </p>
-                                            @enderror
-                                        </div>
-                                    </div>
                                 </div>
 
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label for="is_featured" class="control-label mb-1">Is Featured </label>
-                                            <select id="is_featured" name="is_featured" type="text" class="form-control"
-                                                aria-required="true" aria-invalid="false">
-
-
-
-                                                    @if ($is_featured == 1)
-                                                        <option selected value="1"> Yes  </option>
-                                                        <option value=0>No</option>
-                                                        @else
-                                                        <option value=1>Yes</option>
-                                                        <option value=0 selected>No</option>
-                                                    @endif
-
-
-
-
-
-
-                                            </select>
-                                            @error('tex_id')
-                                                <p class="text-danger">
-
-                                                    {{ $message }}
-
-                                                </p>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label for="is_discounted" class="control-label mb-1">Is Discounted </label>
-                                            <select id="is_discounted" name="is_discounted" type="text" class="form-control"
-                                                aria-required="true" aria-invalid="false">
-
-
-
-                                                    @if ($is_promo == 1)
-                                                        <option selected value="1"> Yes  </option>
-                                                        <option value=0>No</option>
-                                                        @else
-                                                        <option value=1>Yes</option>
-                                                        <option value=0 selected>No</option>
-                                                    @endif
-
-
-
-
-
-
-                                            </select>
-                                            @error('tex_id')
-                                                <p class="text-danger">
-
-                                                    {{ $message }}
-
-                                                </p>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label for="is_tranding" class="control-label mb-1">Is Tranding </label>
-                                            <select id="is_tranding" name="is_tranding" type="text" class="form-control"
-                                                aria-required="true" aria-invalid="false">
-
-
-
-                                                    @if ($is_promo == 1)
-                                                        <option selected value="1"> Yes  </option>
-                                                        <option value=0>No</option>
-                                                        @else
-                                                        <option value=1>Yes</option>
-                                                        <option value=0 selected>No</option>
-                                                    @endif
-
-
-
-
-
-
-                                            </select>
-                                            @error('tex_id')
-                                                <p class="text-danger">
-
-                                                    {{ $message }}
-
-                                                </p>
-                                            @enderror
-                                        </div>
-                                    </div>
+                                <div class="mb-4 col-lg-2">
+                                    <x-admin.is_true name='is_promo' id="is_promo" value="{{ $is_promo }}"
+                                        lable="Promotional"></x-admin.is_true>
                                 </div>
+                                <div class="mb-4 col-lg-2">
+                                    <x-admin.is_true name='is_discounted' id="is_discounted" value="{{ $is_discounted }}"
+                                        lable="Disounted"></x-admin.is_true>
+                                </div>
+                                <div class="mb-4 col-lg-2">
+                                    <x-admin.is_true name='is_featured' id="is_featured" value="{{ $is_featured }}"
+                                        lable="Featured"></x-admin.is_true>
+                                </div>
+                                <div class="mb-4 col-lg-2">
+                                    <x-admin.is_true name='is_tranding' id="is_tranding" value="{{ $is_tranding }}"
+                                        lable="Tranding"></x-admin.is_true>
+                                </div>
+
+
 
 
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+            <!-- END Info -->
+            <!-- thumbanil image -->
+            <div class="block block-rounded">
+                <div class="block-header block-header-default">
+                    <h3 class="block-title">Thumbnail Image</h3>
+                    @error('image')
+                        <p class="text-danger">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div class="block-content block-content-full">
+                    <div class="row justify-content-center">
+                        <div class="col-md-10 col-lg-8">
 
-                {{-- product multiple image --}}
-                <div class="row">
-                    <div class="col-12" id="product_attr_box">
-                        <h3>Product Images</h3>
+                            <input id="thumbnail" type="file" name="image"
+                                data-default-file="{{ asset('storage/media/product/' . $image) }}"
+                                data-allowed-file-extensions="jpg jpeg webp png">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- thumbnail image -->
+            <!-- muliple  image -->
+            <div class="block block-rounded">
+                <div class="block-header block-header-default">
+                    <h3 class="block-title">Multiple Image</h3>
+                </div>
+                <div class="block block-rounded block-mode-hidden">
+                    <div class="block-header block-header-default">
+                        <div class="block-options">
+
+                            <button type="button" class="btn-block-option" data-toggle="block-option"
+                                data-action="content_toggle"></button>
+                        </div>
+                    </div>
+                    <div class="block-content">
+                        <button type="button" id="add_image" class="btn btn-success me-1 mb-3">
+                            <i class="fa fa-fw fa-plus me-1"></i> Add Image
+                        </button>
+                        <div class="row" id="pimage_area">
+
+                            @foreach ($product_img as $list)
+                                <div class="col-lg-4  position-relative multiple_image">
+                                    <i class="fa fa-circle-xmark pmimage_close"></i>
+                                    <input type="number" name="piid[]" value="{{$list['id']}}" hidden>
+
+                                    <input type="file" class="multi_image" name="pmimage[]"  data-default-file="{{ asset('storage/media/attr_image/' . $list['image']) }}">
+                                </div>
+                            @endforeach
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- mulitple image -->
 
 
-                        <div class="card" id="product_multi_img">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-2">
-                                        <div class="form-group">
-                                            <label class="control-label mb-1"></label>
-                                            <button type="button" onclick="add_more_img()"
-                                                class="btn btn-lg btn-success btn-block">
-                                                <i class="fa fa-plus"></i>
+            <!-- Attribute  -->
+            <div class="block block-rounded">
+                <div class="block-header block-header-default">
+                    <h3 class="block-title">Product Attribute </h3>
+                </div>
+                <div class="block-content block-content-full">
+                    <div class="row justify-content-center">
+                        <div class="col-md-10 col-lg-12">
+                            <button type="button" class="btn btn-success me-1 mb-3" id="pattr_add">
+                                <i class="fa fa-fw fa-plus me-1"></i> Add
+                            </button>
+                            <div class="product_attr" id="pattr_area">
+                                @foreach ($product_attr as $value)
+                                    @php
+                                        $list = (array) $value;
+                                    @endphp
 
-                                            </button>
+                                    <div class="row">
+                                        <input type="number" name="paid[]" value="{{ $list['id'] }}" hidden>
+                                        <div class="mb-4 col-lg-2 ">
+                                            <label class="form-label" for="">Price</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text">
+                                                    ₹
+                                                </span>
+                                                <input type="number" class="form-control number" name="price[]"
+                                                    placeholder="00" value="{{ $list['price'] }}">
 
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="mb-4 col-lg-2 ">
+                                            <label class="form-label" for="">Mrp</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text">
+                                                    ₹
+                                                </span>
+                                                <input type="number" class="form-control number" name="mrp[]"
+                                                    placeholder="00" value="{{ $list['mrp'] }}">
+
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="mb-4 col-lg-2 ">
+                                            <label class="form-label" for="">Quantity</label>
+                                            <div class="input-group">
+                                                <input type="number" class="form-control number" name="qty[]"
+                                                    placeholder="00" value="{{ $list['qty'] }}">
+                                                <span class="input-group-text">
+                                                    p
+                                                </span>
+
+                                            </div>
+                                        </div>
+                                        <div class="mb-4 col-lg-4">
+                                            <label class="form-label" for="dm-ecom-product-name">Size </label>
+
+                                            <select class="js-select2 form-select paselect"  name="size_id[]"
+                                                style="width: 100%;" data-placeholder="Choose Size">
+                                                <option></option>
+
+                                                @foreach ($size as $s)
+                                                    @if ($list['size_id'] == $s->id)
+                                                        <option value="{{ $s->id }}" selected>
+                                                            {{ $s->size }}
+                                                        </option>
+                                                    @else
+                                                        <option value="{{ $s->id }}">{{ $s->size }}</option>
+                                                    @endif
+                                                @endforeach
+
+                                            </select>
 
                                         </div>
+
+
                                     </div>
-
-                                    @php
-                                        $loop_img_count = 1;
-                                        $loop_img_count_prev = $loop_img_count;
-
-                                    @endphp
-                                    @foreach ($product_img as $atr_key => $atr_val)
-                                        @php
-                                            $p_img = (array) $atr_val;
-                                            $loop_img_count_prev = $loop_img_count;
-
-                                        @endphp
-
-                                        {{-- data base img end --}}
-
-
-                                        @if ($p_img['id'] > 0)
-                                            <div class="col-lg-4 col-md-6 col-6">
-                                                <input hidden type="number" name="piid[]" value="{{ $p_img['id'] }}">
-                                                <div class="form-group">
-                                                    <label for="image{{ $loop_img_count }}"
-                                                        class="control-label mb-1">Image
-                                                    </label>
-                                                    <input id="image{{ $loop_img_count }}" name="pmimage[]"
-                                                        type="file" class="form-control" aria-required="true"
-                                                        aria-invalid="false" {{ $image_required }}
-                                                        >
-
-                                                    <img src='{{ asset('storage/media/product_img/' . $p_img['image']) }}'
-                                                        alt="">
-
-                                                </div>
-                                            </div>
-
-
-
-                                            <div class="col-2">
-                                                <div class="form-group">
-                                                    <label class="control-label mb-1"></label>
-                                                    <a
-                                                        href="{{ url('admin/manage_product_process/image/delete') }}/{{ $p_img['id'] }}/{{ $id }}">
-                                                        <button type="button"
-                                                            onclick="remove_more({{ $loop_img_count_prev }})"
-                                                            class="btn btn-lg btn-danger btn-block">
-                                                            <i class="fa fa-minus"></i>
-
-                                                        </button>
-                                                    </a>
-
-                                                </div>
-                                            </div>
-                                        @endif
-                                        {{-- data base img end --}}
-
-
-                                </div>
                                 @endforeach
 
                             </div>
+
                         </div>
                     </div>
                 </div>
-                {{-- end product multiple image --}}
-                {{-- product attribute --}}
-                <div class="row">
-                    <div class="col-12" id="product_attr_box">
-                        <h3>Product Attribute</h3>
-                        @php
-                            $loop_count_num = 1;
-                            $loop_count_prev = $loop_count_num;
-
-                        @endphp
+            </div>
+            <!-- Attribute -->
 
 
-                        @foreach ($product_attr as $atr_key => $atr_val)
-                            @php
-                                $p_atr = (array) $atr_val;
-                                $loop_count_prev = $loop_count_num;
+            <button type="submit" class="btn btn-lg rounded-pill btn-hero btn-success ">
+                <i class="fa fa-circle-check me-1"></i> Submit
+            </button>
 
-                            @endphp
-
-
-                            <div class="card" id="product_attr_{{ $loop_count_num++ }}">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-lg-2 col-md-6 col-6">
-                                            <input hidden type="number" name="paid[]" value="{{ $p_atr['id'] }}">
-                                            <div class="form-group">
-                                                <label for="sku{{ $loop_count_num }}" class="control-label mb-1">SKU
-                                                </label>
-                                                <input id="sku{{ $loop_count_num }}" name="sku[]" type="text"
-                                                    class="form-control" aria-required="true" aria-invalid="false"
-                                                    value="{{ $p_atr['sku'] }}" required>
-                                                @error('image')
-                                                    <p class="text-danger">
-
-                                                        {{ $message }}
-
-                                                    </p>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-6 col-6">
-                                            <div class="form-group">
-                                                <label for="mrp{{ $loop_count_num }}" class="control-label mb-1">MRP
-                                                </label>
-                                                <input id="mrp{{ $loop_count_num }}" name="mrp[]" type="number"
-                                                    class="form-control" aria-required="true" aria-invalid="false"
-                                                    value="{{ $p_atr['mrp'] }}" required>
-                                                @error('image')
-                                                    <p class="text-danger">
-
-                                                        {{ $message }}
-
-                                                    </p>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-6 col-6 ">
-                                            <div class="form-group">
-                                                <label for="price{{ $loop_count_num }}" class="control-label mb-1">PRICE
-                                                </label>
-                                                <input id="price{{ $loop_count_num }}" name="price[]" type="text"
-                                                    class="form-control" aria-required="true" aria-invalid="false"
-                                                    value="{{ $p_atr['price'] }}" required>
-                                                @error('image')
-                                                    <p class="text-danger">
-
-                                                        {{ $message }}
-
-                                                    </p>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-6 col-6">
-                                            <div class="form-group">
-                                                <label for="size_id{{ $loop_count_num }}" class="control-label mb-1">Size
-                                                </label>
-                                                <select id="size_id{{ $loop_count_num }}" name="size_id[]"
-                                                    type="text" class="form-control" aria-required="true"
-                                                    aria-invalid="false">
-                                                    <option value=''>Select Category </option>
-
-                                                    @foreach ($size as $list)
-                                                        @if ($p_atr['size_id'] == $list->id)
-                                                            <option selected value="{{ $list->id }}">
-                                                                {{ $list->size }} </option>
-                                                        @else
-                                                            <option value="{{ $list->id }}">{{ $list->size }}
-                                                            </option>
-                                                        @endif
-                                                    @endforeach
+        </form>
 
 
+        <!-- Media -->
 
 
-
-                                                </select>
-                                                @error('category_id')
-                                                    <p class="text-danger">
-
-                                                        {{ $message }}
-
-                                                    </p>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-6 col-6">
-                                            <div class="form-group">
-                                                <label for="color_id{{ $loop_count_num }}"
-                                                    class="control-label mb-1">Color </label>
-                                                <select id="color_id{{ $loop_count_num }}" name="color_id[]"
-                                                    type="text" class="form-control" aria-required="true"
-                                                    aria-invalid="false">
-                                                    <option value=''>Select Color </option>
-
-                                                    @foreach ($color as $list)
-                                                        @if ($p_atr['color_id'] == $list->id)
-                                                            <option selected value="{{ $list->id }}">
-                                                                {{ $list->color }} </option>
-                                                        @else
-                                                            <option value="{{ $list->id }}">{{ $list->color }}
-                                                            </option>
-                                                        @endif
-                                                    @endforeach
-
-
-
-
-
-                                                </select>
-                                                @error('category_id')
-                                                    <p class="text-danger">
-
-                                                        {{ $message }}
-
-                                                    </p>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-6 col-6 ">
-                                            <div class="form-group">
-                                                <label for="qty{{ $loop_count_num }}" class="control-label mb-1">Quantity
-                                                </label>
-                                                <input id="qty{{ $loop_count_num }}" name="qty[]" type="text"
-                                                    class="form-control" aria-required="true" aria-invalid="false"
-                                                    value="{{ $p_atr['sku'] }}" required>
-                                                @error('image')
-                                                    <p class="text-danger">
-
-                                                        {{ $message }}
-
-                                                    </p>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4 col-md-6 col-6">
-                                            <div class="form-group">
-                                                <label for="image{{ $loop_count_num }}" class="control-label mb-1">Image
-                                                </label>
-                                                <input id="image{{ $loop_count_num }}" name="pimage[]" type="file"
-                                                    class="form-control" aria-required="true" aria-invalid="false"
-                                                    {{ $image_required }}>
-                                                <img width="100px" src='{{ asset('storage/media/attr_image/' . $p_atr['image']) }}'
-                                                    alt="">
-                                                @error('image')
-                                                    <p class="text-danger">
-
-                                                        {{ $message }}
-
-                                                    </p>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        @if ($loop_count_num == 2)
-                                            <div class="col-2">
-                                                <div class="form-group">
-                                                    <label class="control-label mb-1"></label>
-                                                    <button type="button" onclick="add_more()"
-                                                        class="btn btn-lg btn-success btn-block">
-                                                        <i class="fa fa-plus"></i>
-
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        @else
-                                            <div class="col-2">
-                                                <div class="form-group">
-                                                    <label class="control-label mb-1"></label>
-                                                    <a
-                                                        href="{{ url('admin/manage_product_process/delete') }}/{{ $p_atr['id'] }}/{{ $id }}">
-                                                        <button type="button"
-                                                            onclick="remove_more({{ $loop_count_prev }})"
-                                                            class="btn btn-lg btn-danger btn-block">
-                                                            <i class="fa fa-minus"></i>
-
-                                                        </button>
-                                                    </a>
-
-                                                </div>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                    </div>
-                    @endforeach
-                </div>
-                {{-- end product attribute --}}
-                <div class="row">
-                    <div class="col">
-                        <div>
-                            <button id="payment-button" type="submit" class="btn btn-lg btn-info btn-block">
-                                Submit
-
-                            </button>
-                            <input hidden type="number" name="id" value="{{ $id }}">
-                        </div>
-
-            </form>
-        </div>
+        <!-- END Media -->
     </div>
-    </div>
-    </div>
+@endsection
+
+@section('page_link')
+
+    <link rel="stylesheet" href="{{ asset('admin_assets/js/plugins/simplemde/simplemde.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin_assets/js/plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin_assets/js/plugins/selecteditable/editable-select.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin_assets/js/plugins/dropzone/dropzone.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin_assets/tags/css/tag.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin_assets/dropify/dropify.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin_assets/css/custom.css') }}">
+@endsection
+
+@section('page_script')
 
 
+<!-- custorm js -->
+    <script type="module" src="{{ asset('admin_assets/js/custom/manage_product.js') }}"></script>
+ <!-- Plugin -->
+    <script src="{{ asset('admin_assets/js/plugins/select2/js/select2.full.min.js') }}"></script>
+    <script src="{{ asset('admin_assets/js/plugins/selecteditable/editable-select.js') }}"></script>
+
+    <script src="{{ asset('admin_assets/tags/js/tag.js') }}"></script>
+    <script src="{{ asset('admin_assets/dropify/dropify.js') }}"></script>
+
+
+
+    <!-- Page JS Plugins -->
+    <script src="{{ asset('admin_assets/js/plugins/simplemde/simplemde.min.js') }}"></script>
+    <script src="{{ asset('admin_assets/js/plugins/ckeditor/ckeditor.js') }}"></script>
+    <script src="{{ asset('admin_assets/js/plugins/notify/notify.js') }}"></script>
+    <!-- Page JS Helpers (SimpleMDE + CKEditor plugins) -->
 
 
     <script>
-        let loop_count = {{ $loop_count_prev }}
-        let loop_img_count = {{ $loop_img_count_prev }};
+        $(document).ready(function() {
+            $('.js-select2').select2(); // select on category , brand , size
 
-        function add_more() {
-            loop_count++;
-            let pro_attr_section = document.querySelector("#product_attr_box");
-            let size_id_html = document.querySelector('#size_id2').innerHTML;
-            size_id_html = size_id_html.replace('selected', '');
-            let color_id_html = document.querySelector('#color_id2').innerHTML;
-            color_id_html = color_id_html.replace('selected', '');
+            $("#thumbnail").dropify({
+                preview: {
+                    enabled: true,
+                    extensions: ['webp']
+                }
+            });
+            $(".multi_image").dropify();
+            @php
+                $error_list = ['price.*', 'mrp.*', 'qty.*', 'size_id.*'];
+            @endphp
+            @foreach ($error_list as $list)
 
-            let card_div = document.createElement('div');
-            card_div.classList.add('card');
-            card_div.setAttribute('id', 'product_attr_' + loop_count);
-
-            // < class='card' id='product_attr_"+loop_count+"'>
-            html = "<div class='card-body'><div class='row'>";
-            html += `<div class="col-lg-2 col-md-6 col-6"><div class="form-group"> <input hidden type="number" name="paid[]" ><label for="sku${loop_count}" class="control-label mb-1">SKU </label><input id="sku${loop_count}" name="sku[]" type="text" class="form-control"aria-required="true" aria-invalid="false" value="" required>
-                                            @error('image')
-                                                <p class="text-danger">
-
-                                                    {{ $message }}
-
-                                                </p>
-                                            @enderror
-                                        </div> </div>`;
-
-
-            html += `<div class="col-lg-2 col-md-6 col-6"><div class="form-group"><label for="mrp${loop_count}" class="control-label mb-1">MRP </label><input id="mrp${loop_count}" name="mrp[]" type="text" class="form-control"aria-required="true" aria-invalid="false" value="" required>
-                                            @error('image')
-                                                <p class="text-danger">
-
-                                                    {{ $message }}
-
-                                                </p>
-                                            @enderror
-                                        </div></div>`;
-            html += `<div class="col-lg-2 col-md-6 col-6"><div class="form-group"><label for="price${loop_count}" class="control-label mb-1">PRICE </label><input id="price${loop_count}" name="price[]" type="text" class="form-control"aria-required="true" aria-invalid="false" value="" required>
-                                            @error('image')
-                                                <p class="text-danger">
-
-                                                    {{ $message }}
-
-                                                </p>
-                                            @enderror
-                                        </div></div>`;
-            html += `<div class="col-lg-3 col-md-6 col-6"><div class="form-group"><label for="size_id${loop_count}" class="control-label mb-1">Size </label><select id="size_id${loop_count}" name="size_id[]" type="text" class="form-control" aria-required="true" aria-invalid="false"> ${size_id_html} </select>
-                                            @error('image')
-                                                <p class="text-danger">
-
-                                                    {{ $message }}
-
-                                                </p>
-                                            @enderror
-                                        </div></div>`;
-
-            html += `<div class="col-lg-3 col-md-6 col-6"><div class="form-group"><label for="color_id${loop_count}" class="control-label mb-1">Color </label><select id="color_id${loop_count}" name="color_id[]" type="text" class="form-control" aria-required="true" aria-invalid="false" > ${color_id_html} </select>
-                                            @error('image')
-                                                <p class="text-danger">
-
-                                                    {{ $message }}
-
-                                                </p>
-                                            @enderror
-                                        </div></div>`;
-            html += `<div class="col-lg-2 col-md-6 col-6"><div class="form-group"><label for="qty${loop_count}" class="control-label mb-1">Quantity </label><input id="qty${loop_count}" name="qty[]" type="text" class="form-control"aria-required="true" aria-invalid="false" value="" required>
-                                            @error('image')
-                                                <p class="text-danger">
-
-                                                    {{ $message }}
-
-                                                </p>
-                                            @enderror
-                                        </div></div>`;
-            html += ` <div class="col-lg-4 col-md-6 col-6">
-                                        <div class="form-group">
-                                            <label for="image${loop_count}" class="control-label mb-1">Image </label>
-                                            <input id="image${loop_count}" name="pimage[]" type="file" class="form-control"
-                                                aria-required="true" aria-invalid="false" {{ $image_required }}
-                                                >
-                                            @error('image')
-                                                <p class="text-danger">
-
-                                                    {{ $message }}
-
-                                                </p>
-                                            @enderror
-                                        </div>
-                                    </div>`;
-            html += `<div class="col-2"> <div class="form-group">
-                                            <label class="control-label mb-1"></label>
-                                            <button onclick="remove_more(${loop_count})" class="btn btn-lg btn-danger btn-block">
-                                                <i class="fa fa-minus"></i>
-
-                                            </button>
-                                        </div>
-                                    `;
-
-
-
-
-
-            html += '</div></div></div>';
-            card_div.innerHTML = html;
-
-            pro_attr_section.appendChild(card_div);
-
-        }
-
-        function remove_more(id) {
-
-            let product_attr = document.querySelector("#product_attr_" + id);
-
-            product_attr.remove();
-        }
-
-        // function to add image division
-        function add_more_img() {
-            let multi_img_parrent = document.querySelector('#product_multi_img .card-body .row');
-            let img_col = document.createElement('div');
-            img_col.classList.add('col-lg-4', 'col-md-6', 'col-6');
-            loop_img_count++;
-            img_col.id = `img_col_${loop_img_count}`;
-
-
-            html = `<div class="row align-items-end"><div class="col"><input hidden type="number" name="piid[]" >
-                                                <div class="form-group">
-                                                    <label for="image${loop_img_count}"
-                                                        class="control-label mb-1">Image
-                                                    </label>
-                                                    <input id="image${loop_img_count}" name="pmimage[]"
-                                                        type="file" class="form-control" aria-required="true"
-                                                        aria-invalid="false"
-                                                        >
-
-
-
-                                                </div>
-                                                </div>
-
-
-
-
-                                            <div class="col-2">
-                                                <div class="form-group">
-                                                    <label class="control-label mb-1"></label>
-
-                                                        <button type="button"
-                                                            onclick="remove_img(${loop_img_count})"
-                                                            class="btn btn-lg btn-danger btn-block">
-                                                            <i class="fa fa-minus"></i>
-
-                                                        </button>
-
-
-                                                </div>
-                                            </div>
-                                            </div>`;
-            img_col.innerHTML = html;
-            multi_img_parrent.appendChild(img_col);
-        };
-
-        function remove_img(id) {
-            let img_div = document.querySelector(`#img_col_${id}`);
-            img_div.remove();
-        }
+                @error($list)
+                    $.notify("{{ $message }}");
+                @enderror
+            @endforeach
+        });
     </script>
-
-    {{-- <script src="{{asset('admin_assets/ckeditor/ckeditor.js')}}"></script> --}}
-    <script src="https://cdn.ckeditor.com/ckeditor5/38.0.1/classic/ckeditor.js"></script>
-
-
     <script>
-        ClassicEditor
-            .create(document.querySelector('#short_desc'))
-            .catch(error => {
-                console.error(error);
-            });
-        ClassicEditor
-            .create(document.querySelector('#desc'))
-            .catch(error => {
-                console.error(error);
-            });
-        ClassicEditor
-            .create(document.querySelector('#keywords'))
-            .catch(error => {
-                console.error(error);
-            });
-        ClassicEditor
-            .create(document.querySelector('#technical_specification'))
-            .catch(error => {
-                console.error(error);
-            });
+        Dashmix.helpersOnLoad(['js-ckeditor', 'js-simplemde']);
     </script>
 
 @endsection

@@ -135,8 +135,8 @@
                                  <h2 class="product__details--info__title mb-15">{{ $product->name }}
                                  </h2>
                                  <div class="product__details--info__price mb-12">
-                                     <span class="current__price">$58.00</span>
-                                     <span class="old__price">$68.00</span>
+                                     <span class="current__price"></span>
+                                     <span class="old__price"></span>
                                  </div>
 
                                  <p class="product__details--info__desc mb-15">{!! $product->short_desc !!}</p>
@@ -152,7 +152,7 @@
                                                 @foreach ($product_color as $list)
                                                          @if ($list != '')
                                                          <div class="variant__color--list product_color"
-                                                         data-size="{{ $list['size'] }}"
+                                                         data-size=@json($list['size'])
                                                          data-product-image="{{ $list['image'] }}"
                                                          data-color="{{ $list['color'] }}">
                                                          <input id="{{ $list['color'] }}" name="color" type="radio">
@@ -178,7 +178,7 @@
                                                      @endphp
                                                      @foreach ($product_size as $list)
                                                          <li class="variant__size--list product_size_item"
-                                                             data-size="{{ $list['size'] }}">
+                                                             data-size="{{ $list['size'] }}" data-color=@json($list['color'])>
                                                              <input id="{{ $list['size'] }}" name="size"
                                                                  type="radio">
                                                              <label class="variant__size--value red"

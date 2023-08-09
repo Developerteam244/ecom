@@ -10,7 +10,7 @@ class SizeController extends Controller
 {
     public function index()
     {
-        $result['data'] = Size::all();
+        $result['size'] = Size::all();
         return view('admin/size',$result);
     }
 
@@ -22,12 +22,12 @@ class SizeController extends Controller
             $arr = Size::where(['id'=>$id])->get();
             $result['size'] = $arr[0]->size;
 
-            $result['size_id'] = $arr[0]->id;
+            $result['id'] = $arr[0]->id;
 
         }else{
             $result['size'] = '';
 
-            $result['size_id'] = 0;
+            $result['id'] = 0;
         }
 
         return view('admin/manage_Size',$result);
@@ -44,11 +44,11 @@ class SizeController extends Controller
             $id =$request->post('id');
             $model = Size::find($id);
 
-            $request->session()->flash('message','size Updated');
+            $request->session()->flash('message','Size Updated');
         }else{
 
             $model = new Size();
-            $request->session()->flash('message','size Inserted');
+            $request->session()->flash('message','Size Inserted');
         }
         $model->size = ucfirst($request->post('size'));
 

@@ -1,58 +1,122 @@
 @extends('admin/layout')
-@section('title','Size')
-@section('size_select','active')
+@section('title', 'Size')
+@section('admin.all_size', 'active')
+@section('admin.size', 'open')
 @section('container')
-    {{session('message')}}
-    <h1 class="mb10">Size</h1>
-    <a href="size/manage_size">
 
-        <button type="button" class="btn btn-success">Add Size</button>
-    </a>
-    <div class="row m-t-30">
-        <div class="col-md-12">
-            <!-- DATA TABLE-->
-            <div class="table-responsive m-b-40">
-                <table class="table table-borderless table-data3">
-                    <thead>
+
+    <div class="block-content">
+        <!-- All Products Table -->
+        <div class="table-responsive">
+            <table class="table table-borderless table-striped table-vcenter" id="table">
+                <thead>
+                    <tr>
+                        <th class="text-center" style="width: 100px;">S. NO. </th>
+                        <th class="d-none d-sm-table-cell text-center">Size</th>
+
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @php
+                        $count = 0;
+                    @endphp
+                    @foreach ($size as $list)
                         <tr>
-                            <th>S.NO.</th>
-                            <th>Size</th>
+                            <td class="text-center fs-sm">
 
-                            <th>Action</th>
+                                <strong>{{ $count++ }}</strong>
 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @php
-                            $i=1;
-                        @endphp
-                        @foreach ($data as $list)
-
-                        <tr>
-                            <td> {{$i++}} </td>
-                            <td> {{$list->size}}</td>
-
-                            <td >
-                                <a href="{{url('admin/size/edit')}}/{{$list->id}}">
-                                    <button class="btn btn-primary">Edit</button>
-                                </a>
-
-
-
-
-
-                                <a href="{{url('admin/size/delete')}}/{{$list->id}}">
-                                    <button class="btn btn-danger">Delete</button>
-                                </a>
                             </td>
 
-                        </tr>
-                        @endforeach
+                            <td class=" d-md-table-cell fs-sm text-center">
+                                <a class="fw-semibold">{{ $list->size }}</a>
+                            </td>
 
-                    </tbody>
-                </table>
-            </div>
-            <!-- END DATA TABLE-->
+
+                            <td class="text-center fs-sm">
+                                <a class="btn btn-sm btn-alt-secondary"
+                                    href="{{ route('admin.edit_size', ['id' => $list->id]) }}">
+                                    <i class="fa fa-fw fa-eye"></i>
+                                </a>
+                                <a class="btn btn-sm btn-alt-secondary"
+                                    href="{{ route('admin.size_delete', ['id' => $list->id]) }}">
+                                    <i class="fa fa-fw fa-times text-danger"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
+        <!-- END All Products Table -->
+
+        <!-- Pagination -->
+        <nav aria-label="Photos Search Navigation">
+            <ul class="pagination justify-content-end mt-2">
+                <li class="page-item">
+                    <a class="page-link" href="javascript:void(0)" tabindex="-1" aria-label="Previous">
+                        Prev
+                    </a>
+                </li>
+                <li class="page-item active">
+                    <a class="page-link" href="javascript:void(0)">1</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="javascript:void(0)">2</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="javascript:void(0)">3</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="javascript:void(0)">4</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="javascript:void(0)" aria-label="Next">
+                        Next
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <!-- END Pagination -->
     </div>
+
+@endsection
+@section('page_link')
+
+
+
+    <link rel="stylesheet" href="{{ asset('admin_assets\js\plugins\datatables\datatables.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin_assets\js\plugins\sweetalert2\sweetalert2.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin_assets/css/custom.css') }}">
+
+@endsection
+
+@section('page_script')
+
+    <script src="{{ asset('admin_assets\js\plugins\datatables\datatables.js') }}"></script>
+    <script src="{{ asset('admin_assets\js\plugins\sweetalert2\sweetalert2.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+
+            // attch datatable plugin on table
+            let datatable = new DataTable('#table');
+            // sweet alert on update or insert
+
+            @if (session()->has('message'))
+                Swal.fire({
+                    icon: 'success', // You can change the icon as desired (success, error, warning, info, etc.)
+                    title: "{{session('message')}}",
+                    timer: 2000, // Duration in milliseconds
+                    showConfirmButton: false,
+                });
+            @endif
+
+
+
+
+        });
+    </script>
+
+
 @endsection
